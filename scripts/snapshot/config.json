@@ -7,5 +7,5 @@
     "fields": { "id": "id", "sura": "sura_no", "aya": "aya_no", "text": "aya_text" }
   },
   "quranenc": { "translationKey": "arabic_mokhtasar" },
-  "mp3quran": { "timingReadId": null, "reciterNameContains": "الحصري", "requiredRewayaContains": "حفص" }
+  "mp3quran": { "timingReadId": 118, "reciterNameContains": "الحصري", "requiredRewayaContains": "حفص" }
 }
