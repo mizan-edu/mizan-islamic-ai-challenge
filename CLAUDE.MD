@@ -113,6 +113,7 @@ Records also carry, by type (reference: .claude/skills/mizan-content-author/asse
 - recitation — quran records: platform, reciterId, audioUrl, startMs, endMs.
 - imageBrief — choice and narration_card records, in English.
 - grading and gradingSource — hadith records.
+- Optional authoring fields: citations, note, candidateNote, display, highlightChoiceId, moshafId (inside recitation).
 
 You never change status, level or reviewer fields. Only Hussein does, and the review log goes to /content/review-log.json.
 The compiler fails the build on: missing platform ID for Qur'an/tafsir/hadith; hadith without grading; Qur'an text not matching the snapshot; tafsir not kept separate from verse text.
