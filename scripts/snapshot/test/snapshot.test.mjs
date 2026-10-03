@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { run } from '../snapshot.mjs';
 import {
   NOW, OLD, ARABIC_TEXT_SENTINEL, AUDIO_16, config, makeRepo, readJson, snapshotLogs, mockFetch, capture,
-  quranRecord, tafsirRecord, uiRecord, routes, kfcEntries,
+  quranRecord, tafsirRecord, uiRecord, routes, kfcEntries, ARABIC_PLACEHOLDER,
 } from './fixtures.mjs';
 
 async function snap(repo, argv = [], { fetch = mockFetch(), cfg = config(), hooks } = {}) {
@@ -211,16 +211,60 @@ test('--list writes nothing and reports the selector', async () => {
   assert.ok(!cap.text().includes(ARABIC_TEXT_SENTINEL));
 });
 
-test('stops when the configured tafsir key is not in the QuranEnc list', async () => {
-  const repo = await makeRepo();
-  const before = await readFile(repo.stationFile, 'utf8');
-  const fetch = mockFetch({
-    'GET https://quranenc.com/api/v1/translations/list/ar': () => new Response(JSON.stringify({ translations: [] }), { status: 200 }),
-  });
+const EMPTY_LIST = { 'GET https://quranenc.com/api/v1/translations/list/ar': () => new Response(JSON.stringify({ translations: [] }), { status: 200 }) };
+const ayaResponse = (translation) => () => new Response(JSON.stringify({
+  result: { id: '1', sura: '16', aya: '10', arabic_text: ARABIC_TEXT_SENTINEL, translation, footnotes: null },
+}), { status: 200 });
+
+test('listed tafsir key: platformId carries :v{version}; log listStatus "listed"', async () => {
+  const repo = await makeRepo([uiRecord(), tafsirRecord()]);
+  assert.equal((await snap(repo)).code, 0);
+  assert.equal((await byId(repo.stationFile, 'S9.T1')).platformId, 'quranenc:fixture_tafsir:v1.2.3:16:10');
+  const [log] = await snapshotLogs(repo.root);
+  const parsed = await readJson(join(repo.root, 'content', 'snapshots', log));
+  assert.deepEqual(parsed.sources.quranenc, { key: 'fixture_tafsir', title: 'FIXTURE_TITLE', version: '1.2.3', listStatus: 'listed' });
+});
+
+test('unlisted tafsir key with an Arabic-script translation is accepted: version null, no :v, arabic_text not stored', async () => {
+  const repo = await makeRepo([uiRecord(), tafsirRecord()]);
+  const fetch = mockFetch({ ...EMPTY_LIST, 'GET https://quranenc.com/api/v1/translation/aya/fixture_tafsir/16/10': ayaResponse(ARABIC_PLACEHOLDER) });
   const { code, cap } = await snap(repo, [], { fetch });
-  assert.equal(code, 1);
-  assert.match(cap.text(), /"fixture_tafsir" is not in .*translations\/list\/ar/);
-  assert.equal(await readFile(repo.stationFile, 'utf8'), before);
+  assert.equal(code, 0);
+  const r = await byId(repo.stationFile, 'S9.T1');
+  assert.equal(r.text, ARABIC_PLACEHOLDER);
+  assert.equal(r.platformId, 'quranenc:fixture_tafsir:16:10');
+  assert.match(cap.text(), /WARN QuranEnc key "fixture_tafsir" is not in/);
+  const [log] = await snapshotLogs(repo.root);
+  const raw = await readFile(join(repo.root, 'content', 'snapshots', log), 'utf8');
+  assert.deepEqual(JSON.parse(raw).sources.quranenc, { key: 'fixture_tafsir', title: null, version: null, listStatus: 'unlisted' });
+  assert.ok(!raw.includes(ARABIC_TEXT_SENTINEL));
+  assert.ok(!(await readFile(repo.stationFile, 'utf8')).includes(ARABIC_TEXT_SENTINEL));
+});
+
+test('unlisted tafsir key is rejected when the translation is not Arabic script or the ayah is not 200', async () => {
+  for (const handler of [ayaResponse('FIXTURE_LATIN_TRANSLATION'), () => new Response('not found', { status: 404 })]) {
+    const repo = await makeRepo([uiRecord(), tafsirRecord()]);
+    const before = await readFile(repo.stationFile, 'utf8');
+    const fetch = mockFetch({ ...EMPTY_LIST, 'GET https://quranenc.com/api/v1/translation/aya/fixture_tafsir/16/10': handler });
+    const { code, cap } = await snap(repo, [], { fetch });
+    assert.equal(code, 1);
+    assert.match(cap.text(), /not in Arabic script|HTTP 404/);
+    assert.equal(await readFile(repo.stationFile, 'utf8'), before);
+  }
+});
+
+test('--list reports an unlisted key as accepted after the per-ayah check', async () => {
+  const repo = await makeRepo();
+  const fetch = mockFetch({
+    ...EMPTY_LIST,
+    'GET https://quranenc.com/api/v1/translation/aya/fixture_tafsir/1/1': () => new Response(JSON.stringify({
+      result: { sura: '1', aya: '1', arabic_text: ARABIC_TEXT_SENTINEL, translation: ARABIC_PLACEHOLDER, footnotes: null },
+    }), { status: 200 }),
+  });
+  const { code, cap } = await snap(repo, ['--list'], { fetch });
+  assert.equal(code, 0);
+  assert.match(cap.text(), /unlisted key check \(1:1\): accepted/);
+  assert.ok(!cap.text().includes(ARABIC_PLACEHOLDER));
 });
 
 test('stops when QuranEnc answers for a different ayah', async () => {
@@ -277,7 +321,7 @@ test('the run log records sources, request URLs and actions', async () => {
   assert.match(log.sources.kfc.sha256, /^[0-9a-f]{64}$/);
   assert.equal(log.sources.kfc.sourceUrl, 'https://fixture.invalid/kfc.zip');
   assert.equal(log.sources.kfc.sourceVersion, '0.0-fixture');
-  assert.deepEqual(log.sources.quranenc, { key: 'fixture_tafsir', title: 'FIXTURE_TITLE', version: '1.2.3' });
+  assert.deepEqual(log.sources.quranenc, { key: 'fixture_tafsir', title: 'FIXTURE_TITLE', version: '1.2.3', listStatus: 'listed' });
   assert.equal(log.sources.mp3quran.readId, 7);
   assert.equal(log.sources.mp3quran.folderUrl, 'https://server9.mp3quran.net/fixture/');
   const v1 = log.records.find((r) => r.id === 'S9.V1');

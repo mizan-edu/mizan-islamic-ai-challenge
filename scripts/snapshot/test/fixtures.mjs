@@ -10,6 +10,8 @@ export const OLD = '2026-10-01T09:00:00.000Z';
 export const ARABIC_TEXT_SENTINEL = 'FIXTURE_ARABIC_TEXT_MUST_NOT_BE_STORED';
 export const FOLDER = 'https://server9.mp3quran.net/fixture'; // no trailing slash on purpose
 export const AUDIO_16 = 'https://server9.mp3quran.net/fixture/016.mp3';
+// Synthetic Arabic-script placeholder (one letter repeated; not a word, verse or tafsir), built from a code point (G8).
+export const ARABIC_PLACEHOLDER = `${String.fromCharCode(0x0628).repeat(8)} ${String.fromCharCode(0x0628).repeat(8)}`;
 
 export const config = () => ({
   kfc: { file: 'sources/kfc/fixture.json', sourceUrl: 'https://fixture.invalid/kfc.zip', sourceVersion: '0.0-fixture', expectedAyahCount: 3, fields: { id: 'id', sura: 'sura_no', aya: 'aya_no', text: 'aya_text' } },

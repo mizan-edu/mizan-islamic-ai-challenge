@@ -10,7 +10,8 @@ import { createHttp, isAllowedUrl, USER_AGENT } from '../http.mjs';
 import { loadKfc, indexKfc, describeShape } from '../kfc.mjs';
 import { ayahTiming, audioUrlFor, matchReciter } from '../mp3quran.mjs';
 import { parseReference, deepDiff, checkAllowedChanges, findVerifyPaths } from '../records.mjs';
-import { config, kfcEntries, quranRecord, uiRecord, stationDoc } from './fixtures.mjs';
+import { resolveTranslation, tafsirPlatformId, isArabicScript } from '../quranenc.mjs';
+import { config, kfcEntries, quranRecord, uiRecord, stationDoc, ARABIC_PLACEHOLDER } from './fixtures.mjs';
 
 const ok = (body) => new Response(JSON.stringify(body), { status: 200 });
 
@@ -155,6 +156,21 @@ test('mp3quran: audio URL and reciter match normalize the trailing slash', () =>
   const reciters = [{ id: 5, moshaf: [{ id: 6, server: 'https://server6.mp3quran.net/x/' }] }];
   assert.deepEqual(matchReciter(reciters, 'https://server6.mp3quran.net/x'), { reciterId: 5, moshafId: 6, matches: 1 });
   assert.deepEqual(matchReciter(reciters, 'https://server6.mp3quran.net/y'), { reciterId: null, moshafId: null, matches: 0 });
+});
+
+test('QuranEnc: listed/unlisted resolution, platformId format, Arabic-script check', () => {
+  const list = [{ key: 'fixture_tafsir', title: 'FIXTURE_TITLE', version: '1.2.3' }];
+  const listed = resolveTranslation(list, 'fixture_tafsir');
+  const unlisted = resolveTranslation(list, 'fixture_unlisted');
+  assert.deepEqual(listed, { key: 'fixture_tafsir', title: 'FIXTURE_TITLE', version: '1.2.3', listStatus: 'listed' });
+  assert.deepEqual(unlisted, { key: 'fixture_unlisted', title: null, version: null, listStatus: 'unlisted' });
+  assert.equal(tafsirPlatformId(listed, 16, 10), 'quranenc:fixture_tafsir:v1.2.3:16:10');
+  assert.equal(tafsirPlatformId(unlisted, 50, 9), 'quranenc:fixture_unlisted:50:9');
+  assert.ok(isArabicScript(ARABIC_PLACEHOLDER));
+  assert.ok(isArabicScript(`${ARABIC_PLACEHOLDER} (1)`));
+  assert.ok(!isArabicScript('FIXTURE_LATIN_TRANSLATION'));
+  assert.ok(!isArabicScript(`${ARABIC_PLACEHOLDER} FIXTURE_LATIN_TRANSLATION`));
+  assert.ok(!isArabicScript('12345'));
 });
 
 test('records: reference parsing', () => {

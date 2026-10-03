@@ -10,7 +10,7 @@ The script fills draft `quran` and `tafsir` records in `content/stations/*.json`
 |---|---|---|
 | `quran` | King Fahd Complex Qur'an JSON (a local file in `sources/kfc/`) | `text` (exact string), `sourcePlatform`, `platformId` (`kfc-hafs:{id}`), `retrievedAt` |
 | `quran` | mp3quran.net ayah timings | `recitation.platform`, `reciterId`, `moshafId`, `timingReadId`, `audioUrl`, `startMs`, `endMs` |
-| `tafsir` | QuranEnc | `text` (`result.translation`, as received), `sourcePlatform`, `platformId` (`quranenc:{key}:v{version}:{S}:{A}`), `retrievedAt` |
+| `tafsir` | QuranEnc | `text` (`result.translation`, as received), `sourcePlatform`, `platformId` (`quranenc:{key}:v{version}:{S}:{A}`, or `quranenc:{key}:{S}:{A}` when no version is known), `retrievedAt` |
 
 `hadith` records are not resolved yet (Station 4 comes after the Monday gate). Every other record type is left untouched.
 
@@ -55,7 +55,9 @@ QuranEnc's `arabic_text` field is never stored: verse text comes only from the K
 - King Fahd Complex Qur'an text: KFGQPC Hafs Uthmanic Data v2.0 (read.me dated 2022-09-07), file hafsData_v2-0.json from UthmanicHafs_v2-0.zip, obtained from: https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip
 - The routes listed in the Reference Package (15-page edition) and Runbook §5.1 (qurancomplex.gov.sa/quran-dev), and the Complex's announced route (qurancomplex.gov.sa/techquran/dev), did not resolve from Hussein's network on 3 Oct 2026.
 
-`config.kfc.sourceUrl` and `config.kfc.sourceVersion` record this route. Each run log copies them into `sources.kfc`, next to the file name, size and SHA-256. The field map is `id`, `sura_no`, `aya_no`, `aya_text`. `aya_text_emlaey` (the simplified spelling) is never used.
+- QuranEnc tafsir: `GET /api/v1/translations/list/ar` returned no Arabic entries on 3 Oct 2026, so `arabic_mokhtasar` is "unlisted". An unlisted key is still accepted, but only per ayah: the ayah endpoint must return HTTP 200, the requested sura/aya, and a non-empty `translation` in which at least 90% of the letters are Arabic script. Otherwise the run stops. The run log records `version: null` and `listStatus: "unlisted"`, and the platformId has no `:v{version}` part.
+
+`config.kfc.sourceUrl` and `config.kfc.sourceVersion` record the KFC route. Each run log copies them into `sources.kfc`, next to the file name, size and SHA-256. The field map is `id`, `sura_no`, `aya_no`, `aya_text`. `aya_text_emlaey` (the simplified spelling) is never used.
 
 ## Notes
 

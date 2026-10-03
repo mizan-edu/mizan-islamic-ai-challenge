@@ -88,10 +88,19 @@ async function runList({ http, config, out }) {
   const key = config.quranenc.translationKey;
   const inList = list.some((t) => t.key === key);
   out.log(`   configured key "${key}" in list: ${inList ? 'yes' : 'NO'}`);
-  if (!inList) shapeNotes.push(`QuranEnc: "${key}" is not in /translations/list/ar, so title/version for platformId cannot be resolved`);
   const sample = await http.getJson(quranenc.ayaUrl(key, 1, 1));
   const resultKeys = sample?.result && typeof sample.result === 'object' ? Object.keys(sample.result) : null;
   out.log(`   ayah endpoint shape for "${key}" (1:1, keys only): ${resultKeys ? `result{${resultKeys.join(', ')}}` : `top-level [${Object.keys(sample ?? {}).join(', ')}]`}`);
+  if (!inList) {
+    try {
+      await quranenc.fetchAyaTafsir(http, key, 1, 1, { requireArabic: true });
+      out.log(`   unlisted key check (1:1): accepted (200, sura/aya match, Arabic script); version null, platformId without :v`);
+      shapeNotes.push(`QuranEnc: "${key}" is unlisted; it is accepted per ayah and logged with version null, listStatus "unlisted"`);
+    } catch (e) {
+      out.log(`   unlisted key check (1:1): REJECTED (${e.message})`);
+      shapeNotes.push(`QuranEnc: "${key}" is unlisted and failed the per-ayah check`);
+    }
+  }
 
   out.log('\n== mp3quran: GET', mp3.readsUrl());
   const reads = await mp3.fetchReads(http);
@@ -186,8 +195,11 @@ async function runSnapshot({ root, config, opts, http, now, out, hooks }) {
     };
   }
   if (drafts('tafsir')) {
-    qe = quranenc.findTranslation(await quranenc.fetchArabicTranslations(http), config.quranenc.translationKey);
+    qe = quranenc.resolveTranslation(await quranenc.fetchArabicTranslations(http), config.quranenc.translationKey);
     log.sources.quranenc = qe;
+    if (qe.listStatus === 'unlisted') {
+      log.warnings.push(`QuranEnc key "${qe.key}" is not in ${quranenc.listUrl()}; accepted per ayah (Arabic-script check), version null`);
+    }
   }
 
   const plans = [];
@@ -234,8 +246,8 @@ async function runSnapshot({ root, config, opts, http, now, out, hooks }) {
         };
         entry.requestUrl = t.url;
       } else {
-        const tafsir = await quranenc.fetchAyaTafsir(http, qe.key, surah, ayah);
-        fill = { text: tafsir.text, sourcePlatform: 'QuranEnc', platformId: `quranenc:${qe.key}:v${qe.version}:${surah}:${ayah}` };
+        const tafsir = await quranenc.fetchAyaTafsir(http, qe.key, surah, ayah, { requireArabic: qe.listStatus === 'unlisted' });
+        fill = { text: tafsir.text, sourcePlatform: 'QuranEnc', platformId: quranenc.tafsirPlatformId(qe, surah, ayah) };
         entry.requestUrl = tafsir.requestUrl;
         if (tafsir.footnotes) entry.footnotes = tafsir.footnotes;
       }

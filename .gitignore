@@ -142,5 +142,6 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
-# Raw King Fahd Complex Qur'an file: kept out of the repo until its licence is verified
-sources/kfc/*.json
+# Raw King Fahd Complex Qur'an files: kept out of the repo until the licence is verified
+sources/kfc/*
+!sources/kfc/.gitkeep

@@ -27,15 +27,25 @@ export async function fetchArabicTranslations(http) {
 
 export const isTafsirEntry = (t) => TAFSIR_PATTERN.test(`${t.key} ${t.title} ${t.description ?? ''}`);
 
-export function findTranslation(list, key) {
+// A key absent from the list is not an error: it is "unlisted" (no title/version), and each
+// ayah response must then prove the key by passing the Arabic-script check in fetchAyaTafsir.
+export function resolveTranslation(list, key) {
   const t = list.find((x) => x.key === key);
-  if (!t) {
-    throw new QuranEncError(`translation key "${key}" is not in ${listUrl()} (${list.length} entries); cannot resolve title/version for platformId`);
-  }
-  return { key: t.key, title: t.title, version: t.version };
+  if (!t) return { key, title: null, version: null, listStatus: 'unlisted' };
+  return { key: t.key, title: t.title, version: t.version, listStatus: 'listed' };
 }
 
-export async function fetchAyaTafsir(http, key, surah, ayah) {
+// "quranenc:{key}:v{version}:{S}:{A}" when the version is known, else "quranenc:{key}:{S}:{A}".
+export const tafsirPlatformId = ({ key, version }, surah, ayah) => `quranenc:${key}${version ? `:v${version}` : ''}:${surah}:${ayah}`;
+
+// True when at least 90% of the letters are in Arabic script.
+export function isArabicScript(text) {
+  const letters = text.match(/\p{L}/gu) ?? [];
+  if (!letters.length) return false;
+  return letters.filter((c) => /\p{Script=Arabic}/u.test(c)).length / letters.length >= 0.9;
+}
+
+export async function fetchAyaTafsir(http, key, surah, ayah, { requireArabic = false } = {}) {
   const url = ayaUrl(key, surah, ayah);
   const data = await http.getJson(url);
   const r = data?.result;
@@ -47,6 +57,9 @@ export async function fetchAyaTafsir(http, key, surah, ayah) {
   }
   if (typeof r.translation !== 'string' || r.translation.length === 0) {
     throw new QuranEncError(`${url}: result.translation is missing or empty`);
+  }
+  if (requireArabic && !isArabicScript(r.translation)) {
+    throw new QuranEncError(`${url}: unlisted key "${key}" rejected, result.translation is not in Arabic script`);
   }
   return { text: r.translation, footnotes: r.footnotes || null, requestUrl: url };
 }
