@@ -88,7 +88,14 @@ Not allowed anywhere: names, ages, voice or video recordings, free text from the
 API routes must not console.log request bodies. Error logs record error type and route only.
 7. Content library record (Runbook §5.2)
 
-Every record in /content/*.json has: id, station, type (quran|tafsir|hadith|explanation|answer|referral|fallback|ui), text, sourcePlatform, platformId, retrievedAt, reference (surah:ayah, or book + number + grading + gradingSource), level, reviewer1, reviewer1At, reviewer2 (where required), reviewer2At, status (draft|approved|rejected).
+Every record in /content/*.json has: id, station, type (quran|tafsir|hadith|explanation|answer|referral|fallback|ui), text, sourcePlatform, platformId, retrievedAt, reference (surah:ayah, or book + number + grading + gradingSource), level (A|B|C|D|OUT_OF_SCOPE, or NA for non-Islamic ui and science lines), tts (boolean; must be false for quran and tafsir records), reviewer1, reviewer1At, reviewer2 (where required), reviewer2At, status (draft|approved|rejected).
+
+Records also carry, by type (reference: .claude/skills/mizan-content-author/assets/station-template.json):
+- role — ui records: frame|question|choice|praise|redirect|hint|bridge|narration_card|close|parent_line|title.
+- basedOn — explanation records: IDs of the quran/tafsir records it relies on.
+- recitation — quran records: platform, reciterId, audioUrl, startMs, endMs.
+- imageBrief — choice and narration_card records, in English.
+- grading and gradingSource — hadith records.
 
 You never change status, level or reviewer fields. Only Hussein does, and the review log goes to /content/review-log.json.
 The compiler fails the build on: missing platform ID for Qur'an/tafsir/hadith; hadith without grading; Qur'an text not matching the snapshot; tafsir not kept separate from verse text.
