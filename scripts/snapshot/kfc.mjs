@@ -38,6 +38,9 @@ export function describeShape(data) {
 }
 
 export function indexKfc(data, { fields, expectedAyahCount }) {
+  if (fields.text === 'aya_text_emlaey') {
+    throw new KfcError('config.kfc.fields.text must be the Uthmanic aya_text, never aya_text_emlaey (simplified spelling)');
+  }
   if (!Array.isArray(data)) {
     throw new KfcError(`top-level is not an array (${JSON.stringify(describeShape(data))}); run --inspect-kfc and confirm the shape`);
   }

@@ -95,6 +95,31 @@ test('KFC: loads, hashes and indexes the file; text kept byte-exact', async () =
   assert.equal(index.get('16:10').id, '101');
 });
 
+// KFC Hafs v2.0 ends each aya_text with U+00A0 + a font-specific ayah-end code point (U+FC00 range).
+// Fixture strings only: a placeholder word plus those two code points.
+test('KFC: UTF-8 with or without BOM; aya_text kept exact incl. NBSP and ayah-end symbol; emlaey never used', async () => {
+  const NBSP = String.fromCharCode(0x00a0);
+  const AYAH_END = String.fromCharCode(0xfc09);
+  const exact = ` FIXTURE_TEXT_16_10${NBSP}${AYAH_END}`;
+  const entries = kfcEntries().map((e) => ({ ...e, aya_text_emlaey: 'FIXTURE_EMLAEY_MUST_NOT_BE_USED' }));
+  entries[0].aya_text = exact;
+  const dir = await mkdtemp(join(tmpdir(), 'mizan-kfc-'));
+  for (const bom of ['', String.fromCharCode(0xfeff)]) {
+    const file = join(dir, `k${bom ? '-bom' : ''}.json`);
+    await writeFile(file, `${bom}${JSON.stringify(entries)}`, 'utf8');
+    const { index } = await loadKfc(file, config().kfc);
+    const got = index.get('16:10').text;
+    assert.equal(got, exact);
+    assert.deepEqual([...got].map((c) => c.codePointAt(0)), [...exact].map((c) => c.codePointAt(0)));
+    assert.ok(![...index.values()].some((v) => v.text.includes('EMLAEY')));
+  }
+  const emlaey = { ...config().kfc, fields: { ...config().kfc.fields, text: 'aya_text_emlaey' } };
+  assert.throws(() => indexKfc(entries, emlaey), /never aya_text_emlaey/);
+  const bad = join(dir, 'bad.json');
+  await writeFile(bad, Buffer.from([0x5b, 0xff, 0x5d]));
+  await assert.rejects(loadKfc(bad, config().kfc), /not valid UTF-8 JSON/);
+});
+
 test('KFC: rejects wrong count, duplicates, missing fields and non-array shapes', () => {
   const cfg = config().kfc;
   assert.throws(() => indexKfc(kfcEntries().slice(0, 2), cfg), /entry count 2 != expectedAyahCount 3/);

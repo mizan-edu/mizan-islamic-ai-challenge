@@ -8,7 +8,7 @@ import { join } from 'node:path';
 import { run } from '../snapshot.mjs';
 import {
   NOW, OLD, ARABIC_TEXT_SENTINEL, AUDIO_16, config, makeRepo, readJson, snapshotLogs, mockFetch, capture,
-  quranRecord, tafsirRecord, uiRecord, routes,
+  quranRecord, tafsirRecord, uiRecord, routes, kfcEntries,
 } from './fixtures.mjs';
 
 async function snap(repo, argv = [], { fetch = mockFetch(), cfg = config(), hooks } = {}) {
@@ -37,6 +37,15 @@ test('fills a draft quran record from KFC and mp3quran', async () => {
   assert.equal(r.tts, false);
   assert.equal(r.status, 'draft');
   assert.equal(r.level, 'A');
+});
+
+test('quran text is written to the station file exactly as loaded (NBSP and ayah-end symbol kept)', async () => {
+  const exact = ` FIXTURE_TEXT_16_10${String.fromCharCode(0x00a0)}${String.fromCharCode(0xfc09)}`;
+  const kfc = kfcEntries();
+  kfc[0].aya_text = exact;
+  const repo = await makeRepo([uiRecord(), quranRecord()], { kfc });
+  assert.equal((await snap(repo)).code, 0);
+  assert.equal((await byId(repo.stationFile, 'S9.V1')).text, exact);
 });
 
 test('fills a draft tafsir record from QuranEnc', async () => {
@@ -266,6 +275,8 @@ test('the run log records sources, request URLs and actions', async () => {
   assert.equal(log.mode, 'apply');
   assert.equal(log.sources.kfc.file, 'fixture.json');
   assert.match(log.sources.kfc.sha256, /^[0-9a-f]{64}$/);
+  assert.equal(log.sources.kfc.sourceUrl, 'https://fixture.invalid/kfc.zip');
+  assert.equal(log.sources.kfc.sourceVersion, '0.0-fixture');
   assert.deepEqual(log.sources.quranenc, { key: 'fixture_tafsir', title: 'FIXTURE_TITLE', version: '1.2.3' });
   assert.equal(log.sources.mp3quran.readId, 7);
   assert.equal(log.sources.mp3quran.folderUrl, 'https://server9.mp3quran.net/fixture/');

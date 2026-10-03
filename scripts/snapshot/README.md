@@ -50,6 +50,13 @@ npm run test:snapshot                # offline tests (mocked fetch, fixture data
 
 QuranEnc's `arabic_text` field is never stored: verse text comes only from the KFC file. Dry-run output shows source text as length + hash, never verbatim.
 
+## Source access routes
+
+- King Fahd Complex Qur'an text: KFGQPC Hafs Uthmanic Data v2.0 (read.me dated 2022-09-07), file hafsData_v2-0.json from UthmanicHafs_v2-0.zip, obtained from: https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip
+- The routes listed in the Reference Package (15-page edition) and Runbook §5.1 (qurancomplex.gov.sa/quran-dev), and the Complex's announced route (qurancomplex.gov.sa/techquran/dev), did not resolve from Hussein's network on 3 Oct 2026.
+
+`config.kfc.sourceUrl` and `config.kfc.sourceVersion` record this route. Each run log copies them into `sources.kfc`, next to the file name, size and SHA-256. The field map is `id`, `sura_no`, `aya_no`, `aya_text`. `aya_text_emlaey` (the simplified spelling) is never used.
+
 ## Notes
 
 - The raw KFC file stays out of git (`sources/kfc/*.json` is in `.gitignore`) until its licence is verified. Its name, size and SHA-256 are recorded in the run log.

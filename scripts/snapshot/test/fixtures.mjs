@@ -12,7 +12,7 @@ export const FOLDER = 'https://server9.mp3quran.net/fixture'; // no trailing sla
 export const AUDIO_16 = 'https://server9.mp3quran.net/fixture/016.mp3';
 
 export const config = () => ({
-  kfc: { file: 'sources/kfc/fixture.json', expectedAyahCount: 3, fields: { id: 'id', sura: 'sura_no', aya: 'aya_no', text: 'aya_text' } },
+  kfc: { file: 'sources/kfc/fixture.json', sourceUrl: 'https://fixture.invalid/kfc.zip', sourceVersion: '0.0-fixture', expectedAyahCount: 3, fields: { id: 'id', sura: 'sura_no', aya: 'aya_no', text: 'aya_text' } },
   quranenc: { translationKey: 'fixture_tafsir' },
   mp3quran: { timingReadId: null, reciterNameContains: 'FIXTURE_RECITER', requiredRewayaContains: 'FIXTURE_HAFS' },
 });

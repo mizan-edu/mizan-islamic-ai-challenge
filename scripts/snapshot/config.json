@@ -1,6 +1,8 @@
 {
   "kfc": {
-    "file": null,
+    "file": "sources/kfc/hafsData_v2-0.json",
+    "sourceUrl": "https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip",
+    "sourceVersion": "2.0",
     "expectedAyahCount": 6236,
     "fields": { "id": "id", "sura": "sura_no", "aya": "aya_no", "text": "aya_text" }
   },

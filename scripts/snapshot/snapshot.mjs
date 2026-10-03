@@ -173,7 +173,7 @@ async function runSnapshot({ root, config, opts, http, now, out, hooks }) {
   let rec = null;
   if (drafts('quran')) {
     kfc = await loadKfc(kfcPath(root, config), config.kfc);
-    log.sources.kfc = kfc.meta;
+    log.sources.kfc = { ...kfc.meta, sourceUrl: config.kfc.sourceUrl ?? null, sourceVersion: config.kfc.sourceVersion ?? null };
     const read = mp3.selectRead(await mp3.fetchReads(http), config.mp3quran);
     const match = mp3.matchReciter(await mp3.fetchReciters(http), read.folder_url);
     if (match.matches !== 1) {
