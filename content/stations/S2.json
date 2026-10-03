@@ -19,6 +19,7 @@
     {
       "step": "frame",
       "recordIds": [
+        "S2.TITLE",
         "S2.F1"
       ]
     },
@@ -43,7 +44,9 @@
         "S2.H4"
       ],
       "togetherId": "S2.H5",
-      "conceptIds": null
+      "conceptIds": [
+        "S2.C1"
+      ]
     },
     {
       "step": "connect",
@@ -53,17 +56,19 @@
         "S2.SC3"
       ],
       "bridgeId": "S2.B1",
-      "listenId": null,
+      "listenId": "S2.L1",
       "verseCard": {
         "quranId": "S2.V1",
         "tafsirId": "S2.T1",
         "explanationId": "S2.E1"
       },
-      "conceptIds": null
+      "conceptIds": [
+        "S2.C1"
+      ]
     },
     {
       "step": "narrate",
-      "introId": null,
+      "introId": "S2.N0",
       "narrationCardIds": [
         "S2.N1",
         "S2.N2",
@@ -71,9 +76,9 @@
       ],
       "mode": "pick_best",
       "expectedOrder": null,
-      "retryId": null,
-      "praiseId": null,
-      "scoringNote": null
+      "retryId": "S2.NR",
+      "praiseId": "S2.NP",
+      "scoringNote": "S2.N2 = 3 (best: Allah's sign + all living things); S2.N1 = 2 (partial: flower only); S2.N3 = 1 (misconception); no pick = 0"
     },
     {
       "step": "close",
@@ -81,7 +86,9 @@
         "S2.CL1"
       ],
       "progressMarker": "plant_grows_2",
-      "parentSummaryIds": null
+      "parentSummaryIds": [
+        "S2.PS1"
+      ]
     }
   ],
   "anticipatedQuestions": [
@@ -349,7 +356,7 @@
       "type": "ui",
       "role": "hint",
       "text": "لِنجدْه معًا: هذا ماءٌ! الزهرةُ تشربُ الماءَ.",
-      "highlightChoiceId": null,
+      "highlightChoiceId": "S2.Q1.c1",
       "level": "NA",
       "tts": true,
       "sourcePlatform": null,
@@ -421,8 +428,26 @@
       "station": "S2",
       "type": "ui",
       "role": "bridge",
-      "text": "الماءُ نعمةٌ من اللهِ. لِنستمعْ إلى آيةٍ من القرآنِ الكريمِ.",
+      "text": "الماءُ نعمةٌ من اللهِ.",
       "level": "A",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "reviewer1": null,
+      "reviewer1At": null,
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "draft"
+    },
+    {
+      "id": "S2.L1",
+      "station": "S2",
+      "type": "ui",
+      "role": "bridge",
+      "text": "لِنستمعْ إلى آيةٍ من القرآنِ الكريمِ.",
+      "level": "NA",
       "tts": true,
       "sourcePlatform": null,
       "platformId": null,
@@ -469,7 +494,7 @@
       "sourcePlatform": "QuranEnc",
       "platformId": "quranenc:arabic_mokhtasar:21:30",
       "reference": "21:30",
-      "display": null,
+      "display": "parents_only",
       "level": "A",
       "tts": false,
       "retrievedAt": "2026-10-03T09:12:42.773Z",
@@ -494,6 +519,24 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": "21:30",
+      "reviewer1": null,
+      "reviewer1At": null,
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "draft"
+    },
+    {
+      "id": "S2.N0",
+      "station": "S2",
+      "type": "ui",
+      "role": "frame",
+      "text": "أيُّ بطاقةٍ تحكي ما رأيناه اليومَ؟",
+      "level": "NA",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
       "reviewer1": null,
       "reviewer1At": null,
       "reviewer2": null,
@@ -545,6 +588,42 @@
       "role": "narration_card",
       "text": "الريحُ تسقي الزهرةَ",
       "imageBrief": "Soft wind lines blowing around a dry, drooping flower.",
+      "level": "NA",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "reviewer1": null,
+      "reviewer1At": null,
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "draft"
+    },
+    {
+      "id": "S2.NR",
+      "station": "S2",
+      "type": "ui",
+      "role": "redirect",
+      "text": "فكرةٌ جميلةٌ! لِننظرْ إلى البطاقاتِ مرّةً أخرى.",
+      "level": "NA",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "reviewer1": null,
+      "reviewer1At": null,
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "draft"
+    },
+    {
+      "id": "S2.NP",
+      "station": "S2",
+      "type": "ui",
+      "role": "praise",
+      "text": "حكايةٌ جميلةٌ! هكذا نتذكّرُ ما رأيناه.",
       "level": "NA",
       "tts": true,
       "sourcePlatform": null,
@@ -623,6 +702,24 @@
       "type": "referral",
       "text": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
       "level": "C",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "reviewer1": null,
+      "reviewer1At": null,
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "draft"
+    },
+    {
+      "id": "S2.FB1",
+      "station": "S2",
+      "type": "fallback",
+      "text": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "note": null,
+      "level": "NA",
       "tts": true,
       "sourcePlatform": null,
       "platformId": null,

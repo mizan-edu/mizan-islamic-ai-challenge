@@ -108,7 +108,8 @@ API routes must not console.log request bodies. Error logs record error type and
 Every record in /content/*.json has: id, station, type (quran|tafsir|hadith|explanation|answer|referral|fallback|ui), text, sourcePlatform, platformId, retrievedAt, reference (surah:ayah, or book + number + grading + gradingSource), level (A|B|C|D|OUT_OF_SCOPE, or NA for non-Islamic ui and science lines), tts (boolean; must be false for quran and tafsir records), reviewer1, reviewer1At, reviewer2 (where required), reviewer2At, status (draft|approved|rejected).
 
 Records also carry, by type (reference: .claude/skills/mizan-content-author/assets/station-template.json):
-- role — ui records: frame|question|choice|praise|redirect|hint|bridge|narration_card|close|parent_line|title.
+- role — ui records: frame|question|choice|praise|redirect|hint|bridge|narration_card|close|parent_line|title|science.
+- science — ui records only: level NA only, tts true; the only permitted source of science wording in tutor answers. The station script lists them in the optional connect-step key scienceIds.
 - basedOn — explanation records: IDs of the quran/tafsir records it relies on.
 - recitation — quran records: platform, reciterId, audioUrl, startMs, endMs, timingReadId (mp3quran timing read; filled by the snapshot script).
 - imageBrief — choice and narration_card records, in English.
