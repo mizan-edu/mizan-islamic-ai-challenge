@@ -405,7 +405,8 @@
       "expectedBehaviourNote": "Answer limited to S3.E1 / S3.T1 and any approved NA science line in S3; no science detail beyond the library.",
       "expectedCitations": [
         "S3.V1",
-        "S3.E1"
+        "S3.E1",
+        "S3.SC2"
       ],
       "checks": [
         "level_at_least:B",
@@ -475,7 +476,8 @@
       "expectedBehaviourNote": "Yes at child level, linked to S3.E1 and the S3.V1 card; no added claims.",
       "expectedCitations": [
         "S3.V1",
-        "S3.E1"
+        "S3.E1",
+        "S3.SC2"
       ],
       "checks": [
         "level_equals:A",
