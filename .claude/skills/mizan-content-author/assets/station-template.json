@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "stationId": "S1",
+    "titleRecordId": "S1.TITLE",
+    "concepts": [
+      { "id": "S1.C1", "summary_en": "Allah sends rain down from the sky" }
+    ],
+    "contentVersion": "0.1-draft",
+    "draftedBy": "Claude (project chat)",
+    "draftedAt": "YYYY-MM-DD",
+    "status": "draft"
+  },
+  "script": [
+    { "step": "frame", "recordIds": ["S1.F1"] },
+    { "step": "observe", "questionId": "S1.Q1", "choiceIds": ["S1.Q1.c1", "S1.Q1.c2", "S1.Q1.c3"], "correctChoiceId": "S1.Q1.c1",
+      "praiseId": "S1.P1", "redirectIds": { "S1.Q1.c2": "S1.R1", "S1.Q1.c3": "S1.R2" },
+      "hintLadder": ["S1.H1", "S1.H2", "S1.H3", "S1.H4"], "togetherId": "S1.H5" },
+    { "step": "connect", "bridgeId": "S1.B1", "verseCard": { "quranId": "S1.V1", "tafsirId": "S1.T1", "explanationId": "S1.E1" } },
+    { "step": "narrate", "narrationCardIds": ["S1.N1", "S1.N2", "S1.N3"], "mode": "pick_best" },
+    { "step": "close", "recordIds": ["S1.CL1"], "progressMarker": "plant_grows_1" }
+  ],
+  "anticipatedQuestions": [
+    { "id": "S1.AQ1", "childQuestion": "[Arabic, as a child might ask]", "level": "A", "responseRecordId": "S1.X1" },
+    { "id": "S1.AQ2", "childQuestion": "[Arabic]", "level": "C", "responseRecordId": "S1.X2" }
+  ],
+  "records": [
+    { "id": "S1.F1", "station": "S1", "type": "ui", "role": "frame", "text": "[Arabic]", "level": "NA", "tts": true,
+      "sourcePlatform": null, "platformId": null, "retrievedAt": null, "reference": null,
+      "reviewer1": null, "reviewer1At": null, "reviewer2": null, "reviewer2At": null, "status": "draft" },
+    { "id": "S1.Q1.c1", "station": "S1", "type": "ui", "role": "choice", "text": "[Arabic label]", "imageBrief": "[English, one sentence]",
+      "level": "NA", "tts": true, "status": "draft" },
+    { "id": "S1.V1", "station": "S1", "type": "quran", "text": "[VERIFY: qurancomplex.gov.sa]",
+      "sourcePlatform": "King Fahd Complex", "platformId": "[VERIFY: KFC ayah ID SS:AA]", "retrievedAt": null, "reference": "SS:AA",
+      "level": "A", "tts": false,
+      "recitation": { "platform": "mp3quran.net", "reciterId": "[VERIFY]", "audioUrl": "[VERIFY]", "startMs": null, "endMs": null },
+      "reviewer1": null, "reviewer1At": null, "reviewer2": null, "reviewer2At": null, "status": "draft" },
+    { "id": "S1.T1", "station": "S1", "type": "tafsir", "text": "[VERIFY: quranenc.com]",
+      "sourcePlatform": "QuranEnc", "platformId": "[VERIFY: tafsir name + SS:AA]", "retrievedAt": null, "reference": "SS:AA",
+      "level": "A", "tts": false, "status": "draft" },
+    { "id": "S1.E1", "station": "S1", "type": "explanation", "text": "[Arabic, child level, restates only the verse's plain meaning or S1.T1]",
+      "basedOn": ["S1.V1", "S1.T1"], "level": "A", "tts": true, "status": "draft" },
+    { "id": "S1.N1", "station": "S1", "type": "ui", "role": "narration_card", "text": "[Arabic, 2-5 words]", "imageBrief": "[English]",
+      "level": "NA", "tts": true, "status": "draft" },
+    { "id": "S1.X2", "station": "S1", "type": "referral", "text": "[Arabic, warm referral to a parent]", "level": "C", "tts": true, "status": "draft" },
+    { "id": "S1.PS1", "station": "S1", "type": "ui", "role": "parent_line", "text": "[Arabic, what the child explored, with source reference]",
+      "level": "NA", "tts": false, "status": "draft" }
+  ]
+}
