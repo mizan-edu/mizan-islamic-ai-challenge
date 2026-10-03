@@ -110,7 +110,7 @@ Every record in /content/*.json has: id, station, type (quran|tafsir|hadith|expl
 Records also carry, by type (reference: .claude/skills/mizan-content-author/assets/station-template.json):
 - role — ui records: frame|question|choice|praise|redirect|hint|bridge|narration_card|close|parent_line|title.
 - basedOn — explanation records: IDs of the quran/tafsir records it relies on.
-- recitation — quran records: platform, reciterId, audioUrl, startMs, endMs.
+- recitation — quran records: platform, reciterId, audioUrl, startMs, endMs, timingReadId (mp3quran timing read; filled by the snapshot script).
 - imageBrief — choice and narration_card records, in English.
 - grading and gradingSource — hadith records.
 - Optional authoring fields: citations, note, candidateNote, display, highlightChoiceId, moshafId (inside recitation).

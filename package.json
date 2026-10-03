@@ -1,0 +1,11 @@
+{
+  "name": "mizan-islamic-ai-challenge",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "snapshot": "node scripts/snapshot/snapshot.mjs",
+    "test:snapshot": "node --test \"scripts/snapshot/test/*.test.mjs\""
+  }
+}
