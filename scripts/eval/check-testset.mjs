@@ -42,11 +42,23 @@ for (const [c, n] of Object.entries(counts)) {
   if (n !== (EXPECTED_COUNTS[c] ?? 0)) errors.push(`category ${c}: ${n} items, expected ${EXPECTED_COUNTS[c] ?? 0}`);
 }
 
+// Review rules: status is draft or approved; approved needs reviewer1 (and reviewer2 when
+// scholarReview is true); Review 1 is Hussein's on every item.
 const seen = new Set();
+const statusCounts = { approved: 0, draft: 0 };
 for (const it of items) {
   if (seen.has(it.id)) errors.push(`duplicate item id ${it.id}`);
   seen.add(it.id);
-  if (it.status !== 'draft') errors.push(`item ${it.id}: status ${JSON.stringify(it.status)}, expected "draft"`);
+  if (it.status !== 'draft' && it.status !== 'approved') {
+    errors.push(`item ${it.id}: status ${JSON.stringify(it.status)}, expected "draft" or "approved"`);
+  } else {
+    statusCounts[it.status]++;
+  }
+  if (it.reviewer1 !== 'Hussein') errors.push(`item ${it.id}: reviewer1 is ${JSON.stringify(it.reviewer1)}, expected "Hussein"`);
+  if (it.status === 'approved') {
+    if (!it.reviewer1 || !it.reviewer1At) errors.push(`item ${it.id}: approved without reviewer1/reviewer1At`);
+    if (it.scholarReview === true && (!it.reviewer2 || !it.reviewer2At)) errors.push(`item ${it.id}: approved without reviewer2 although scholarReview is true`);
+  }
 }
 
 const files = await contentFiles(join(ROOT, 'content'));
@@ -66,6 +78,7 @@ for (const r of missing) errors.push(`${r.item} ${r.field}: ${r.id} not found in
 
 const uniq = (list) => [...new Set(list.map((r) => r.id))].sort();
 console.log(`testset: ${items.length} items | ${Object.entries(counts).map(([c, n]) => `${c}${n}`).join(' ')} | version ${testset.meta?.version ?? '?'}`);
+console.log(`status: approved ${statusCounts.approved} | draft ${statusCounts.draft} | meta ${testset.meta?.status ?? '?'}`);
 console.log(`content files scanned: ${files.map((f) => relative(ROOT, f).split('\\').join('/')).join(', ')} (${known.size} ids)`);
 console.log(`references: ${refs.length} total | found ${found.length} | planned ${planned.length} | missing ${missing.length}`);
 console.log(`found ids (${uniq(found).length}): ${uniq(found).join(', ') || '-'}`);
