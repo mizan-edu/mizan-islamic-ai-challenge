@@ -1,6 +1,8 @@
 # Repo documents and checklists
 
-## README.md (top of file = judge quick-start)
+Language (D13): README Arabic-first; DISCLOSURE, SOURCES and TESTING in Arabic (MSA) inside `<div dir="rtl">`; LICENSES in English. IDs, URLs, endpoints and code stay in Latin script.
+
+## README.md (Arabic first; top of file = judge quick-start; English technical-setup section after the Arabic part)
 1. One-line description + **Live link** + QR.
 2. "Try these three things in two minutes": (a) play Station 1 by tapping; (b) open the evaluation page and type a test question; (c) ask a sensitive question and see the referral and parent summary.
 3. Built 4–6 Oct vs Roadmap (short table).

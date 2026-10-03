@@ -59,6 +59,6 @@ Run this checklist on every record and report only failures, by record ID:
 
 ## Task E — TESTING.md section
 
-Write from actual result files only. Per category: items, runs, pass rate, consistency, threshold, met (Y/N), notable failures and fixes. State the limits plainly (sample size, single model version, human grading by the entrant with independent scholar review on C–F). Label everything **Built 4–6 Oct**. If a number is not in a result file, write `[PENDING: run-id]`, never an estimate.
+Write in Arabic (MSA) inside `<div dir="rtl">` (language rule D13), from actual result files only. Per category: items, runs, pass rate, consistency, threshold, met (Y/N), notable failures and fixes. State the limits plainly (sample size, single model version, human grading by the entrant with independent scholar review on C–F). Label everything **Built 4–6 Oct**. If a number is not in a result file, write `[PENDING: run-id]`, never an estimate.
 
 Tag working notes FACT / ASSUMPTION / RECOMMENDATION / DECISION.

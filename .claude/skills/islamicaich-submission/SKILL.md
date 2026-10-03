@@ -19,7 +19,7 @@ Read before working:
 2. **Built 4–6 Oct vs Roadmap** on every slide, section and claim. Roadmap items are written in the future tense and never shown as screenshots of the product.
 3. **No Islamic text from memory** — the deck and video show verses only as screenshots of the live product (which renders the snapshotted text). Never type a verse or hadith into a slide.
 4. **No identifiable child** in screenshots, video or deck; pilot children are C1–C6; no names, faces or voices. In the video an adult voices the child's answers.
-5. **Language:** deck and video narration in Modern Standard Arabic; working documents and repo docs in English; Western numerals everywhere.
+5. **Language (D13, CLAUDE.md §1):** deck, video, evaluation page, SOURCES.md, TESTING.md and DISCLOSURE.md in Modern Standard Arabic; README Arabic-first with an English technical-setup section; LICENSES.md and working notes in English; Western numerals everywhere. Wrap Arabic Markdown in `<div dir="rtl">` so GitHub renders it right-to-left.
 6. **Positioning (D12):** complementary to Rayan & Bayan — they teach reading and memorization; MIZAN builds understanding of Allah's signs in creation. Never disparage another product.
 7. **Business and legal framing (D11):** pilot via partnership with an existing association or school, then a commercial company serving the sector, with hybrid grant funding for free access. Present as Roadmap.
 8. **Pilot honesty:** report the actual sample size, the crossover design and that results are preliminary; at least two UX changes made from the pilot (Built).

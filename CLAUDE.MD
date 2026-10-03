@@ -8,6 +8,23 @@ Challenge: Islamic AI Challenge, Track 03 (interactive experiences and the knowl
 Build window: Sun 4 Oct 2026 09:00 → Tue 6 Oct 2026 23:59, Riyadh time (UTC+3). Internal submission: Tue 21:00.
 Scored work: only what is built 4–6 Oct. Everything before is tagged v0-baseline and declared in DISCLOSURE.md (Participant Guide p.43).
 Your role (Claude Code): write and test the code — app, content compiler, retrieval, router, citation validator, ingestion script, evaluation runner — and draft README and technical docs from the actual repo. You do not author Islamic content and you do not approve anything.
+
+### Language rule (DECISION, 3 Oct 2026)
+
+| Artefact | Language |
+|---|---|
+| Product: child journey, parent summary, all UI text | Arabic (MSA) |
+| Evaluation page | Arabic (MSA) |
+| Deck and video | Arabic (MSA) |
+| SOURCES.md · TESTING.md · DISCLOSURE.md | Arabic (MSA) |
+| README.md | Arabic first (description, live link, judge quick-start, Built 4–6 Oct vs Roadmap), then an English section for technical setup, run and dependencies |
+| Code, code comments, commit messages, branch and tag names | English |
+
+- Western numerals (0–9) in every language.
+- Wrap Arabic Markdown in `<div dir="rtl">` … `</div>` (blank line after the opening tag) so GitHub renders it right-to-left. Code blocks, URLs, file paths, record IDs and API endpoints stay in Latin script.
+- Files not listed above (LICENSES.md, /docs, /eval data, CLAUDE.md, skills) stay in English unless Hussein decides otherwise.
+- Islamic terms in Arabic documents come from the approved sources (§2; Runbook §5.1). Never machine-translate a verse or a sensitive term.
+
 2. Sources of truth (in order of precedence)
 Participant Guide (organizers) — deliverables p.14, repo rules p.32, prior-work rule p.43.
 Reference and Scientific Package, 15-page edition — content levels p.2, approved references p.3–4, binding output standard p.5, test cases p.6, platforms and APIs p.8–15.
