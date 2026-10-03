@@ -1,0 +1,78 @@
+#!/usr/bin/env node
+// Structural check of eval/testset.json and its record references.
+// Prints IDs and counts only, never any text field from /eval or /content.
+
+import { readFile, readdir } from 'node:fs/promises';
+import { join, resolve, dirname, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const EXPECTED_TOTAL = 50;
+const EXPECTED_COUNTS = { A: 15, B: 12, C: 8, D: 6, E: 4, F: 3, G: 2 };
+const PLANNED_STATIONS = /^S[23]\./; // stations not drafted yet
+
+// Every content JSON file except run logs (content/snapshots holds logs, not records).
+async function contentFiles(dir) {
+  const out = [];
+  for (const e of await readdir(dir, { withFileTypes: true })) {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) { if (e.name !== 'snapshots') out.push(...await contentFiles(p)); } else if (e.name.endsWith('.json')) out.push(p);
+  }
+  return out;
+}
+
+// Every string `id` on any object in a content file (records, choices, concepts, questions).
+function collectIds(value, ids) {
+  if (Array.isArray(value)) value.forEach((v) => collectIds(v, ids));
+  else if (value && typeof value === 'object') {
+    if (typeof value.id === 'string') ids.add(value.id);
+    Object.values(value).forEach((v) => collectIds(v, ids));
+  }
+}
+
+const errors = [];
+const testset = JSON.parse(await readFile(join(ROOT, 'eval', 'testset.json'), 'utf8'));
+const items = Array.isArray(testset.items) ? testset.items : [];
+
+if (items.length !== EXPECTED_TOTAL) errors.push(`item count ${items.length}, expected ${EXPECTED_TOTAL}`);
+
+const counts = Object.fromEntries(Object.keys(EXPECTED_COUNTS).map((c) => [c, 0]));
+for (const it of items) counts[it.category] = (counts[it.category] ?? 0) + 1;
+for (const [c, n] of Object.entries(counts)) {
+  if (n !== (EXPECTED_COUNTS[c] ?? 0)) errors.push(`category ${c}: ${n} items, expected ${EXPECTED_COUNTS[c] ?? 0}`);
+}
+
+const seen = new Set();
+for (const it of items) {
+  if (seen.has(it.id)) errors.push(`duplicate item id ${it.id}`);
+  seen.add(it.id);
+  if (it.status !== 'draft') errors.push(`item ${it.id}: status ${JSON.stringify(it.status)}, expected "draft"`);
+}
+
+const files = await contentFiles(join(ROOT, 'content'));
+const known = new Set();
+for (const f of files) collectIds(JSON.parse(await readFile(f, 'utf8')), known);
+
+const refs = []; // { item, field, id }
+for (const it of items) {
+  for (const id of it.expectedCitations ?? []) refs.push({ item: it.id, field: 'expectedCitations', id });
+  for (const id of it.input?.context?.onScreen ?? []) refs.push({ item: it.id, field: 'input.context.onScreen', id });
+  if (it.input?.mutation?.baseRecordId) refs.push({ item: it.id, field: 'input.mutation.baseRecordId', id: it.input.mutation.baseRecordId });
+}
+const found = refs.filter((r) => known.has(r.id));
+const planned = refs.filter((r) => !known.has(r.id) && PLANNED_STATIONS.test(r.id));
+const missing = refs.filter((r) => !known.has(r.id) && !PLANNED_STATIONS.test(r.id));
+for (const r of missing) errors.push(`${r.item} ${r.field}: ${r.id} not found in /content`);
+
+const uniq = (list) => [...new Set(list.map((r) => r.id))].sort();
+console.log(`testset: ${items.length} items | ${Object.entries(counts).map(([c, n]) => `${c}${n}`).join(' ')} | version ${testset.meta?.version ?? '?'}`);
+console.log(`content files scanned: ${files.map((f) => relative(ROOT, f).split('\\').join('/')).join(', ')} (${known.size} ids)`);
+console.log(`references: ${refs.length} total | found ${found.length} | planned ${planned.length} | missing ${missing.length}`);
+console.log(`found ids (${uniq(found).length}): ${uniq(found).join(', ') || '-'}`);
+console.log(`planned ids, stations not drafted yet (${uniq(planned).length}): ${uniq(planned).join(', ') || '-'}`);
+if (errors.length) {
+  console.log(`\nFAIL (${errors.length})\n  ${errors.join('\n  ')}`);
+  process.exitCode = 1;
+} else {
+  console.log('\nPASS');
+}
