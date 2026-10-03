@@ -145,3 +145,6 @@ vite.config.ts.timestamp-*
 # Raw King Fahd Complex Qur'an files: kept out of the repo until the licence is verified
 sources/kfc/*
 !sources/kfc/.gitkeep
+
+# Local snapshot review pages (contain source text; never committed)
+.snapshot-preview/
