@@ -44,3 +44,11 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Voice and model:** ElevenLabs voice Hams (`29hj550woDeJpvjtiu26`), model `eleven_v3`, output `mp3_44100_128` (D28). 82 lines regenerated 2026-10-05 from fully vocalized text. 11 lines whose new text awaits the scholar's Review 2 keep their earlier audio (same voice, model `eleven_multilingual_v2`, 2026-10-04) until approved.
 - **Never Qur'an:** quran, tafsir and hadith records are never sent; every line passes the app's TTS guard and the citation validator's Qur'anic-text checks (R4).
 - **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]
+
+## Sound effects (ElevenLabs Sound Effects)
+
+- **Files:** `public/audio/sfx/tap.mp3`, `correct.mp3`, `tryAgain.mp3`, `momentS1.mp3`, `momentS2.mp3`, `momentS3.mp3`, `close.mp3` (7 files; D40).
+- **Source:** ElevenLabs Sound Effects, model `eleven_text_to_sound_v2`, generated 2026-10-04 and approved by Hussein. Nature/foley sounds only, no musical instruments.
+- **Processing:** ffmpeg (silence trimmed, length capped, 30 ms fade-in, 150 ms fade-out, normalised to -20 LUFS, mono 64 kbps MP3).
+- **Never with Qur'an:** no effect plays while a recitation is playing; a running effect stops when one starts (D38). Parents can turn all effects off.
+- **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]

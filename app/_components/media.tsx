@@ -126,7 +126,11 @@ const Star = ({ className }: { className: string }) => (
 export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { verse: VerseView; playLabel?: string; label?: string; surahLabel?: string; ayahLabel?: string }) {
   const ref = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
+  const reciting = useRef(false);
   const rc = verse.recitation;
+  // Qur'an recitation: sound effects stop and stay silent until it ends (D38).
+  const started = () => { reciting.current = true; sfx.recitationStarted(); };
+  const stopped = () => { setPlaying(false); reciting.current = false; sfx.recitationStopped(); };
 
   const play = () => {
     const a = ref.current;
@@ -135,14 +139,24 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { 
     // The tap itself starts playback (required on iPad/Android); seek as soon as metadata is known.
     if (a.readyState >= 1) a.currentTime = start;
     else a.addEventListener('loadedmetadata', () => { a.currentTime = start; }, { once: true });
-    // Qur'an recitation: sound effects stop and stay silent until it ends (D38).
-    sfx.recitationStarted();
-    void a.play().then(() => setPlaying(true)).catch(() => { setPlaying(false); sfx.recitationStopped(); });
+    started();
+    void a.play().then(() => setPlaying(true)).catch(stopped);
   };
   const onTime = () => {
     const a = ref.current;
     if (a && rc && a.currentTime >= rc.endMs / 1000) { a.pause(); setPlaying(false); }
   };
+  // Leaving the card mid-recitation (next step, another page): stop the recitation and let sound
+  // effects play again; the element's own pause event no longer reaches React once it is unmounted.
+  useEffect(() => {
+    const a = ref.current;
+    return () => {
+      if (!reciting.current) return;
+      a?.pause();
+      reciting.current = false;
+      sfx.recitationStopped();
+    };
+  }, []);
 
   return (
     <figure data-verse={verse.id} className="card flex flex-col gap-5 border border-gold p-3">
@@ -170,7 +184,7 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { 
           </span>
         </figcaption>
       )}
-      {rc && <audio ref={ref} src={rc.src} preload="none" onTimeUpdate={onTime} onPlay={() => sfx.recitationStarted()} onPause={() => { setPlaying(false); sfx.recitationStopped(); }} onEnded={() => { setPlaying(false); sfx.recitationStopped(); }} />}
+      {rc && <audio ref={ref} src={rc.src} preload="none" onTimeUpdate={onTime} onPlay={started} onPause={stopped} onEnded={stopped} />}
     </figure>
   );
 }
