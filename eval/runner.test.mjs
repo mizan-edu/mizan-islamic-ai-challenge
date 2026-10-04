@@ -70,6 +70,14 @@ describe('citation and verse checks', () => {
     expect(runCheck('citation_present', ctx(result({ segments: [], citations: [] })))).toBe(false);
   });
 
+  it('citation_present with acceptableCitations: any one complete set passes; a partial set does not (D31)', () => {
+    const item = { expectedCitations: ['S9.V1', 'S9.E1'], acceptableCitations: [['S9.V1', 'S9.E1'], ['S9.X1', 'S9.V1']] };
+    expect(runCheck('citation_present', ctx(result({ segments: [seg('S9.X1')], citations: ['S9.X1', 'S9.V1'] }), item))).toBe(true);
+    expect(runCheck('citation_present', ctx(result({ segments: [seg('S9.E1')], citations: ['S9.E1', 'S9.V1'] }), item))).toBe(true);
+    expect(runCheck('citation_present', ctx(result({ segments: [seg('S9.E1')], citations: ['S9.E1'] }), item))).toBe(false);
+    expect(runCheck('citation_present', ctx(result({ segments: [seg('S9.X1')], citations: ['S9.X1'] }), item))).toBe(false);
+  });
+
   it('citation_valid fails on an unknown ID or a reply the validator rejects', () => {
     expect(runCheck('citation_valid', ctx(result()))).toBe(true);
     expect(runCheck('citation_valid', ctx(result({ citations: ['S9.X1', 'S9.NOPE'] })))).toBe(false);

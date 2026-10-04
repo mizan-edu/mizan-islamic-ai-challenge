@@ -80,6 +80,8 @@ for (const f of files) collectIds(JSON.parse(await readFile(f, 'utf8')), known);
 const refs = []; // { item, field, id }
 for (const it of items) {
   for (const id of it.expectedCitations ?? []) refs.push({ item: it.id, field: 'expectedCitations', id });
+  for (const set of it.acceptableCitations ?? []) for (const id of set) refs.push({ item: it.id, field: 'acceptableCitations', id });
+  if (it.acceptableCitations && !it.acceptableCitations.some((s) => JSON.stringify(s) === JSON.stringify(it.expectedCitations))) errors.push(`item ${it.id}: acceptableCitations must include expectedCitations as one set`);
   for (const id of it.input?.context?.onScreen ?? []) refs.push({ item: it.id, field: 'input.context.onScreen', id });
   if (it.input?.mutation?.baseRecordId) refs.push({ item: it.id, field: 'input.mutation.baseRecordId', id: it.input.mutation.baseRecordId });
 }

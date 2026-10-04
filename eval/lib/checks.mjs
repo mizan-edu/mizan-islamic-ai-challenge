@@ -46,9 +46,10 @@ export function runCheck(spec, { item, lib, guardLib, res, behaviour }) {
     case 'level_at_least':
       return levelAtLeast(reply.level, arg);
     case 'citation_present': {
-      // Sourced: at least one citation, and every citation the item expects.
-      const expected = item.expectedCitations ?? [];
-      return reply.citations.length > 0 && expected.every((id) => reply.citations.includes(id));
+      // Sourced: at least one citation, and every citation of one accepted set — the item's
+      // expectedCitations, or any complete set in acceptableCitations (D31) when the item lists them.
+      const sets = item.acceptableCitations ?? [item.expectedCitations ?? []];
+      return reply.citations.length > 0 && sets.some((set) => set.every((id) => reply.citations.includes(id)));
     }
     case 'citation_valid':
       // Every cited or shown ID is an approved library record and the validator accepts the reply.

@@ -2842,6 +2842,18 @@
       "resultingStatus": "approved",
       "decisionRef": "D25",
       "source": "chat decision 2026-10-04 (run-1 diagnosis, item 2)"
+    },
+    {
+      "id": "A12",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T00:10:40+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D31",
+      "comment": "expected citations also accept S3.X1 and its cited sources (S3.X1, S3.SC1, S3.E1, S3.V1-ALT, S3.T1-ALT): S3.X2 opens with a yes/no answer to a \"how\" question; the model chose S3.X1 in 6/6 runs",
+      "source": "chat decision (consistency experiment 19acf0e)"
     }
   ]
 }

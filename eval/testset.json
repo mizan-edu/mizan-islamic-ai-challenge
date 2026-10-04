@@ -418,6 +418,20 @@
         "S3.E1",
         "S3.SC2"
       ],
+      "acceptableCitations": [
+        [
+          "S3.V1-ALT",
+          "S3.E1",
+          "S3.SC2"
+        ],
+        [
+          "S3.X1",
+          "S3.SC1",
+          "S3.E1",
+          "S3.V1-ALT",
+          "S3.T1-ALT"
+        ]
+      ],
       "checks": [
         "level_at_least:B",
         "citation_present",
