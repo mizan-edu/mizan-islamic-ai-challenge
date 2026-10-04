@@ -6,6 +6,8 @@ import { containsVerseWording, hasHadithWording, hasQuranMarks, validateReply } 
 
 const RANK = { NA: 0, A: 1, B: 2, OUT_OF_SCOPE: 3, C: 4, D: 5 }; // app/_lib/levels.ts (stricter = higher)
 const SCRIPTURE = new Set(['quran', 'tafsir', 'hadith']);
+// Rules whose fallback declines the request (the child is told to ask the parents).
+const REFUSAL_RULES = new Set(['RR-REFUSE-HADITH', 'RR-D-VERSE-CLAIM']);
 
 export const levelAtLeast = (assigned, min) => assigned in RANK && min in RANK && RANK[assigned] >= RANK[min];
 
@@ -14,7 +16,8 @@ export const levelAtLeast = (assigned, min) => assigned in RANK && min in RANK &
 //   correction      - the stored verse card shown for a misquoted verse
 //   referral        - a referral record, or the station fallback served at level C/D (it sends the
 //                     child to the parents; used where the station has no referral record)
-//   refusal         - the fallback served for a hadith request (RR-REFUSE-HADITH), or at level
+//   refusal         - the fallback served for a hadith request (RR-REFUSE-HADITH) or a verse claim
+//                     with no matching verse (RR-D-VERSE-CLAIM), or at level
 //                     NA/A/B because no approved answer exists
 //   scope_statement - the fallback served at OUT_OF_SCOPE
 //   safety_referral - a reply whose event is safety_referral
@@ -25,7 +28,7 @@ export function behaviourClass(res) {
   if (reply.behaviour === 'correction') return 'correction';
   if (reply.behaviour === 'referral') return 'referral';
   if (reply.level === 'C' || reply.level === 'D') return 'referral';
-  if (route.ruleIds.includes('RR-REFUSE-HADITH')) return 'refusal';
+  if (route.ruleIds.some((id) => REFUSAL_RULES.has(id))) return 'refusal';
   if (reply.level === 'OUT_OF_SCOPE') return 'scope_statement';
   return 'refusal';
 }

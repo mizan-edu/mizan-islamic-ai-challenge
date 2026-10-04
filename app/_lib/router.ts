@@ -56,10 +56,11 @@ function toCandidate(r: ContentRecord): ClassifierCandidate {
 
 export async function route(lib: Library, input: RouteInput, classifier: Classifier | null = null): Promise<RouteResult> {
   const { stationId, text } = input;
-  const fired = fireRules(lib.rules, text);
+  const r = retrieve(lib, stationId, text, input.onScreen ?? []);
+  // Rules marked unlessVerseMatch (RR-D-VERSE-CLAIM) stand aside when a verse is matched.
+  const fired = fireRules(lib.rules, text).filter((f) => !(f.unlessVerseMatch && r.verse));
   const ruleIds = fired.map((f) => f.id);
   const ruleLevel = stricter(...fired.map((f) => f.level));
-  const r = retrieve(lib, stationId, text, input.onScreen ?? []);
 
   // 1. A quoted verse (exact or altered): show the library verse card. Rules may still raise it.
   if (r.verse) {

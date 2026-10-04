@@ -2831,6 +2831,17 @@
       "decisionRef": "D25",
       "comment": "added machine check correction_detected",
       "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "RR-D-VERSE-CLAIM",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:20:02+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis, item 2)"
     }
   ]
 }

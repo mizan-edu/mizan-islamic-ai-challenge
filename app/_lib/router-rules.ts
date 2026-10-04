@@ -15,6 +15,8 @@ export interface RouterRule {
   patterns: string[]; // regular expressions over normalized text
   // The rule does not fire when ANY of `any` matches and NONE of `none` matches.
   exceptWhen?: { any: string[]; none: string[] };
+  // The rule stands aside when the question contains a verse that reaches the verse-match threshold.
+  unlessVerseMatch?: boolean;
   note?: string;
   status: string;
   reviewer1?: string | null;
@@ -32,6 +34,7 @@ export interface FiredRule {
   id: string;
   level: RouteLevel;
   route: 'referral' | 'fallback';
+  unlessVerseMatch?: boolean;
 }
 
 export function fireRules(rules: RouterRule[], text: string): FiredRule[] {
@@ -41,7 +44,7 @@ export function fireRules(rules: RouterRule[], text: string): FiredRule[] {
   for (const r of rules) {
     if (r.status !== 'approved' || !hit(r.patterns)) continue;
     if (r.exceptWhen && hit(r.exceptWhen.any) && !hit(r.exceptWhen.none)) continue;
-    fired.push({ id: r.id, level: r.level, route: r.route });
+    fired.push({ id: r.id, level: r.level, route: r.route, ...(r.unlessVerseMatch ? { unlessVerseMatch: true } : {}) });
   }
   return fired;
 }

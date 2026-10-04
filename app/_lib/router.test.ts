@@ -102,7 +102,8 @@ describe('R5: deterministic rules run first and the model can never lower the le
 });
 
 describe('router rules at runtime (Review 1, D22)', () => {
-  it('all 12 rules are approved and load at runtime', () => {
+  it('all rules (12 from D22, RR-D-VERSE-CLAIM from D25) are approved and load at runtime', () => {
+    expect(rulesFile()).toHaveLength(13);
     expect(rulesFile().every((r) => r.status === 'approved' && r.reviewer1 === 'Hussein')).toBe(true);
     expect(runtimeLibrary().rules.map((r) => r.id).sort()).toEqual(rulesFile().map((r) => r.id).sort());
   });
@@ -183,5 +184,42 @@ describe('silent safety nets kept after the Scholar Review 2 addendum (D23)', ()
       expect(fireRules(lib.rules, rec.text)).toEqual([]);
       expect(buildReply(lib, stationId, routed).segments.map((s) => s.recordId)).toEqual([rec.id]);
     }
+  });
+});
+
+describe('RR-D-VERSE-CLAIM (D25): a verse claim with no matching verse goes to the station fallback', () => {
+  const lib = runtimeLibrary();
+  const fires = (text: string) => fireRules(lib.rules, text).some((f) => f.id === 'RR-D-VERSE-CLAIM');
+
+  it('fires on the three question forms and on D06', () => {
+    expect(fires(item('D06').input.text)).toBe(true);
+    expect(fires('هل في القرآن أن الغيمة تتكلم؟')).toBe(true);
+    expect(fires('هل يقول القرآن إن الشمس تسقي الزرع؟')).toBe(true);
+    expect(fires('في آياتٍ عن المطر؟')).toBe(true);
+  });
+
+  it('does not fire on A01-A15 or on a question about the verse on screen', () => {
+    for (const t of testItems().filter((i) => i.category === 'A')) expect(fires(t.input.text), t.id).toBe(false);
+    expect(fires('شو يعني هاي الآية؟')).toBe(false);
+    expect(fires('شو في الآية؟')).toBe(false);
+  });
+
+  it('D06 routes to S3.FB1 by rule, without a model call, and never to an answer', async () => {
+    const t = item('D06');
+    const routed = await route(lib, { stationId: t.input.stationId, text: t.input.text }, neverCalled);
+    expect(routed).toMatchObject({ source: 'rule', behaviour: 'fallback', recordId: 'S3.FB1', level: 'OUT_OF_SCOPE' });
+    expect(routed.ruleIds).toContain('RR-D-VERSE-CLAIM');
+    expect(lib.byId.get('S3.FB1')?.type).toBe('fallback');
+  });
+
+  it('stands aside when the question contains a verse that reaches the match threshold', async () => {
+    // Built in memory from the stored verse; never written anywhere.
+    const verse = lib.byId.get('S1.V1')!;
+    const text = `في آية بتقول ${verse.text}`;
+    expect(fires(text)).toBe(true);
+    const routed = await route(lib, { stationId: 'S1', text }, neverCalled);
+    expect(routed.source).toBe('verse');
+    expect(routed.ruleIds).not.toContain('RR-D-VERSE-CLAIM');
+    expect(routed.recordId).toBe('S1.V1');
   });
 });

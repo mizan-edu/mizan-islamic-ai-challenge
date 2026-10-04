@@ -172,6 +172,20 @@
       "status": "approved",
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-D-VERSE-CLAIM",
+      "level": "OUT_OF_SCOPE",
+      "route": "fallback",
+      "note": "A question asking whether a verse (or the Quran) says something, when no verse in the question reaches the verse-match threshold: the station fallback FB1. Never states that a verse does not exist (D25).",
+      "patterns": [
+        "(^| )في (ايه|ايات)( |$)",
+        "(^| )هل (في|يقول) القران( |$)"
+      ],
+      "unlessVerseMatch": true,
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T18:20:02+03:00"
     }
   ]
 }
