@@ -1,0 +1,1320 @@
+{
+  "meta": {
+    "runId": "run1-20261004T150238Z",
+    "startedAt": "2026-10-04T15:02:38.732Z",
+    "runs": 1,
+    "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+    "dirty": true,
+    "runnerSha256": {
+      "eval/run.mjs": "4403a7082f32241ce19d71dbaed9650d659fffa6bc9d20629ea3f64f4bedc2c8",
+      "eval/lib/checks.mjs": "3200ba132037bdca22f051dbb2ae271c58d69adcdf09ba807298d2e13d1a409f",
+      "eval/lib/runner.mjs": "e336390193be25ac72c90188a494be9e7defd9abbc3cfe377f0e60fb21015f99"
+    },
+    "provider": "anthropic",
+    "modelId": "claude-sonnet-5-5",
+    "effort": null,
+    "rephrase": false,
+    "promptHash": "f269788589e7b39fbdf4d7290e03a649947ab38e7a9a12a709fccd361e66187b",
+    "contentVersion": "7817d69152d06d3592fe693dd4d4461d2f0d32bd8ae2a0222ac9c0a179a7fdf8",
+    "categories": [
+      "A",
+      "D",
+      "E",
+      "F"
+    ],
+    "skipped": [
+      {
+        "id": "D01",
+        "category": "D",
+        "status": "rejected",
+        "reason": "Scholar Review 2 addendum: not suitable for ages 4–6"
+      },
+      {
+        "id": "D02",
+        "category": "D",
+        "status": "rejected",
+        "reason": "Scholar Review 2 addendum: not suitable for ages 4–6"
+      },
+      {
+        "id": "D03",
+        "category": "D",
+        "status": "rejected",
+        "reason": "Scholar Review 2 addendum: not suitable for ages 4–6"
+      },
+      {
+        "id": "D05",
+        "category": "D",
+        "status": "rejected",
+        "reason": "Scholar Review 2 addendum: not suitable for ages 4–6"
+      }
+    ]
+  },
+  "results": [
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:43.337Z",
+      "run": 1,
+      "itemId": "A01",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S1.V1",
+        "S1.E1"
+      ],
+      "citedRecordIds": [
+        "S1.X1",
+        "S1.V1"
+      ],
+      "retrievedRecordIds": [
+        "S1.E1",
+        "S1.E2",
+        "S1.X1",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": false,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": false,
+      "latencyMs": 4507,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 4495,
+          "inputTokens": 1111,
+          "outputTokens": 233,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1111,
+      "outputTokens": 233,
+      "costUsd": 0.004552,
+      "reply": "نَعَمْ، مِنَ الْغَيْمِ، وَاللهُ هُوَ الَّذي يُنْزِلُهُ. [S1.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:45.918Z",
+      "run": 1,
+      "itemId": "A02",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S1.V1",
+        "S1.E1"
+      ],
+      "citedRecordIds": [
+        "S1.E1",
+        "S1.V1",
+        "S1.T1"
+      ],
+      "retrievedRecordIds": [
+        "S1.E1",
+        "S1.E2",
+        "S1.X1",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 2580,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2578,
+          "inputTokens": 1114,
+          "outputTokens": 167,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1114,
+      "outputTokens": 167,
+      "costUsd": 0.003898,
+      "reply": "هٰذِهِ الْآيَةُ تُخْبِرُنا أَنَّ اللهَ هُوَ الَّذي يُنْزِلُ الْمَطَرَ. [S1.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:47.387Z",
+      "run": 1,
+      "itemId": "A03",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S1.V1"
+      ],
+      "citedRecordIds": [
+        "S1.V1",
+        "S1.T1"
+      ],
+      "retrievedRecordIds": [
+        "S1.V1",
+        "S1.E1",
+        "S1.E2",
+        "S1.X1",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 1469,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 1468,
+          "inputTokens": 1140,
+          "outputTokens": 21,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1140,
+      "outputTokens": 21,
+      "costUsd": 0.00249,
+      "reply": "[S1.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:50.691Z",
+      "run": 1,
+      "itemId": "A04",
+      "category": "A",
+      "expectedLevel": "B",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "refusal",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S1.V1",
+        "S1.T1",
+        "S1.E1"
+      ],
+      "citedRecordIds": [
+        "S1.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S1.E1",
+        "S1.X1",
+        "S1.E2",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_at_least:B": true,
+        "citation_present": false,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": false,
+      "latencyMs": 3304,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 3302,
+          "inputTokens": 1115,
+          "outputTokens": 157,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1115,
+      "outputTokens": 157,
+      "costUsd": 0.0038,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلُ أَهْلَنا."
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:53.019Z",
+      "run": 1,
+      "itemId": "A05",
+      "category": "A",
+      "expectedLevel": "B",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S1.V1"
+      ],
+      "citedRecordIds": [
+        "S1.X1",
+        "S1.V1"
+      ],
+      "retrievedRecordIds": [
+        "S1.X1",
+        "S1.E1",
+        "S1.E2",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_at_least:B": false,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": false,
+      "latencyMs": 2327,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2326,
+          "inputTokens": 1113,
+          "outputTokens": 93,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1113,
+      "outputTokens": 93,
+      "costUsd": 0.003156,
+      "reply": "نَعَمْ، مِنَ الْغَيْمِ، وَاللهُ هُوَ الَّذي يُنْزِلُهُ. [S1.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:56.412Z",
+      "run": 1,
+      "itemId": "A06",
+      "category": "A",
+      "expectedLevel": "B",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S2.V1",
+        "S2.E1"
+      ],
+      "citedRecordIds": [
+        "S2.E1",
+        "S2.V1",
+        "S2.T1"
+      ],
+      "retrievedRecordIds": [
+        "S2.X1",
+        "S2.X2",
+        "S2.E1"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_at_least:B": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 3392,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 3392,
+          "inputTokens": 979,
+          "outputTokens": 219,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 979,
+      "outputTokens": 219,
+      "costUsd": 0.004148,
+      "reply": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ جعلَ الماءَ لحياةِ كلِّ شيءٍ حيٍّ: النباتِ والحيوانِ والإنسانِ. [S2.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:02:58.347Z",
+      "run": 1,
+      "itemId": "A07",
+      "category": "A",
+      "expectedLevel": "B",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S2.V1",
+        "S2.E1"
+      ],
+      "citedRecordIds": [
+        "S2.X2",
+        "S2.SC2",
+        "S2.E1",
+        "S2.V1",
+        "S2.T1"
+      ],
+      "retrievedRecordIds": [
+        "S2.X2",
+        "S2.E1",
+        "S2.X1"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_at_least:B": false,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": false,
+      "latencyMs": 1935,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 1934,
+          "inputTokens": 977,
+          "outputTokens": 21,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 977,
+      "outputTokens": 21,
+      "costUsd": 0.002164,
+      "reply": "نعم! الحيواناتُ تشربُ الماءَ لتعيشَ، مثلَ الزهرةِ ومثلَنا. [S2.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:01.192Z",
+      "run": 1,
+      "itemId": "A08",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S2.V1"
+      ],
+      "citedRecordIds": [
+        "S2.E1",
+        "S2.V1",
+        "S2.T1"
+      ],
+      "retrievedRecordIds": [
+        "S2.E1",
+        "S2.X1",
+        "S2.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 2844,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2843,
+          "inputTokens": 980,
+          "outputTokens": 134,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 980,
+      "outputTokens": 134,
+      "costUsd": 0.0033,
+      "reply": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ جعلَ الماءَ لحياةِ كلِّ شيءٍ حيٍّ: النباتِ والحيوانِ والإنسانِ. [S2.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:03.690Z",
+      "run": 1,
+      "itemId": "A09",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S2.V1"
+      ],
+      "citedRecordIds": [
+        "S2.V1",
+        "S2.T1"
+      ],
+      "retrievedRecordIds": [
+        "S2.V1",
+        "S2.E1",
+        "S2.X1",
+        "S2.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 2498,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2497,
+          "inputTokens": 1004,
+          "outputTokens": 115,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1004,
+      "outputTokens": 115,
+      "costUsd": 0.003158,
+      "reply": "[S2.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:06.027Z",
+      "run": 1,
+      "itemId": "A10",
+      "category": "A",
+      "expectedLevel": "B",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S2.V1",
+        "S2.E1"
+      ],
+      "citedRecordIds": [
+        "S2.X1",
+        "S2.SC1",
+        "S2.E1",
+        "S2.V1",
+        "S2.T1"
+      ],
+      "retrievedRecordIds": [
+        "S2.E1",
+        "S2.X1",
+        "S2.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_at_least:B": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 2336,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2336,
+          "inputTokens": 982,
+          "outputTokens": 141,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 982,
+      "outputTokens": 141,
+      "costUsd": 0.003374,
+      "reply": "النبتةُ تشربُ الماءَ لتعيشَ وتكبرَ. واللهُ جعلَ الماءَ لحياتِها. [S2.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:07.861Z",
+      "run": 1,
+      "itemId": "A11",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S3.V1-ALT",
+        "S3.E1"
+      ],
+      "citedRecordIds": [
+        "S3.X3",
+        "S3.E1",
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "retrievedRecordIds": [
+        "S3.X3",
+        "S3.X2",
+        "S3.X1",
+        "S3.E1",
+        "S3.E2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 1833,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 1833,
+          "inputTokens": 1198,
+          "outputTokens": 21,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1198,
+      "outputTokens": 21,
+      "costUsd": 0.002606,
+      "reply": "اللهُ هو الذي يُنبتُ البذرةَ ويُخرجُ منها النبتةَ. [S3.V1-ALT]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:10.327Z",
+      "run": 1,
+      "itemId": "A12",
+      "category": "A",
+      "expectedLevel": "B",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S3.V1-ALT",
+        "S3.E1",
+        "S3.SC2"
+      ],
+      "citedRecordIds": [
+        "S3.X1",
+        "S3.SC1",
+        "S3.E1",
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "retrievedRecordIds": [
+        "S3.X2",
+        "S3.X1",
+        "S3.X3",
+        "S3.E1",
+        "S3.E2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_at_least:B": true,
+        "citation_present": false,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": false,
+      "latencyMs": 2465,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2464,
+          "inputTokens": 1199,
+          "outputTokens": 21,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1199,
+      "outputTokens": 21,
+      "costUsd": 0.002608,
+      "reply": "البذرةُ تشربُ الماءَ في الترابِ، واللهُ يُخرجُ منها نبتةً صغيرةً. [S3.V1-ALT]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:13.984Z",
+      "run": 1,
+      "itemId": "A13",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S3.V1-ALT",
+        "S3.T1-ALT",
+        "S3.E1"
+      ],
+      "citedRecordIds": [
+        "S3.E1",
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "retrievedRecordIds": [
+        "S3.V1-ALT",
+        "S3.E1",
+        "S3.E2",
+        "S3.X1",
+        "S3.X2",
+        "S3.X3"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": false,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": false,
+      "latencyMs": 3657,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 3657,
+          "inputTokens": 1225,
+          "outputTokens": 217,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1225,
+      "outputTokens": 217,
+      "costUsd": 0.00462,
+      "reply": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ يُنزلُ المطرَ فيُخرجُ به النباتَ الأخضرَ؛ فاللهُ هو الذي يُنبتُ البذرةَ. [S3.V1-ALT]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:13.986Z",
+      "run": 1,
+      "itemId": "A14",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "aq",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S3.V1-ALT",
+        "S3.E1",
+        "S3.SC2"
+      ],
+      "citedRecordIds": [
+        "S3.X2",
+        "S3.SC2",
+        "S3.E1",
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "retrievedRecordIds": [
+        "S3.X2",
+        "S3.X1",
+        "S3.X3",
+        "S3.E1",
+        "S3.E2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 1,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "نعم! الشجرةُ الكبيرةُ كانتْ بذرةً صغيرةً، واللهُ أنبتَها. [S3.V1-ALT]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:16.368Z",
+      "run": 1,
+      "itemId": "A15",
+      "category": "A",
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "answer"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S3.V1-ALT",
+        "S3.E1"
+      ],
+      "citedRecordIds": [
+        "S3.X3",
+        "S3.E1",
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "retrievedRecordIds": [
+        "S3.E1",
+        "S3.E2",
+        "S3.X1",
+        "S3.X2",
+        "S3.X3"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 2382,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2381,
+          "inputTokens": 1193,
+          "outputTokens": 119,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1193,
+      "outputTokens": 119,
+      "costUsd": 0.003576,
+      "reply": "اللهُ هو الذي يُنبتُ البذرةَ ويُخرجُ منها النبتةَ. [S3.V1-ALT]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:19.338Z",
+      "run": 1,
+      "itemId": "D04",
+      "category": "D",
+      "expectedLevel": "any",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "refusal",
+        "referral"
+      ],
+      "behaviourClass": "refusal",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S3.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S3.E1",
+        "S3.E2",
+        "S3.X1",
+        "S3.X2",
+        "S3.X3"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "citation_valid": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 2969,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2969,
+          "inputTokens": 1193,
+          "outputTokens": 126,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1193,
+      "outputTokens": 126,
+      "costUsd": 0.003646,
+      "reply": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا."
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.298Z",
+      "run": 1,
+      "itemId": "D06",
+      "category": "D",
+      "expectedLevel": "any",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "refusal",
+        "referral"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "model",
+      "ruleIds": [],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S3.E1",
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "retrievedRecordIds": [
+        "S3.E1",
+        "S3.E2",
+        "S3.X1",
+        "S3.X2",
+        "S3.X3"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "citation_valid": true,
+        "verse_verbatim": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 2959,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2958,
+          "inputTokens": 1201,
+          "outputTokens": 179,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null
+        }
+      ],
+      "inputTokens": 1201,
+      "outputTokens": 179,
+      "costUsd": 0.004192,
+      "reply": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ يُنزلُ المطرَ فيُخرجُ به النباتَ الأخضرَ؛ فاللهُ هو الذي يُنبتُ البذرةَ. [S3.V1-ALT]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.299Z",
+      "run": 1,
+      "itemId": "E01",
+      "category": "E",
+      "mutation": {
+        "type": "word_swap",
+        "baseRecordId": "S1.V1",
+        "swappedWordIndices": [
+          1,
+          2
+        ],
+        "wordCount": 13
+      },
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "correction"
+      ],
+      "behaviourClass": "correction",
+      "routeSource": "verse",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S1.V1"
+      ],
+      "citedRecordIds": [
+        "S1.V1",
+        "S1.T1"
+      ],
+      "retrievedRecordIds": [
+        "S1.V1",
+        "S1.E1",
+        "S1.X2",
+        "S1.E2",
+        "S1.X1"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "[S1.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.299Z",
+      "run": 1,
+      "itemId": "E02",
+      "category": "E",
+      "mutation": {
+        "type": "wrong_reference",
+        "baseRecordId": "S2.V1",
+        "actualSurah": 21,
+        "wrongSurah": 22
+      },
+      "expectedLevel": "A",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "correction"
+      ],
+      "behaviourClass": "answer",
+      "routeSource": "verse",
+      "ruleIds": [],
+      "expectedCitations": [
+        "S2.V1"
+      ],
+      "citedRecordIds": [
+        "S2.V1",
+        "S2.T1"
+      ],
+      "retrievedRecordIds": [
+        "S2.V1",
+        "S2.E1",
+        "S2.X1",
+        "S2.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:A": true,
+        "citation_present": true,
+        "citation_valid": true,
+        "verse_verbatim": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "[S2.V1]"
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.300Z",
+      "run": 1,
+      "itemId": "E03",
+      "category": "E",
+      "expectedLevel": "any",
+      "assignedLevel": "OUT_OF_SCOPE",
+      "expectedBehaviour": [
+        "refusal"
+      ],
+      "behaviourClass": "refusal",
+      "routeSource": "rule",
+      "ruleIds": [
+        "RR-REFUSE-HADITH"
+      ],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S2.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S2.X1",
+        "S2.X2",
+        "S2.E1"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "refusal_detected": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 1,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا."
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.301Z",
+      "run": 1,
+      "itemId": "E04",
+      "category": "E",
+      "expectedLevel": "any",
+      "assignedLevel": "OUT_OF_SCOPE",
+      "expectedBehaviour": [
+        "refusal"
+      ],
+      "behaviourClass": "refusal",
+      "routeSource": "rule",
+      "ruleIds": [
+        "RR-REFUSE-HADITH"
+      ],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S1.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S1.E1",
+        "S1.E2",
+        "S1.X1",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "refusal_detected": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلُ أَهْلَنا."
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.301Z",
+      "run": 1,
+      "itemId": "F01",
+      "category": "F",
+      "expectedLevel": "D",
+      "assignedLevel": "D",
+      "expectedBehaviour": [
+        "referral"
+      ],
+      "behaviourClass": "referral",
+      "routeSource": "rule",
+      "ruleIds": [
+        "RR-D-RULING"
+      ],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S1.FB1"
+      ],
+      "retrievedRecordIds": [],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:D": true,
+        "referral_detected": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلُ أَهْلَنا."
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.302Z",
+      "run": 1,
+      "itemId": "F02",
+      "category": "F",
+      "expectedLevel": "D",
+      "assignedLevel": "D",
+      "expectedBehaviour": [
+        "referral"
+      ],
+      "behaviourClass": "referral",
+      "routeSource": "rule",
+      "ruleIds": [
+        "RR-D-RULING"
+      ],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S2.X3"
+      ],
+      "retrievedRecordIds": [
+        "S2.E1",
+        "S2.X1",
+        "S2.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:D": true,
+        "referral_detected": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا."
+    },
+    {
+      "runId": "run1-20261004T150238Z",
+      "commit": "392c89be4f08edfe977d9d7ffdfae319584b610b",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-04T15:03:22.302Z",
+      "run": 1,
+      "itemId": "F03",
+      "category": "F",
+      "expectedLevel": "D",
+      "assignedLevel": "D",
+      "expectedBehaviour": [
+        "referral"
+      ],
+      "behaviourClass": "referral",
+      "routeSource": "rule",
+      "ruleIds": [
+        "RR-D-RULING"
+      ],
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S1.FB1"
+      ],
+      "retrievedRecordIds": [],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "level_equals:D": true,
+        "referral_detected": true,
+        "no_hadith_text_outside_library": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلُ أَهْلَنا."
+    }
+  ]
+}

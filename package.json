@@ -21,6 +21,7 @@
     "assets:images": "node scripts/assets/place-images.mjs",
     "test:snapshot": "node --test \"scripts/snapshot/test/*.test.mjs\"",
     "test:testset": "node scripts/eval/check-testset.mjs",
+    "eval:run": "node eval/run.mjs",
     "content:placeholders": "node scripts/content/check-placeholders.mjs",
     "review:scholar-packet": "node scripts/review/scholar-packet.mjs"
   },

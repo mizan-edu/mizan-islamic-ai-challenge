@@ -17,6 +17,7 @@ npm run verify:clean-build   # before every push: fresh clone of HEAD, npm ci + 
 npm run lint
 npm run typecheck
 npm test            # app unit tests (Vitest)
+npm run eval:run -- --categories A,D,E,F --runs 1   # evaluation: active test-set items through the /api/ask pipeline; writes eval/results/<runId>.json + -summary.md (uses the model settings in .env.local)
 npm run test:screens   # after a build: Playwright screenshots of every screen into docs/screenshots (uses the installed Chrome)
 npm run content:placeholders   # no rendered text may keep a { or } (the same check also runs inside next build)
 npm run check:rendered         # after a build: prerendered /parent and /stations/S1–S3 show no placeholder
