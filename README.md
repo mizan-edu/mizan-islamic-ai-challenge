@@ -39,6 +39,7 @@ npm run check:rendered         # after a build: prerendered /parent and /station
 ```
 npm run assets:briefs -- --copy <file>   # docs/review/image-briefs.json: English picture briefs for approved S1–S3 records
 npm run assets:narrate -- S1 S2 S3       # public/audio/<station>/<recordId>.mp3 + manifest.json (add --force to regenerate, --dry-run to list)
+npm run assets:images -- --base <url>    # public/images/<station>/<recordId>.webp (sharp, WebP q82, max width 1200) + public/images/IMAGES.json
 ```
 
 The narration generator sends only approved `tts: true` records of type ui, explanation, answer, referral or fallback to ElevenLabs (voice `29hj550woDeJpvjtiu26`, model `eleven_multilingual_v2`, `mp3_44100_128`). Quran, tafsir and hadith records are never sent, and every line must also pass the app's TTS guard and the citation validator's Qur'anic-text checks (R4). Each station's `manifest.json` stores the SHA-256 of the text each file was made from; the generator reports a file as stale when the record text has changed since.

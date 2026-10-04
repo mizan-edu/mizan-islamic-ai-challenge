@@ -65,13 +65,18 @@ function Burst() {
 // A picture choice or narration card. Missing picture: a soft panel showing the record's text.
 // highlight + celebrate = the child's correct answer (green ring and burst); highlight alone = the
 // last hint pointing at the right card (soft yellow glow). Wrong choices grey out; never red.
-export function PictureCard({ record, state, onTap, order, celebrate = false }: {
+// Pictures are never cropped: choices share one square frame (the same for all three, so the frame
+// never hints at the answer); other pictures keep their own aspect ratio. Alt text = record text.
+export function PictureCard({ record, state, onTap, order, celebrate = false, wide = false }: {
   record: RecordView;
   state: 'idle' | 'greyed' | 'highlight' | 'picked';
   onTap?: () => void;
   order?: number;
   celebrate?: boolean;
+  wide?: boolean;
 }) {
+  const size = record.imageSize;
+  const square = record.role === 'choice';
   const look = state === 'highlight'
     ? (celebrate ? 'ring-8 ring-leaf' : 'ring-4 ring-sun anim-glow')
     : state === 'picked' ? 'ring-8 ring-water-light'
@@ -83,15 +88,18 @@ export function PictureCard({ record, state, onTap, order, celebrate = false }: 
       data-state={state}
       disabled={state === 'greyed' || !onTap}
       onClick={onTap}
-      className={`press relative flex min-h-56 flex-col items-center justify-center gap-3 rounded-[28px] bg-card p-4 text-center ${look}`}
+      className={`press relative flex min-h-56 flex-col items-center justify-center gap-3 rounded-[28px] bg-card p-4 text-center ${wide ? 'sm:col-span-full' : ''} ${look}`}
     >
       {record.image ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={record.image} alt="" className="h-40 w-full rounded-[20px] object-cover" />
+        <span className={`flex w-full items-center justify-center overflow-hidden rounded-[20px] bg-sky-soft ${square ? 'mx-auto aspect-square max-w-56' : wide ? 'mx-auto max-w-3xl' : ''}`}
+          style={square || !size ? undefined : { aspectRatio: `${size.width} / ${size.height}` }} data-picture-frame={square ? 'square' : wide ? 'wide' : 'natural'}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={record.image} alt={record.text} width={size?.width} height={size?.height} className="size-full object-contain" />
+        </span>
       ) : (
         <span data-placeholder="picture" className="font-display flex h-40 w-full items-center justify-center rounded-[20px] bg-sky-soft px-3 text-2xl leading-relaxed text-ink">{record.text}</span>
       )}
-      {record.image && <span className="font-display text-xl leading-relaxed text-ink">{record.text}</span>}
+      {record.image && <span aria-hidden="true" className="font-display text-xl leading-relaxed text-ink">{record.text}</span>}
       {order !== undefined && <span className="font-display absolute start-3 top-3 flex size-11 items-center justify-center rounded-full bg-sun text-xl text-ink">{order}</span>}
       {state === 'highlight' && celebrate && <Burst />}
     </button>

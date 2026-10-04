@@ -3,7 +3,7 @@
 
 import type { ContentRecord, ScriptStep } from './content';
 import type { Library } from './library';
-import { narrationSrc, pictureSrc, publicFileExists, recitationSrc, type FileExists } from './media';
+import { narrationSrc, pictureSize, pictureSrc, publicFileExists, recitationSrc, type FileExists, type PictureSize } from './media';
 import { placeholderValues, resolveText, type PlaceholderValues } from './placeholders';
 
 export interface RecordView {
@@ -14,6 +14,7 @@ export interface RecordView {
   text: string;
   audio: string | null; // pre-rendered narration, when the file exists
   image: string | null; // picture, when the file exists
+  imageSize: PictureSize | null; // its pixel size, for an uncropped frame
 }
 
 export interface VerseView {
@@ -174,7 +175,8 @@ export function buildStationView(
 }
 
 function toView(stationId: string, r: ContentRecord, exists: FileExists): RecordView {
-  return { id: r.id, type: r.type, role: r.role ?? null, level: r.level, text: r.text, audio: narrationSrc(stationId, r, exists), image: pictureSrc(stationId, r, exists) };
+  const image = pictureSrc(stationId, r, exists);
+  return { id: r.id, type: r.type, role: r.role ?? null, level: r.level, text: r.text, audio: narrationSrc(stationId, r, exists), image, imageSize: image ? pictureSize(r.id) : null };
 }
 
 export function toVerseView(r: ContentRecord): VerseView {

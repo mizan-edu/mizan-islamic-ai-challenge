@@ -1,7 +1,7 @@
 // Media lookup for station screens. Narration is pre-rendered audio only (no browser TTS);
 // Qur'an records never get narration (R4) — their sound is the real mp3quran recitation.
 
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type { ContentRecord } from './content';
 
@@ -22,6 +22,22 @@ export function narrationSrc(stationId: string, r: ContentRecord, exists: FileEx
 export function pictureSrc(stationId: string, r: ContentRecord, exists: FileExists = publicFileExists): string | null {
   const p = picturePath(stationId, r.id);
   return exists(p) ? p : null;
+}
+
+export interface PictureSize { width: number; height: number }
+
+// Pixel sizes from public/images/IMAGES.json (written by npm run assets:images), so each picture is
+// framed at its own aspect ratio and never cropped.
+let sizes: Map<string, PictureSize> | null = null;
+export function pictureSize(recordId: string): PictureSize | null {
+  if (!sizes) {
+    sizes = new Map();
+    const file = path.join(process.cwd(), 'public', 'images', 'IMAGES.json');
+    if (existsSync(file)) {
+      for (const e of (JSON.parse(readFileSync(file, 'utf8')) as { images: (PictureSize & { recordId: string })[] }).images) sizes.set(e.recordId, { width: e.width, height: e.height });
+    }
+  }
+  return sizes.get(recordId) ?? null;
 }
 
 // Media fragment so the browser starts and stops the recitation at the ayah (works on iPad Safari

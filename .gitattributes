@@ -6,3 +6,6 @@ public/fonts/BalooBhaijaan2-OFL.txt -text
 
 # Generated narration audio (ElevenLabs; never Qur'an).
 public/audio/**/*.mp3 binary
+
+# Station pictures (WebP, converted by npm run assets:images).
+public/images/**/*.webp binary

@@ -14,6 +14,8 @@ import { Moment } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
+// A wide picture (e.g. a 16:9 strip) spans the full row and is never cropped.
+const isWide = (r: RecordView): boolean => !!r.imageSize && r.imageSize.width / r.imageSize.height > 1.5;
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" className="size-9 -scale-x-100" aria-hidden="true"><path d="M5 12h12m-5-6 6 6-6 6" stroke="currentColor" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -142,16 +144,18 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       {state.step === 'observe' && o && (
         <section className="flex flex-col gap-5" data-screen="observe">
           <div className={`grid items-center gap-5 ${persistentMoment ? '' : 'md:grid-cols-[1fr_minmax(0,18rem)]'}`}>
-            <div className="card flex items-center gap-5 p-5">
+            <div className="card flex flex-wrap items-center gap-5 p-5">
               <NarrationButton src={o.question.audio} label={labels.play} big />
-              <p className="font-display text-3xl leading-relaxed text-ink" data-line={o.question.id}>{o.question.text}</p>
+              <p className="font-display flex-1 text-3xl leading-relaxed text-ink" data-line={o.question.id}>{o.question.text}</p>
+              {o.question.image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={o.question.image} alt={o.question.text} width={o.question.imageSize?.width} height={o.question.imageSize?.height}
+                  className="w-44 rounded-[20px] bg-sky-soft object-contain md:w-56" data-question-picture
+                  style={o.question.imageSize ? { aspectRatio: `${o.question.imageSize.width} / ${o.question.imageSize.height}` } : undefined} />
+              )}
             </div>
             {!persistentMoment && <Moment stationId={view.stationId} step={state.step} solved={state.observe.solved} />}
           </div>
-          {o.question.image && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={o.question.image} alt="" className="max-h-64 w-full rounded-[28px] object-cover" />
-          )}
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             {o.choices.map((c) => (
               <PictureCard key={c.id} record={c}
@@ -220,12 +224,13 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       {state.step === 'narrate' && view.narrate && (
         <section className="flex flex-col gap-5" data-screen="narrate" data-mode={view.narrate.mode}>
           <div className="card p-5"><Line record={view.narrate.intro} labels={labels} size="text-3xl" big /></div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div className={`grid grid-cols-1 gap-5 ${view.narrate.cards.some(isWide) ? 'sm:grid-flow-dense sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
             {view.narrate.cards.map((c) => {
               const pos = state.narrate.picked.indexOf(c.id);
               const highlight = state.narrate.done && (view.narrate!.mode === 'order' || c.id === view.narrate!.bestCardId);
               return (
                 <PictureCard key={c.id} record={c}
+                  wide={isWide(c)}
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}
