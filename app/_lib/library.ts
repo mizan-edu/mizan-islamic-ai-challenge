@@ -3,6 +3,7 @@
 
 import { findContentDir, loadStations, type AnticipatedQuestion, type ContentRecord, type ScriptStep, type Station } from './content';
 import { loadRouterRules, type RouterRule } from './router-rules';
+import { loadSurahNames, type SurahNames } from './surahs';
 
 export interface StationIndex {
   stationId: string;
@@ -18,9 +19,10 @@ export interface Library {
   stations: Map<string, StationIndex>;
   verses: ContentRecord[]; // approved quran records
   rules: RouterRule[]; // approved router rules only
+  surahs: SurahNames; // KFC surah names (content/kfc-surahs.json)
 }
 
-export function buildLibrary(stations: Station[], rules: RouterRule[] = []): Library {
+export function buildLibrary(stations: Station[], rules: RouterRule[] = [], surahs: SurahNames = new Map()): Library {
   const byId = new Map<string, ContentRecord>();
   const index = new Map<string, StationIndex>();
   for (const s of stations) {
@@ -43,11 +45,12 @@ export function buildLibrary(stations: Station[], rules: RouterRule[] = []): Lib
     stations: index,
     verses: [...byId.values()].filter((r) => r.type === 'quran'),
     rules: rules.filter((r) => r.status === 'approved'),
+    surahs,
   };
 }
 
 export function loadLibrary(contentDir: string = findContentDir()): Library {
-  return buildLibrary(loadStations(contentDir), loadRouterRules(contentDir));
+  return buildLibrary(loadStations(contentDir), loadRouterRules(contentDir), loadSurahNames(contentDir));
 }
 
 // The station's fallback, or the first approved fallback in station order when the station has none.

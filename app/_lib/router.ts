@@ -7,6 +7,7 @@ import type { ContentRecord } from './content';
 import { stricter, type RouteLevel } from './levels';
 import { fallbackFor, referralFor, sourcesOf, type Library } from './library';
 import { fireRules } from './router-rules';
+import { namedSurahs } from './surahs';
 import { retrieve } from './retrieval';
 
 export type Behaviour = 'answer' | 'verse_card' | 'correction' | 'referral' | 'fallback';
@@ -63,10 +64,16 @@ export async function route(lib: Library, input: RouteInput, classifier: Classif
   const ruleLevel = stricter(...fired.map((f) => f.level));
 
   // 1. A quoted verse (exact or altered): show the library verse card. Rules may still raise it.
+  //    A question that names a different surah gets the correction too (stored reference shown).
   if (r.verse) {
     const level = stricter('A', ruleLevel)!;
     if (level === 'A') {
-      return { level, behaviour: r.verse.exact ? 'verse_card' : 'correction', recordId: r.verse.record.id, source: 'verse', reason: r.verse.exact ? 'verse quoted exactly' : 'verse quoted with changes', ruleIds };
+      const surah = Number(String(r.verse.record.reference).split(':')[0]);
+      const named = namedSurahs(text, lib.surahs);
+      const wrongSurah = named.length > 0 && !named.includes(surah);
+      const correction = !r.verse.exact || wrongSurah;
+      const reason = !r.verse.exact ? 'verse quoted with changes' : wrongSurah ? 'verse quoted with the wrong surah' : 'verse quoted exactly';
+      return { level, behaviour: correction ? 'correction' : 'verse_card', recordId: r.verse.record.id, source: 'verse', reason, ruleIds };
     }
     return byLevel(lib, stationId, level, { source: 'rule', reason: 'rule raised a verse question', ruleIds });
   }

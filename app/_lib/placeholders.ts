@@ -8,9 +8,11 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { findContentDir, loadUiStrings, type ContentRecord } from './content';
 import type { Library } from './library';
+import { loadSurahNames, type SurahNames } from './surahs';
+
+export { loadSurahNames, type SurahNames } from './surahs';
 
 export type PlaceholderValues = Record<string, string>;
-export type SurahNames = Map<number, string>;
 
 const PLACEHOLDER = /\{([^{}]*)\}/g;
 export const hasBraces = (text: string): boolean => /[{}]/.test(text);
@@ -19,12 +21,6 @@ export const hasBraces = (text: string): boolean => /[{}]/.test(text);
 // them. Every other record is also served raw (replies, narration) and must be brace-free.
 export const PLACEHOLDER_ROLES = new Set(['parent_line']);
 
-export function loadSurahNames(contentDir: string = findContentDir()): SurahNames {
-  const file = path.join(contentDir, 'kfc-surahs.json');
-  if (!existsSync(file)) return new Map();
-  const doc = JSON.parse(readFileSync(file, 'utf8')) as { surahs: { number: number; nameAr: string }[] };
-  return new Map(doc.surahs.map((s) => [s.number, s.nameAr]));
-}
 
 // The station's verse-card verse: the script's connect.verseCard.quranId, approved quran records only.
 export function verseCardRecordId(lib: Library, stationId: string): string | null {

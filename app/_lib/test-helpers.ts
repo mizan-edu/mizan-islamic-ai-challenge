@@ -5,6 +5,7 @@ import path from 'node:path';
 import { findContentDir, loadStations } from './content';
 import { buildLibrary, loadLibrary, type Library } from './library';
 import type { RouterRule } from './router-rules';
+import { loadSurahNames } from './surahs';
 
 export const sameBytes = (a: string, b: string): boolean => Buffer.from(a, 'utf8').equals(Buffer.from(b, 'utf8'));
 
@@ -13,7 +14,7 @@ export const runtimeLibrary = (): Library => loadLibrary();
 
 // The repo library with router rules switched off, to exercise the classifier fallback path.
 export function libraryWithoutRules(): Library {
-  return buildLibrary(loadStations(findContentDir()), []);
+  return buildLibrary(loadStations(findContentDir()), [], loadSurahNames(findContentDir()));
 }
 
 // All rules from the file, as written (for checks on the file itself).

@@ -223,3 +223,35 @@ describe('RR-D-VERSE-CLAIM (D25): a verse claim with no matching verse goes to t
     expect(routed.recordId).toBe('S1.V1');
   });
 });
+
+describe('verse path: a question naming the wrong surah gets the correction (D25)', () => {
+  const lib = runtimeLibrary();
+  const verse = lib.byId.get('S2.V1')!;
+  const surah = Number(String(verse.reference).split(':')[0]);
+  // Inputs are built in memory from the stored verse and the KFC surah names; never written anywhere.
+  const ask = (name: string) => `هذه الآية من سورة ${name}: ${verse.text} — صح؟`;
+
+  it('names a different surah -> correction with the stored verse and reference', async () => {
+    const wrong = lib.surahs.get((surah % 114) + 1)!;
+    const routed = await route(lib, { stationId: 'S2', text: ask(wrong) }, neverCalled);
+    expect(routed).toMatchObject({ source: 'verse', behaviour: 'correction', recordId: 'S2.V1', level: 'A', reason: 'verse quoted with the wrong surah' });
+    const reply = buildReply(lib, 'S2', routed);
+    const v = reply.segments.find((s) => s.kind === 'verse')!;
+    expect(Buffer.from(v.text).equals(Buffer.from(verse.text))).toBe(true);
+    expect(v.reference).toBe(verse.reference);
+    expect(reply.segments.some((s) => s.text.includes(wrong))).toBe(false);
+  });
+
+  it('names the right surah -> verse card; names none -> verse card', async () => {
+    const right = await route(lib, { stationId: 'S2', text: ask(lib.surahs.get(surah)!) }, neverCalled);
+    expect(right).toMatchObject({ behaviour: 'verse_card', reason: 'verse quoted exactly' });
+    const none = await route(lib, { stationId: 'S2', text: verse.text }, neverCalled);
+    expect(none.behaviour).toBe('verse_card');
+  });
+
+  it('a bare surah name that is an everyday word does not count as naming a surah', async () => {
+    const moon = [...lib.surahs.entries()].find(([n]) => n === 54)![1]; // a surah whose name is an everyday word
+    const routed = await route(lib, { stationId: 'S2', text: `${moon} ${verse.text}` }, neverCalled);
+    expect(routed.behaviour).toBe('verse_card');
+  });
+});
