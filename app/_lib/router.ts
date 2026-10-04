@@ -4,7 +4,7 @@
 
 import type { Classifier, ClassifierCandidate } from './classifier';
 import type { ContentRecord } from './content';
-import { stricter, type RouteLevel } from './levels';
+import { isRouteLevel, stricter, type RouteLevel } from './levels';
 import { fallbackFor, referralFor, sourcesOf, type Library } from './library';
 import { fireRules } from './router-rules';
 import { namedSurahs } from './surahs';
@@ -43,6 +43,27 @@ function byLevel(lib: Library, stationId: string | null, level: RouteLevel, base
   return { ...base, level, behaviour: 'fallback', recordId: fallbackFor(lib, stationId)?.id ?? null };
 }
 
+// Level floor (D25): the final level is never below the chosen record's level or the levels of the
+// records it relies on (one step through explanations, as in the reply's citations). Only raises.
+export function levelFloor(lib: Library, level: RouteLevel, rec: ContentRecord): RouteLevel {
+  const ids = new Set<string>();
+  for (const id of sourcesOf(lib, rec)) {
+    ids.add(id);
+    const s = lib.byId.get(id);
+    if (s?.type === 'explanation') for (const id2 of sourcesOf(lib, s)) ids.add(id2);
+  }
+  const levels = [rec.level, ...[...ids].map((id) => lib.byId.get(id)?.level)].filter(isRouteLevel);
+  return stricter(level, ...levels)!;
+}
+
+// A routed answer after the floor: if the floor reached C or D, the referral replaces the answer.
+function floored(lib: Library, stationId: string | null, res: RouteResult, rec: ContentRecord): RouteResult {
+  const level = levelFloor(lib, res.level, rec);
+  if (level === res.level) return res;
+  if ((level === 'C' || level === 'D') && rec.type !== 'referral') return byLevel(lib, stationId, level, { source: res.source, reason: `${res.reason}; level floor ${level}`, ruleIds: res.ruleIds });
+  return { ...res, level, reason: `${res.reason}; level floor ${level}` };
+}
+
 function behaviourOf(r: ContentRecord): Behaviour {
   if (r.type === 'referral') return 'referral';
   if (r.type === 'fallback') return 'fallback';
@@ -73,7 +94,7 @@ export async function route(lib: Library, input: RouteInput, classifier: Classif
       const wrongSurah = named.length > 0 && !named.includes(surah);
       const correction = !r.verse.exact || wrongSurah;
       const reason = !r.verse.exact ? 'verse quoted with changes' : wrongSurah ? 'verse quoted with the wrong surah' : 'verse quoted exactly';
-      return { level, behaviour: correction ? 'correction' : 'verse_card', recordId: r.verse.record.id, source: 'verse', reason, ruleIds };
+      return floored(lib, stationId, { level, behaviour: correction ? 'correction' : 'verse_card', recordId: r.verse.record.id, source: 'verse', reason, ruleIds }, r.verse.record);
     }
     return byLevel(lib, stationId, level, { source: 'rule', reason: 'rule raised a verse question', ruleIds });
   }
@@ -83,7 +104,7 @@ export async function route(lib: Library, input: RouteInput, classifier: Classif
     const aqLevel = (r.aq.question.level as RouteLevel) ?? 'A';
     const level = stricter(aqLevel, ruleLevel)!;
     if (level === aqLevel && (r.aq.record.type !== 'answer' && r.aq.record.type !== 'explanation' || isAnswerable(lib, r.aq.record))) {
-      return { level, behaviour: behaviourOf(r.aq.record), recordId: r.aq.record.id, source: 'aq', reason: `anticipated question ${r.aq.question.id}`, ruleIds };
+      return floored(lib, stationId, { level, behaviour: behaviourOf(r.aq.record), recordId: r.aq.record.id, source: 'aq', reason: `anticipated question ${r.aq.question.id}`, ruleIds }, r.aq.record);
     }
     return byLevel(lib, stationId, level, { source: 'rule', reason: 'rule raised an anticipated question', ruleIds });
   }
@@ -102,8 +123,8 @@ export async function route(lib: Library, input: RouteInput, classifier: Classif
   const level = stricter(out.level, ruleLevel)!;
   if (level === 'A' || level === 'B') {
     const rec = out.recordId ? lib.byId.get(out.recordId) : undefined;
-    if (rec?.type === 'quran') return { level, behaviour: 'verse_card', recordId: rec.id, source: 'model', reason: 'classifier: verse on screen', ruleIds };
-    if (isAnswerable(lib, rec)) return { level, behaviour: 'answer', recordId: rec.id, source: 'model', reason: 'classifier', ruleIds };
+    if (rec?.type === 'quran') return floored(lib, stationId, { level, behaviour: 'verse_card', recordId: rec.id, source: 'model', reason: 'classifier: verse on screen', ruleIds }, rec);
+    if (isAnswerable(lib, rec)) return floored(lib, stationId, { level, behaviour: 'answer', recordId: rec.id, source: 'model', reason: 'classifier', ruleIds }, rec);
     return { level, behaviour: 'fallback', recordId: fallbackFor(lib, stationId)?.id ?? null, source: 'model', reason: 'classifier found no approved answer', ruleIds };
   }
   return byLevel(lib, stationId, level, { source: 'model', reason: 'classifier', ruleIds });

@@ -3,9 +3,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import type { Classifier, ClassifierInput } from './classifier';
 import type { Library } from './library';
-import { sourcesOf } from './library';
+import { buildLibrary, sourcesOf } from './library';
+import type { ContentRecord } from './content';
 import { buildReply } from './reply';
-import { isAnswerable, route } from './router';
+import { isAnswerable, levelFloor, route } from './router';
 import { fireRules } from './router-rules';
 import { item, libraryWithoutRules, rulesFile, runtimeLibrary, testItems, type TestItem } from './test-helpers';
 
@@ -253,5 +254,51 @@ describe('verse path: a question naming the wrong surah gets the correction (D25
     const moon = [...lib.surahs.entries()].find(([n]) => n === 54)![1]; // a surah whose name is an everyday word
     const routed = await route(lib, { stationId: 'S2', text: `${moon} ${verse.text}` }, neverCalled);
     expect(routed.behaviour).toBe('verse_card');
+  });
+});
+
+describe('level floor (D25): never below the chosen record or its sources; never lowered', () => {
+  // Synthetic station; placeholder text only (R2).
+  const rec = (id: string, type: ContentRecord['type'], level: ContentRecord['level'], extra: Partial<ContentRecord> = {}): ContentRecord =>
+    ({ id, station: 'S9', type, text: `نص ${id} كلمه`, level, tts: type !== 'quran', status: 'approved', ...extra });
+  const records = [
+    rec('S9.V1', 'quran', 'A', { reference: '16:10' }),
+    rec('S9.EA', 'explanation', 'A', { basedOn: ['S9.V1'] }),
+    rec('S9.EB', 'explanation', 'B', { basedOn: ['S9.V1'] }),
+    rec('S9.XA', 'answer', 'A', { basedOn: ['S9.EA'] }),
+    rec('S9.XAB', 'answer', 'A', { basedOn: ['S9.EB'] }),
+    rec('S9.XB', 'answer', 'B', { basedOn: ['S9.V1'] }),
+    rec('S9.FB1', 'fallback', 'NA'),
+  ];
+  const lib = buildLibrary([{ stationId: 'S9', titleRecordId: null, records, script: [],
+    anticipatedQuestions: [{ id: 'S9.AQ1', childQuestion: 'سؤال اختبار طويل جدا', level: 'A', responseRecordId: 'S9.XB' }] }]);
+  const model = (level: 'A' | 'B', recordId: string): Classifier => vi.fn(async () => ({ level, recordId }));
+
+  it('levelFloor takes the highest of the given level, the record and its sources', () => {
+    expect(levelFloor(lib, 'A', lib.byId.get('S9.XA')!)).toBe('A');
+    expect(levelFloor(lib, 'A', lib.byId.get('S9.XB')!)).toBe('B');
+    expect(levelFloor(lib, 'A', lib.byId.get('S9.XAB')!)).toBe('B'); // a B explanation among the sources
+    expect(levelFloor(lib, 'B', lib.byId.get('S9.XA')!)).toBe('B'); // never lowered
+  });
+
+  it('model path: A with a B record -> B; B with an A record stays B', async () => {
+    expect((await route(lib, { stationId: 'S9', text: 'غير مطابق' }, model('A', 'S9.XB')))).toMatchObject({ level: 'B', behaviour: 'answer', recordId: 'S9.XB' });
+    expect((await route(lib, { stationId: 'S9', text: 'غير مطابق' }, model('A', 'S9.EB')))).toMatchObject({ level: 'B', recordId: 'S9.EB' });
+    expect((await route(lib, { stationId: 'S9', text: 'غير مطابق' }, model('B', 'S9.XA')))).toMatchObject({ level: 'B', recordId: 'S9.XA' });
+    expect((await route(lib, { stationId: 'S9', text: 'غير مطابق' }, model('A', 'S9.XA')))).toMatchObject({ level: 'A', recordId: 'S9.XA' });
+  });
+
+  it('anticipated-question path: an A question answered by a B record -> B', async () => {
+    const routed = await route(lib, { stationId: 'S9', text: 'سؤال اختبار طويل جدا' }, neverCalled);
+    expect(routed).toMatchObject({ source: 'aq', level: 'B', recordId: 'S9.XB' });
+  });
+
+  it('on the real content, every A item routed deterministically keeps a level >= its record levels', async () => {
+    const real = runtimeLibrary();
+    for (const t of testItems().filter((i) => i.category === 'A')) {
+      const routed = await route(real, { stationId: t.input.stationId, text: t.input.text, onScreen: t.input.context?.onScreen }, null);
+      const r = routed.recordId ? real.byId.get(routed.recordId) : undefined;
+      if (r && routed.source !== 'none') expect(levelFloor(real, routed.level, r), t.id).toBe(routed.level);
+    }
   });
 });
