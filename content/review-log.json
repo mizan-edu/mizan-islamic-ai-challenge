@@ -4020,6 +4020,61 @@
       "decision": "A",
       "resultingStatus": "approved",
       "source": "chat brief 2026-10-05 (Q3 pass item 6: verse reference «سورة … · الآية …»)"
+    },
+    {
+      "id": "UI.BTN_PLAY",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T01:19:21+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "comment": "button aria-label (a11y)",
+      "source": "chat approval 2026-10-05 (Lighthouse button-name / link-name)"
+    },
+    {
+      "id": "UI.BTN_PLAY_RECITATION",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T01:19:21+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "comment": "button aria-label (a11y)",
+      "source": "chat approval 2026-10-05 (Lighthouse button-name / link-name)"
+    },
+    {
+      "id": "UI.BTN_HINT",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T01:19:21+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "comment": "button aria-label (a11y)",
+      "source": "chat approval 2026-10-05 (Lighthouse button-name / link-name)"
+    },
+    {
+      "id": "UI.BTN_NEXT",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T01:19:21+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "comment": "button aria-label (a11y)",
+      "source": "chat approval 2026-10-05 (Lighthouse button-name / link-name)"
+    },
+    {
+      "id": "UI.BTN_HOME",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T01:19:21+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "comment": "button aria-label (a11y)",
+      "source": "chat approval 2026-10-05 (Lighthouse button-name / link-name)"
     }
   ]
 }

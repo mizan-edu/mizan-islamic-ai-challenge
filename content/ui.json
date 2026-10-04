@@ -72,13 +72,13 @@
       "reference": null,
       "id": "UI.BTN_PLAY",
       "role": "frame",
-      "text": "[DRAFT — needs review]",
+      "text": "تشغيلُ الصوت",
       "note": "aria label: play narration",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:19:21+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -91,13 +91,13 @@
       "reference": null,
       "id": "UI.BTN_PLAY_RECITATION",
       "role": "frame",
-      "text": "[DRAFT — needs review]",
+      "text": "تشغيلُ التلاوة",
       "note": "aria label: play the recitation",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:19:21+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -110,13 +110,13 @@
       "reference": null,
       "id": "UI.BTN_HINT",
       "role": "frame",
-      "text": "[DRAFT — needs review]",
+      "text": "تلميح",
       "note": "aria label: hint",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:19:21+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -129,13 +129,13 @@
       "reference": null,
       "id": "UI.BTN_NEXT",
       "role": "frame",
-      "text": "[DRAFT — needs review]",
+      "text": "التالي",
       "note": "aria label: next",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:19:21+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -148,13 +148,13 @@
       "reference": null,
       "id": "UI.BTN_HOME",
       "role": "frame",
-      "text": "[DRAFT — needs review]",
+      "text": "العودة إلى الخريطة",
       "note": "aria label: back to the journey map",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:19:21+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
