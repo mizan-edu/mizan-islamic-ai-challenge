@@ -35,6 +35,7 @@ export function exclusionReason(guardLib, r) {
   if (!NARRATABLE_TYPES.has(r.type)) return `type ${r.type} not narratable`;
   if (r.tts !== true) return 'tts is not true';
   if (typeof r.text !== 'string' || !r.text.trim()) return 'empty text';
+  if (/[{}]/.test(r.text)) return 'contains a placeholder (resolved on screen only)';
   if (hasQuranMarks(r.text)) return "citation validator: Qur'anic marks";
   if (containsVerseWording(guardLib, r.text)) return 'citation validator: verse wording';
   try {

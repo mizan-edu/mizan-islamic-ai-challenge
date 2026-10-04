@@ -2,24 +2,11 @@
 // Usage: npm run assets:narrate -- S1 S2 S3 [--force] [--dry-run]
 // Reads ELEVENLABS_API_KEY from the environment or .env.local; never prints it or any record text.
 // Uses the app's own TTS guard and citation validator (app/_lib, TypeScript) via Node's type
-// stripping, with a resolve hook for the app's extensionless relative imports.
+// stripping (scripts/lib/ts-hooks.mjs).
 
+import '../lib/ts-hooks.mjs';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { registerHooks } from 'node:module';
 import path from 'node:path';
-
-registerHooks({
-  resolve(specifier, context, nextResolve) {
-    let out;
-    try {
-      out = nextResolve(specifier, context);
-    } catch (e) {
-      if (!/^\.\.?\//.test(specifier) || path.extname(specifier)) throw e;
-      out = nextResolve(`${specifier}.ts`, context);
-    }
-    return out.url.endsWith('.ts') ? { ...out, format: 'module-typescript' } : out;
-  },
-});
 
 const ROOT = path.resolve(import.meta.dirname, '..', '..');
 const { guardLibrary, narrateStation, selectNarration } = await import('./narrate-lib.mjs');

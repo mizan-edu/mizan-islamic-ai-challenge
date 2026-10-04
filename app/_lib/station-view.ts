@@ -4,6 +4,7 @@
 import type { ContentRecord, ScriptStep } from './content';
 import type { Library } from './library';
 import { narrationSrc, pictureSrc, publicFileExists, recitationSrc, type FileExists } from './media';
+import { placeholderValues, resolveText, type PlaceholderValues } from './placeholders';
 
 export interface RecordView {
   id: string;
@@ -80,13 +81,20 @@ export const stageFromMarker = (marker: unknown): number => {
   return m ? Number(m[1]) : 0;
 };
 
-export function buildStationView(lib: Library, stationId: string, exists: FileExists = publicFileExists): StationView | null {
+export function buildStationView(
+  lib: Library,
+  stationId: string,
+  exists: FileExists = publicFileExists,
+  values: PlaceholderValues = placeholderValues(lib, stationId),
+): StationView | null {
   const station = lib.stations.get(stationId);
   if (!station) return null;
   const view = (id: unknown): RecordView | null => {
     const r = typeof id === 'string' ? lib.byId.get(id) : undefined;
     if (!r || r.station !== stationId || r.type === 'quran' || r.type === 'tafsir' || r.type === 'hadith') return null;
-    return toView(stationId, r, exists);
+    // Placeholders resolve at render time; a line that cannot be fully resolved is not shown.
+    const text = resolveText(r.text, values);
+    return text === null ? null : { ...toView(stationId, r, exists), text };
   };
   const views = (ids: unknown): RecordView[] => (Array.isArray(ids) ? ids.map(view).filter((v): v is RecordView => v !== null) : []);
   const step = (name: string): ScriptStep | undefined => station.script.find((s) => s.step === name);

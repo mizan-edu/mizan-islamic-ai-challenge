@@ -31,6 +31,7 @@ const RECORDS = [
   rec('SX.H1', 'ui', { role: 'hint', text: `قبل ${FAKE_VERSE.split(' ').slice(0, 4).join(' ')} بعد` }),
   rec('SX.VR', 'quran', { text: 'رفض1 رفض2 رفض3 رفض4', status: 'rejected', tts: false }),
   rec('SX.H2', 'ui', { role: 'hint', text: 'قبل رفض1 رفض2 رفض3 رفض4' }),
+  rec('SX.PS2', 'ui', { role: 'parent_line', text: 'نص {verseRef}' }), // placeholder: on-screen only
 ];
 
 const guard = () => {
@@ -54,6 +55,7 @@ describe('narration selection (R4: never Qur\'an)', () => {
       'SX.H1': 'citation validator: verse wording',
       'SX.VR': 'not approved (rejected)',
       'SX.H2': 'citation validator: verse wording', // wording of a rejected verse record is caught too
+      'SX.PS2': 'contains a placeholder (resolved on screen only)',
     });
   });
 
