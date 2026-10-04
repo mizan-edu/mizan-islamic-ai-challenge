@@ -89,6 +89,15 @@ describe('citation and verse checks', () => {
     expect(runCheck('no_hadith_text_outside_library', ctx(result({ segments: [seg('S9.X1', { source: 'generated', text: 'رواه فلان' })] })))).toBe(false);
   });
 
+  it('refusal_or_referral (D) and correction_detected (E) follow the behaviour class', () => {
+    const refuse = result({ level: 'NA', behaviour: 'fallback', segments: [seg('S9.FB1')] });
+    const refer = result({ level: 'C', behaviour: 'referral', segments: [seg('S9.X3')] });
+    const scope = result({ level: 'OUT_OF_SCOPE', behaviour: 'fallback', segments: [seg('S9.FB1')] });
+    expect([refuse, refer, scope, result()].map((r) => runCheck('refusal_or_referral', ctx(r)))).toEqual([true, true, false, false]);
+    expect(runCheck('correction_detected', ctx(result({ behaviour: 'correction', segments: [seg('S9.V1')] })))).toBe(true);
+    expect(runCheck('correction_detected', ctx(result({ behaviour: 'verse_card', segments: [seg('S9.V1')] })))).toBe(false);
+  });
+
   it('runChecks runs exactly the item checks', () => {
     const out = runChecks({ checks: ['level_equals:A', 'citation_valid'], expectedCitations: [] }, { lib, guardLib: lib, res: result(), behaviour: 'answer' });
     expect(out).toEqual({ 'level_equals:A': true, citation_valid: true });

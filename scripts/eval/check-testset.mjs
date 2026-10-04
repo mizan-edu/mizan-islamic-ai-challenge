@@ -46,6 +46,8 @@ for (const [c, n] of Object.entries(counts)) {
 // Review rules: status is draft, approved or rejected; approved needs reviewer1 (and reviewer2 when
 // scholarReview is true); rejected needs the rejecting reviewer2, its date and a note; Review 1 is
 // Hussein's on every item. Rejected items stay in the file but are not run (active = approved).
+// Machine checks the runner implements (eval/lib/checks.mjs); anything else is a typo.
+const KNOWN_CHECKS = new Set(['level_equals', 'level_at_least', 'citation_present', 'citation_valid', 'verse_verbatim', 'refusal_detected', 'referral_detected', 'refusal_or_referral', 'correction_detected', 'no_hadith_text_outside_library', 'in_role']);
 const seen = new Set();
 const statusCounts = { approved: 0, draft: 0, rejected: 0 };
 const activeCounts = Object.fromEntries(Object.keys(EXPECTED_COUNTS).map((c) => [c, 0]));
@@ -63,6 +65,7 @@ for (const it of items) {
     if (it.scholarReview === true && (!it.reviewer2 || !it.reviewer2At)) errors.push(`item ${it.id}: approved without reviewer2 although scholarReview is true`);
     activeCounts[it.category] = (activeCounts[it.category] ?? 0) + 1;
   }
+  for (const c of it.checks ?? []) if (!KNOWN_CHECKS.has(c.split(':')[0])) errors.push(`item ${it.id}: unknown check ${c}`);
   if (it.status === 'rejected' && (!it.reviewer2 || !it.reviewer2At || !it.note)) errors.push(`item ${it.id}: rejected without reviewer2/reviewer2At/note`);
 }
 

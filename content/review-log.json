@@ -2747,6 +2747,90 @@
       "decision": "A",
       "resultingStatus": "approved",
       "source": "chat approval 2026-10-04 (design pass «حديقة الآيات»: text given in the brief; \"Approve all 4\")"
+    },
+    {
+      "id": "A05",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "expected level B -> A to match the approved level of S1.X1 (run-1 diagnosis)",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "A07",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "expected level B -> A to match the approved level of S2.X2 (run-1 diagnosis)",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "A13",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "check level_equals:A -> level_at_least:A (category A allows A or B)",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "D04",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "added machine check refusal_or_referral (category D threshold)",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "D06",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "added machine check refusal_or_referral (category D threshold)",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "E01",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "added machine check correction_detected",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
+    },
+    {
+      "id": "E02",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T18:16:47+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D25",
+      "comment": "added machine check correction_detected",
+      "source": "chat decision 2026-10-04 (run-1 diagnosis)"
     }
   ]
 }
