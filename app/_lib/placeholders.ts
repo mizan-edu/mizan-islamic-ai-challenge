@@ -6,7 +6,7 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
-import { findContentDir, type ContentRecord } from './content';
+import { findContentDir, loadUiStrings, type ContentRecord } from './content';
 import type { Library } from './library';
 
 export type PlaceholderValues = Record<string, string>;
@@ -75,4 +75,11 @@ export function placeholderProblems(lib: Library, uiRecords: Iterable<ContentRec
   }
   for (const r of uiRecords) if (hasBraces(r.text)) problems.push(`${r.id}: brace in a UI string`);
   return problems;
+}
+
+// Build-time guard: the prerendered pages call this, so `next build` fails (on Vercel too) when any
+// approved text would keep a placeholder or brace. Pages are static, so it never runs per request.
+export function assertNoPlaceholderProblems(lib: Library, uiRecords: Iterable<ContentRecord> = loadUiStrings().values(), surahs: SurahNames = loadSurahNames()): void {
+  const problems = placeholderProblems(lib, uiRecords, surahs);
+  if (problems.length) throw new Error(`Unresolved placeholders in approved content: ${problems.join('; ')}`);
 }

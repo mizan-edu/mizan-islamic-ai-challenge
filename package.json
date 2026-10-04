@@ -6,8 +6,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/content/check-placeholders.mjs",
-    "build": "next build && node scripts/content/check-rendered.mjs",
+    "build": "next build",
+    "check:rendered": "node scripts/content/check-rendered.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",

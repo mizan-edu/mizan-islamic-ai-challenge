@@ -101,3 +101,15 @@ describe('unresolvable placeholders never reach the screen', () => {
     expect(buildStationView(lib, 'SX', noFiles, placeholderValues(lib, 'SX', new Map()))!.parent).toEqual([]);
   });
 });
+
+describe('build-time guard', () => {
+  it('throws with record IDs when approved content has an unresolvable placeholder, and passes on the real content', async () => {
+    const { assertNoPlaceholderProblems } = await import('./placeholders');
+    const bad = buildLibrary([{
+      stationId: 'SX', titleRecordId: null, anticipatedQuestions: [], script: [],
+      records: [{ id: 'SX.PS9', station: 'SX', type: 'ui', role: 'parent_line', text: 'x {verseRef}', level: 'NA', tts: false, status: 'approved' }],
+    }]);
+    expect(() => assertNoPlaceholderProblems(bad, [], new Map())).toThrow('SX.PS9: {verseRef} cannot be resolved');
+    expect(() => assertNoPlaceholderProblems(loadLibrary())).not.toThrow();
+  });
+});

@@ -1,4 +1,4 @@
-// Build-time content check (runs before next build): no approved text that can be rendered may
+// Content check (npm run content:placeholders; the same check runs inside next build): no approved text that can be rendered may
 // still contain "{" or "}" once its placeholders are resolved. Prints record IDs only, never text.
 
 import '../lib/ts-hooks.mjs';

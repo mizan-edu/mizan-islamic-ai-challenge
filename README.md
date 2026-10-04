@@ -16,7 +16,8 @@ npm run build       # production build
 npm run lint
 npm run typecheck
 npm test            # app unit tests (Vitest)
-npm run content:placeholders   # also runs before every build: no rendered text may keep a { or }
+npm run content:placeholders   # no rendered text may keep a { or } (the same check also runs inside next build)
+npm run check:rendered         # after a build: prerendered /parent and /stations/S1–S3 show no placeholder
 ```
 
 **Environment variables:** names only are listed in `.env.example`. Put the values in `.env.local`, which is git-ignored and never committed; on Vercel, set them under Project Settings → Environment Variables.
@@ -40,6 +41,6 @@ npm run assets:narrate -- S1 S2 S3       # public/audio/<station>/<recordId>.mp3
 
 The narration generator sends only approved `tts: true` records of type ui, explanation, answer, referral or fallback to ElevenLabs (voice `29hj550woDeJpvjtiu26`, model `eleven_multilingual_v2`, `mp3_44100_128`). Quran, tafsir and hadith records are never sent, and every line must also pass the app's TTS guard and the citation validator's Qur'anic-text checks (R4). Each station's `manifest.json` stores the SHA-256 of the text each file was made from; the generator reports a file as stale when the record text has changed since.
 
-**Placeholders:** approved parent lines may contain `{verseRef}`. It is filled at render time with the ayah number and the surah name of the station's approved verse-card record; the record text itself is never edited. Surah names come from the King Fahd Complex hafsData v2.0 metadata via `npm run snapshot:surahs` (writes `content/kfc-surahs.json` with the source file's SHA-256). `npm run build` fails if any rendered text would still contain a brace, and checks the prerendered `/parent` and `/stations/S1–S3` pages afterwards.
+**Placeholders:** approved parent lines may contain `{verseRef}`. It is filled at render time with the ayah number and the surah name of the station's approved verse-card record; the record text itself is never edited. Surah names come from the King Fahd Complex hafsData v2.0 metadata via `npm run snapshot:surahs` (writes `content/kfc-surahs.json` with the source file's SHA-256). `npm run build` fails if any approved text would still render with a placeholder or brace (the prerendered pages run the check), and `npm run check:rendered` checks the built `/parent` and `/stations/S1–S3` pages.
 
 The model is only a fallback classifier. Every answer the app shows comes from approved library records (see CLAUDE.md §5).

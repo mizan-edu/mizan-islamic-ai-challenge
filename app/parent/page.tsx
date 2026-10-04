@@ -1,12 +1,14 @@
 import Link from 'next/link';
 import { loadLabels } from '@/app/_lib/labels';
 import { loadLibrary } from '@/app/_lib/library';
+import { assertNoPlaceholderProblems } from '@/app/_lib/placeholders';
 import { buildStationView } from '@/app/_lib/station-view';
 
 // Parent summary: the approved parent lines (PS records) of each station. No child data is shown
 // or collected here; the device-only session log stays on the device.
 export default function ParentPage() {
   const lib = loadLibrary();
+  assertNoPlaceholderProblems(lib); // fails the build, never a request: this page is static
   const labels = loadLabels();
   const views = ['S1', 'S2', 'S3'].map((id) => buildStationView(lib, id)).filter((v) => v !== null);
   return (
