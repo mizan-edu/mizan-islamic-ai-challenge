@@ -1,5 +1,7 @@
 // Post-build check: the prerendered /parent and /stations/S1–S3 pages show no "{" or "}" in their
 // visible text and no {placeholder} token anywhere. Prints page names and counts only.
+// Local only (npm run check:rendered after npm run build): Vercel's build adapter does not write
+// these files, so this must never be chained into npm run build (that broke 18f0a7c-2279460 on Vercel).
 
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';

@@ -1,6 +1,8 @@
 // Fresh-clone build check, as Vercel builds: clone a commit (default HEAD) into a temp folder, so
 // only committed files exist (no .env.local, no git-ignored sources/), then npm ci + npm run build
 // with no API keys in the environment. Run before every push.
+// It cannot reproduce Vercel's build adapter ("modifyConfig"/"onBuildComplete"), which changes where
+// build output lands; hence npm run build stays plain `next build` (app/_lib/build-script.test.ts).
 // Usage: npm run verify:clean-build [-- <ref>] [--keep]
 
 import { spawnSync } from 'node:child_process';
