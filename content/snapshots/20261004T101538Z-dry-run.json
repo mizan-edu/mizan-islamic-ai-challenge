@@ -1,0 +1,78 @@
+{
+  "runAt": "2026-10-04T10:15:38.281Z",
+  "mode": "dry-run",
+  "refresh": false,
+  "gitHead": "1b861f3c727928e1c8b0f080c704c7fcf0b48bf5",
+  "node": "v24.19.0",
+  "config": {
+    "kfc": {
+      "file": "sources/kfc/hafsData_v2-0.json",
+      "sourceUrl": "https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip",
+      "sourceVersion": "2.0",
+      "expectedAyahCount": 6236,
+      "fields": {
+        "id": "id",
+        "sura": "sura_no",
+        "aya": "aya_no",
+        "text": "aya_text"
+      }
+    },
+    "quranenc": {
+      "translationKey": "arabic_mokhtasar"
+    },
+    "mp3quran": {
+      "timingReadId": 118,
+      "reciterNameContains": "الحصري",
+      "requiredRewayaContains": "حفص"
+    }
+  },
+  "stations": [
+    "S3.json"
+  ],
+  "sources": {
+    "kfc": null,
+    "quranenc": null,
+    "mp3quran": null
+  },
+  "records": [
+    {
+      "file": "S3.json",
+      "id": "S3.V1",
+      "type": "quran",
+      "reference": "6:99",
+      "platformId": "kfc-hafs:888",
+      "action": "skipped",
+      "requestUrl": null
+    },
+    {
+      "file": "S3.json",
+      "id": "S3.V1-ALT",
+      "type": "quran",
+      "reference": "22:63",
+      "platformId": "kfc-hafs:2658",
+      "action": "skipped",
+      "requestUrl": null
+    },
+    {
+      "file": "S3.json",
+      "id": "S3.T1",
+      "type": "tafsir",
+      "reference": "6:99",
+      "platformId": "quranenc:arabic_mokhtasar:6:99",
+      "action": "skipped",
+      "requestUrl": null
+    },
+    {
+      "file": "S3.json",
+      "id": "S3.T1-ALT",
+      "type": "tafsir",
+      "reference": "22:63",
+      "platformId": "quranenc:arabic_mokhtasar:22:63",
+      "action": "skipped",
+      "requestUrl": null
+    }
+  ],
+  "reviewErrors": [],
+  "warnings": [],
+  "unresolved": []
+}

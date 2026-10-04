@@ -443,8 +443,8 @@
       "reference": null,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "status": "approved"
     },
     {
@@ -516,9 +516,9 @@
       "retrievedAt": "2026-10-03T10:27:42.443Z",
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
-      "status": "draft"
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
+      "status": "approved"
     },
     {
       "id": "S3.T1",
@@ -553,9 +553,9 @@
       "retrievedAt": "2026-10-03T10:27:42.443Z",
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
-      "status": "draft"
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
+      "status": "approved"
     },
     {
       "id": "S3.E1",
@@ -574,9 +574,9 @@
       "reference": null,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
-      "status": "draft"
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
+      "status": "approved"
     },
     {
       "id": "S3.N0",
@@ -630,8 +630,8 @@
       "reference": null,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "status": "approved"
     },
     {
@@ -782,9 +782,9 @@
       "reference": null,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
-      "status": "draft"
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
+      "status": "approved"
     },
     {
       "id": "S3.FB1",

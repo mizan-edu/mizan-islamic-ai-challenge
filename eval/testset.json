@@ -547,10 +547,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 1",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B02",
@@ -628,10 +628,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B05",
@@ -655,10 +655,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 5",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B06",
@@ -681,10 +681,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 6",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B07",
@@ -708,10 +708,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 7",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B08",
@@ -796,10 +796,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 10",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B11",
@@ -830,10 +830,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 case 11",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "B12",
@@ -885,10 +885,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C02",
@@ -913,10 +913,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C03",
@@ -941,10 +941,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C04",
@@ -969,10 +969,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C05",
@@ -997,10 +997,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C06",
@@ -1025,10 +1025,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C07",
@@ -1053,10 +1053,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "C08",
@@ -1081,10 +1081,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §4.2, §5.4; levels default (death, unseen, creed → C)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D01",
@@ -1112,10 +1112,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 golden rule, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D02",
@@ -1142,10 +1142,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 golden rule, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D03",
@@ -1172,10 +1172,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 golden rule, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D04",
@@ -1202,10 +1202,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 golden rule, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D05",
@@ -1232,10 +1232,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 golden rule, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D06",
@@ -1263,10 +1263,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 golden rule, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "E01",
@@ -1297,10 +1297,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 (misquoted verse); Runbook v1.2 §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "E02",
@@ -1332,10 +1332,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.6 (misquoted verse); Runbook v1.2 §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "E03",
@@ -1358,10 +1358,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.4 example; Reference Package p.6 case 6",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "E04",
@@ -1384,10 +1384,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Runbook v1.2 §5.1 (hadith rule), §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "F01",
@@ -1411,10 +1411,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.2 level D; Runbook v1.2 §4.2, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "F02",
@@ -1438,10 +1438,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.2 level D; Runbook v1.2 §4.2, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "F03",
@@ -1465,10 +1465,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-03T11:37:16+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-04",
       "sourceRef": "Reference Package p.2 level D; Runbook v1.2 §4.2, §5.4",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "G01",

@@ -3,14 +3,20 @@
 // Verse and tafsir text are read from the snapshotted library and written into the HTML only;
 // this script logs ids, counts and hashes, never any record text.
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const OUT = join(ROOT, 'docs', 'review', 'scholar-review2-packet.html');
-const FONT_URL = '../../sources/kfc/uthmanic_hafs_v20.ttf'; // relative to docs/review/ (local file, not committed)
+// Output goes to the git-ignored docs/review/out/. docs/review/scholar-review2-packet.html is the
+// committed Review 2 evidence (commit 9338262, SHA-256 92a4ae7c…) and must never be overwritten.
+const EVIDENCE = join(ROOT, 'docs', 'review', 'scholar-review2-packet.html');
+const OUT_DIR = join(ROOT, 'docs', 'review', 'out');
+const STAMP = new Date(Date.now() + 3 * 3600 * 1000).toISOString().slice(0, 10).replace(/-/g, '');
+const OUT = join(OUT_DIR, `scholar-packet-${STAMP}.html`);
+if (resolve(OUT) === resolve(EVIDENCE)) throw new Error('refusing to overwrite the Review 2 evidence packet');
+const FONT_URL = '../../../sources/kfc/uthmanic_hafs_v20.ttf'; // relative to docs/review/out/ (local file, not committed)
 const STATIONS = ['S1', 'S2', 'S3'];
 
 const sha = (s) => createHash('sha256').update(s, 'utf8').digest('hex');
@@ -22,6 +28,22 @@ const riyadhDate = () => new Date(Date.now() + 3 * 3600 * 1000).toISOString().sl
 const stations = {};
 for (const st of STATIONS) stations[st] = JSON.parse(await readFile(join(ROOT, 'content', 'stations', `${st}.json`), 'utf8'));
 const testset = JSON.parse(await readFile(join(ROOT, 'eval', 'testset.json'), 'utf8'));
+
+// Arabic renderings for Section 3 (English stays in eval/testset.json) and Hussein's instructions page.
+const AR = JSON.parse(await readFile(join(ROOT, 'docs', 'review', 'scholar-packet-ar.json'), 'utf8'));
+const argIdx = process.argv.indexOf('--instructions');
+const INSTRUCTIONS_FILE = argIdx > 0 ? resolve(process.argv[argIdx + 1]) : join(ROOT, 'docs', 'review', 'scholar-instructions-ar.txt');
+let instructions;
+try {
+  instructions = (await readFile(INSTRUCTIONS_FILE, 'utf8')).replace(/^﻿/, '');
+} catch {
+  console.error(`STOP: instructions block not found at ${INSTRUCTIONS_FILE}`);
+  process.exit(1);
+}
+const recordRef = (id) => {
+  for (const d of Object.values(stations)) { const r = d.records.find((x) => x.id === id); if (r) return r.reference; }
+  return null;
+};
 
 let n = 0;
 const nextId = () => `SR-${String(++n).padStart(2, '0')}`;
@@ -113,16 +135,37 @@ for (const st of STATIONS) {
 
 // ---------- Section 3: test items still in draft ----------
 let section3 = '';
+const behaviourAr = (b) => AR.behaviour[b] ?? b;
 for (const it of testset.items.filter((i) => i.status === 'draft')) {
   const sr = nextId();
-  const mutation = it.input?.mutation ? ` <small dir="ltr">(mutation: ${esc(it.input.mutation.type)} of ${esc(it.input.mutation.baseRecordId)}${it.input.mutation.wrongReference ? `, ${esc(it.input.mutation.wrongReference)}` : ''})</small>` : '';
+  const noteAr = AR.notes[it.id];
+  if (!noteAr) { console.error(`STOP: no Arabic rendering for ${it.id} in docs/review/scholar-packet-ar.json`); process.exit(1); }
+  const fullNoteAr = /If Review 2 approves/.test(it.expectedBehaviourNote ?? '') ? `${noteAr} ${AR.review2Suffix}` : noteAr;
+
+  // Runtime-generated (mutated verse) inputs: one Arabic line; the altered text is never printed.
+  const m = it.input?.mutation;
+  let question;
+  if (m) {
+    const ref = recordRef(m.baseRecordId);
+    const type = AR.mutation.types[m.type];
+    if (!ref || !type) { console.error(`STOP: ${it.id}: cannot describe mutation ${m.type} of ${m.baseRecordId}`); process.exit(1); }
+    question = `<span lang="ar">${esc(AR.mutation.template.replace('{ref}', `⁦${ref}⁩`).replace('{type}', type))}</span>`;
+  } else {
+    question = `<span lang="ar">${esc(it.input?.text)}</span>`;
+  }
+
+  const also = (it.acceptableBehaviours ?? []).filter((b) => b !== it.expectedBehaviour);
+  const behaviour = `${esc(behaviourAr(it.expectedBehaviour))}${also.length ? ` (${esc(AR.alsoAccepted)}: ${also.map((b) => esc(behaviourAr(b))).join('، ')})` : ''}`;
+  const level = it.expectedLevel === 'any' ? esc(AR.levelAny) : (LEVEL_LABEL[it.expectedLevel] ?? esc(it.expectedLevel));
+
   section3 += item(sr, it.id, `بند اختبار — الفئة ${esc(it.category)}`,
-    dd('الفئة', esc(it.category)) + dd('المستوى المتوقع', LEVEL_LABEL[it.expectedLevel] ?? esc(it.expectedLevel))
-    + dd('السلوك المتوقع', `<span dir="ltr">${esc(it.expectedBehaviour)}${(it.acceptableBehaviours ?? []).length ? ` (also: ${esc(it.acceptableBehaviours.join(', '))})` : ''}</span>`)
+    dd('الفئة', esc(it.category)) + dd('المستوى المتوقع', level)
+    + dd('السلوك المتوقع', behaviour)
     + dd('المراجع المتوقعة', `<code dir="ltr">${esc((it.expectedCitations ?? []).join(', ') || '—')}</code>`),
-    `<div class="qs"><span>السؤال:</span> <span lang="ar">${esc(it.input?.text)}</span>${mutation}</div>
+    `<div class="qs"><span>السؤال:</span> ${question}</div>
+      <p class="line note-ar" lang="ar">${esc(fullNoteAr)}</p>
       <p class="note" dir="ltr" lang="en">${esc(it.expectedBehaviourNote)}</p>`);
-  log.section3.push(`${sr}=${it.id}`);
+  log.section3.push(`${sr}=${it.id}${m ? '(mutation)' : ''}`);
 }
 
 const date = riyadhDate();
@@ -157,7 +200,9 @@ const html = `<!doctype html>
   .tafsir { font-size: 17px; line-height: 2; margin: 3mm 0; padding: 3mm 4mm; border-inline-start: 3px solid var(--line); }
   .line { font-size: 18px; line-height: 2; margin: 3mm 0; }
   .qs { font-size: 15px; margin: 2mm 0; } .qs span:first-child { color: var(--muted); } .qs ul { margin: 1mm 0; }
-  .note { font-size: 13px; color: var(--muted); margin: 2mm 0; text-align: left; }
+  .note { font-size: 12px; color: #8a8983; margin: 1mm 0 2mm; text-align: left; }
+  .note-ar { font-size: 16px; margin: 2mm 0 0; }
+  .instructions { break-after: page; } .instructions > div { white-space: pre-wrap; font-size: 16px; line-height: 2; }
   .decision { margin-top: 3mm; font-size: 16px; }
   .comment { margin-top: 2mm; border: 1px solid var(--line); border-radius: 4px; min-height: 22mm; padding: 2mm 3mm; color: var(--muted); font-size: 13px; }
   code { font-size: 12px; }
@@ -171,6 +216,7 @@ const html = `<!doctype html>
 <body>
 <main>
   <div id="fontwarn">تنبيه: لم يُحمَّل الخط العثماني (${esc(FONT_URL)}). لا تطبع هذا الملف قبل ظهور نص الآيات بالخط العثماني.</div>
+  <section class="instructions"><div dir="rtl">${esc(instructions)}</div></section>
   <section class="cover">
     <h1>مراجعة المحتوى الشرعي — مشروع ميزان — المراجعة الثانية</h1>
     <div class="date">التاريخ: <span dir="ltr">${date}</span></div>
@@ -206,6 +252,7 @@ const html = `<!doctype html>
 </html>
 `;
 
+await mkdir(OUT_DIR, { recursive: true });
 await writeFile(OUT, html, 'utf8');
 console.log(`packet: ${OUT}`);
 console.log(`items: ${n} | section 1: ${log.section1.length} | section 2: ${log.section2.length} | section 3: ${log.section3.length}`);

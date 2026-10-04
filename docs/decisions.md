@@ -17,3 +17,5 @@
 2026-10-04 — Excel reformatted Reference and RecitationSeconds display values in the raw file; decisions are keyed by ID and are unaffected.
 
 2026-10-04 — Tag v0-baseline (annotated) created on commit 38c7882 (committed 2026-10-03 13:28 +03:00, last commit before the build window, Sun 4 Oct 09:00 Riyadh); tag created 2026-10-04 11:03:27 +03:00 and pushed to origin. Approved by Hussein.
+
+2026-10-04 — D20 Scholar Review 2: all packet items (SR range SR-01–SR-47) approved without change; method: signed written confirmation dated 2026-10-04; packet SHA-256 92a4ae7cefc35c767608485b2a48cd8b0a0d3f640901b80d9803ff8fd94800df; scholar not named at their request; evidence held by Hussein. The reviewed packet (9338262) did not include the instructions page.
