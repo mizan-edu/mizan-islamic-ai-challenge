@@ -15,3 +15,5 @@
 2026-10-04 — D19 Station 3 verse: S3.V1-ALT (22:63) kept; S3.V1 and S3.T1 rejected; verseCard, S3.E1 basedOn, test-set citations and S3.PS1 moved to 22:63. Approved by Hussein, Review 1, 2026-10-04.
 
 2026-10-04 — Excel reformatted Reference and RecitationSeconds display values in the raw file; decisions are keyed by ID and are unaffected.
+
+2026-10-04 — Tag v0-baseline (annotated) created on commit 38c7882 (committed 2026-10-03 13:28 +03:00, last commit before the build window, Sun 4 Oct 09:00 Riyadh); tag created 2026-10-04 11:03:27 +03:00 and pushed to origin. Approved by Hussein.
