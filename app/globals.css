@@ -8,15 +8,29 @@
   font-display: block;
 }
 
+/* «حديقة الآيات» design tokens. Text pairs are checked for >= 4.5:1 contrast in design.test.ts. */
 @theme {
   --font-ui: "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-display: var(--font-baloo-ar), var(--font-baloo-latin), "Noto Naskh Arabic", "Segoe UI", sans-serif;
   --font-quran: "KFGQPC Uthmanic Hafs", serif;
-  --color-paper: #f7f4ec;
-  --color-ink: #1f2a2c;
-  --color-water: #2f7f9f;
-  --color-leaf: #3f8a4f;
-  --color-sand: #e8dcc0;
-  --color-muted: #6b6a63;
+  --color-sky: #CFEAF7;
+  --color-sky-soft: #EAF6FC;
+  --color-ink: #17324D;
+  --color-ink-2: #2C4A63;
+  --color-leaf: #3BA55C;
+  --color-leaf-dark: #1F6B3A;
+  --color-water: #2F80C9;
+  --color-water-light: #4FA3DD;
+  --color-sun: #FFC94A;
+  --color-soil: #C97B4A;
+  --color-gold: #C9A44C;
+  --color-card: #FFFFFF;
+  --color-leaf-soft: #E3F4E8;
+  --color-sun-soft: #FFF4D6;
+  --color-stone: #DFE6EA;
+  --shadow-card: 0 6px 0 rgba(23, 50, 77, 0.15);
+  --shadow-press: 0 2px 0 rgba(23, 50, 77, 0.15);
+  --radius-card: 32px;
 }
 
 @layer base {
@@ -24,7 +38,7 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    background: var(--color-paper);
+    background: var(--color-sky-soft);
     color: var(--color-ink);
     font-family: var(--font-ui);
     font-size: 1.25rem;
@@ -33,13 +47,96 @@
   /* Tap-first: every interactive element is at least 64 px tall. */
   button,
   [role="button"],
-  a {
+  a,
+  summary {
     min-height: 64px;
     touch-action: manipulation;
+  }
+  :focus-visible {
+    outline: 4px solid var(--color-water);
+    outline-offset: 3px;
   }
 }
 
 /* Verse text only. Never apply to UI or tafsir text. */
 .font-quran {
   font-family: var(--font-quran);
+}
+
+/* Component classes sit in the components layer so utilities (ring-*, shadow-none) override them. */
+@layer components {
+/* Headings, buttons and child lines. */
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+/* Pill buttons with a chunky press shadow. */
+.pill {
+  border-radius: 9999px;
+  box-shadow: var(--shadow-card);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.pill:active:not(:disabled),
+.press:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: var(--shadow-press);
+}
+.press {
+  box-shadow: var(--shadow-card);
+  transition: transform 120ms ease, box-shadow 120ms ease, filter 200ms ease, opacity 200ms ease;
+}
+}
+
+/* ---------- Motion (CSS/SVG only; all of it switched off by prefers-reduced-motion) ---------- */
+
+@keyframes drift { from { transform: translateX(-12%); } to { transform: translateX(112%); } }
+@keyframes flow { to { stroke-dashoffset: -400; } }
+@keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(1.45); opacity: 0; } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes rays { to { transform: rotate(360deg); } }
+@keyframes glow { 0%, 100% { box-shadow: 0 0 0 6px rgba(255, 201, 74, 0.55), var(--shadow-card); } 50% { box-shadow: 0 0 0 14px rgba(255, 201, 74, 0.25), var(--shadow-card); } }
+@keyframes burst { 0% { transform: translate(0, 0) scale(0.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(var(--bx), var(--by)) scale(1); opacity: 0; } }
+@keyframes fall { 0% { transform: translateY(-10px); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(120px); opacity: 0; } }
+@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.anim-drift { animation: drift linear infinite; }
+.anim-flow { animation: flow 6s linear infinite; }
+.anim-bob { animation: bob 2.8s ease-in-out infinite; }
+.anim-pulse::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 9999px;
+  background: var(--color-sun);
+  animation: pulse-ring 2.2s ease-out infinite;
+  z-index: -1;
+}
+.anim-rays { transform-box: fill-box; transform-origin: center; animation: rays 40s linear infinite; }
+.anim-glow { animation: glow 1.6s ease-in-out infinite; }
+.anim-burst { animation: burst 900ms ease-out forwards; }
+.anim-fall { animation: fall 1.4s ease-in infinite; }
+.anim-pop { transform-box: fill-box; transform-origin: 50% 100%; animation: pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.anim-rise { animation: rise 400ms ease-out both; }
+.anim-spin { animation: spin 8s linear infinite; }
+
+/* Moments: state changes are transitions (also off under reduced motion). */
+.grow { transform-box: fill-box; transition: transform 900ms cubic-bezier(0.34, 1.3, 0.64, 1), opacity 600ms ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -13,14 +13,14 @@ export default function ParentPage() {
   const views = ['S1', 'S2', 'S3'].map((id) => buildStationView(lib, id)).filter((v) => v !== null);
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-8" data-screen="parent">
-      {labels.parents && <h1 className="text-3xl font-bold">{labels.parents}</h1>}
+      {labels.parents && <h1 className="font-display text-4xl text-ink">{labels.parents}</h1>}
       {views.map((v) => (
-        <section key={v.stationId} id={v.stationId} className="flex flex-col gap-3 rounded-3xl bg-white p-6 shadow-sm">
-          {v.title && <h2 className="text-2xl font-bold leading-relaxed">{v.title.text}</h2>}
-          {v.parent.map((r) => <p key={r.id} data-line={r.id} className="text-xl leading-relaxed">{r.text}</p>)}
+        <section key={v.stationId} id={v.stationId} className="card flex flex-col gap-3 p-6">
+          {v.title && <h2 className="font-display text-2xl leading-relaxed text-ink">{v.title.text}</h2>}
+          {v.parent.map((r) => <p key={r.id} data-line={r.id} className="text-xl leading-relaxed text-ink-2">{r.text}</p>)}
         </section>
       ))}
-      <Link href="/" className="min-h-16 self-start py-4 text-water underline">MIZAN</Link>
+      <Link href="/" className="self-start py-4 text-ink-2 underline">MIZAN</Link>
     </main>
   );
 }

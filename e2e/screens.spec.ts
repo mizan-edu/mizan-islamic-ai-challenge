@@ -1,0 +1,139 @@
+// «حديقة الآيات» screens: one screenshot per screen (docs/screenshots), plus checks that hold on every
+// screen: no request leaves the app's origin (no font CDN), no horizontal scroll at tablet or phone
+// width, and prefers-reduced-motion leaves no running animation. Reads IDs from /content; never
+// prints record text.
+
+import { readFileSync } from 'node:fs';
+import { expect, test, type Page } from '@playwright/test';
+
+const SHOTS = 'docs/screenshots';
+const PHONE = { width: 390, height: 844 };
+
+interface Script { step: string; correctChoiceId?: string; choiceIds?: string[]; mode?: string; expectedOrder?: string[]; narrationCardIds?: string[]; scoringNote?: string }
+const script = (id: string): Script[] => (JSON.parse(readFileSync(`content/stations/${id}.json`, 'utf8')) as { script: Script[] }).script;
+const observe = (id: string) => script(id).find((s) => s.step === 'observe')!;
+const narrate = (id: string) => script(id).find((s) => s.step === 'narrate')!;
+
+// Same rule as bestCardFromNote in app/_lib/station-view.ts.
+function narrationPicks(id: string): string[] {
+  const n = narrate(id);
+  if (n.mode === 'order') return n.expectedOrder ?? n.narrationCardIds ?? [];
+  let best: { id: string; score: number } | null = null;
+  for (const m of (n.scoringNote ?? '').matchAll(/(S\d+\.N\d+)\s*=\s*(\d)/g)) {
+    if ((n.narrationCardIds ?? []).includes(m[1]) && (!best || Number(m[2]) > best.score)) best = { id: m[1], score: Number(m[2]) };
+  }
+  return best ? [best.id] : [];
+}
+
+const offOrigin: string[] = [];
+test.beforeEach(({ page, baseURL }) => {
+  page.on('request', (r) => { if (!r.url().startsWith(baseURL!) && !r.url().startsWith('data:')) offOrigin.push(new URL(r.url()).host); });
+});
+test.afterEach(() => { expect(offOrigin, 'requests outside the app origin').toEqual([]); });
+
+async function shot(page: Page, name: string, wait = 0) {
+  if (wait) await page.waitForTimeout(wait);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  expect(overflow, `${name}: horizontal overflow`).toBeLessThanOrEqual(0);
+  await page.screenshot({ path: `${SHOTS}/${name}.png`, fullPage: true });
+}
+
+const next = (page: Page) => page.locator('[data-action="next"]').click();
+
+async function playStation(page: Page, id: string, prefix: string) {
+  const ob = observe(id);
+  const wrong = ob.choiceIds!.find((c) => c !== ob.correctChoiceId)!;
+  await page.goto(`/stations/${id}`);
+  await page.waitForLoadState('networkidle');
+  await shot(page, `${prefix}-1-frame`);
+
+  await page.locator('[data-action="start"]').click();
+  await expect(page.locator('[data-screen="observe"]')).toBeVisible();
+  await shot(page, `${prefix}-2-question`, 300);
+
+  await page.locator(`[data-record="${wrong}"]`).click();
+  await expect(page.locator('[data-strip="redirect"]')).toBeVisible();
+  await expect(page.locator(`[data-record="${wrong}"]`)).toHaveAttribute('data-state', 'greyed');
+  if (id === 'S1') {
+    await shot(page, `${prefix}-3-wrong-redirect`, 450);
+    const hint = page.locator('[data-action="hint"]');
+    while (await hint.isEnabled()) await hint.click();
+    await expect(page.locator(`[data-record="${ob.correctChoiceId}"]`)).toHaveAttribute('data-state', 'highlight');
+    await shot(page, `${prefix}-4-last-hint-glow`, 300);
+  }
+
+  await page.locator(`[data-record="${ob.correctChoiceId}"]`).click();
+  await expect(page.locator('[data-strip="praise"]')).toBeVisible();
+  await shot(page, `${prefix}-5-correct-moment`, 1100);
+
+  await next(page);
+  await expect(page.locator('[data-screen="connect"] [data-verse-text]')).toBeVisible();
+  await shot(page, `${prefix}-6-verse-card`, 500);
+
+  await next(page);
+  if (await page.locator('[data-screen="ask"]').count()) {
+    await page.locator('[data-question]').first().click();
+    await expect(page.locator('[data-answer]')).toBeVisible();
+    await shot(page, `${prefix}-7-ask`, 500);
+    await next(page);
+  }
+
+  await expect(page.locator('[data-screen="narrate"]')).toBeVisible();
+  for (const card of narrationPicks(id)) await page.locator(`[data-record="${card}"]`).click();
+  await expect(page.locator('[data-strip="praise"]')).toBeVisible();
+  await shot(page, `${prefix}-8-narrate`, 1000);
+
+  await next(page);
+  await expect(page.locator('[data-screen="close"]')).toBeVisible();
+  await shot(page, `${prefix}-9-close`, 800);
+}
+
+test('journey map (fresh, and after Station 1)', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  await expect(page.locator('[data-station="S1"]')).toHaveAttribute('data-state', 'current');
+  await expect(page.locator('[data-station="S2"]')).toHaveAttribute('data-state', 'locked');
+  await shot(page, 'map-1-start', 400);
+
+  await page.addInitScript(() => sessionStorage.setItem('mizan.progress', JSON.stringify(['S1'])));
+  await page.reload();
+  await expect(page.locator('[data-station="S1"]')).toHaveAttribute('data-state', 'done');
+  await expect(page.locator('[data-station="S2"]')).toHaveAttribute('data-state', 'current');
+  await expect(page.locator('[data-progress]')).toHaveAttribute('data-progress', '1');
+  await shot(page, 'map-2-after-station-1', 400);
+});
+
+test('Station 1 screens', async ({ page }) => { await playStation(page, 'S1', 's1'); });
+test('Station 2 screens', async ({ page }) => { await playStation(page, 'S2', 's2'); });
+test('Station 3 screens', async ({ page }) => { await playStation(page, 'S3', 's3'); });
+
+test('parent summary', async ({ page }) => {
+  await page.goto('/parent');
+  await shot(page, 'parent');
+});
+
+test('phone width: map, question and verse card', async ({ page }) => {
+  await page.setViewportSize(PHONE);
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  await shot(page, 'phone-map', 400);
+  await page.goto('/stations/S1');
+  await page.locator('[data-action="start"]').click();
+  await shot(page, 'phone-s1-question', 300);
+  await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
+  await next(page);
+  await shot(page, 'phone-s1-verse-card', 400);
+});
+
+test('prefers-reduced-motion: nothing animates', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const running = () => page.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  expect(await running()).toBe(0);
+  await page.goto('/stations/S1');
+  await page.locator('[data-action="start"]').click();
+  await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
+  expect(await running()).toBe(0);
+  await expect(page.locator('[data-moment="S1"]')).toHaveAttribute('data-moment-state', 'rain');
+});

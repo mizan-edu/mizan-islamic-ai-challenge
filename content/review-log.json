@@ -2707,6 +2707,46 @@
       "decisionRef": "D24",
       "comment": "approved as written",
       "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "UI.BTN_START",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T16:43:13+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (design pass «حديقة الآيات»: text given in the brief; \"Approve all 4\")"
+    },
+    {
+      "id": "UI.BTN_NEXT_STATION",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T16:43:13+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (design pass «حديقة الآيات»: text given in the brief; \"Approve all 4\")"
+    },
+    {
+      "id": "UI.VERSE_LABEL",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T16:43:13+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (design pass «حديقة الآيات»: text given in the brief; \"Approve all 4\")"
+    },
+    {
+      "id": "UI.TAFSIR_TOGGLE",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T16:43:13+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (design pass «حديقة الآيات»: text given in the brief; \"Approve all 4\")"
     }
   ]
 }

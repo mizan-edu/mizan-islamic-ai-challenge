@@ -157,3 +157,7 @@ docs/review/out/
 
 # .env.example lists variable names only and is committed
 !.env.example
+
+# Playwright artefacts (screenshots kept in docs/screenshots)
+/test-results/
+/playwright-report/

@@ -16,6 +16,7 @@ npm run build       # production build
 npm run lint
 npm run typecheck
 npm test            # app unit tests (Vitest)
+npm run test:screens   # after a build: Playwright screenshots of every screen into docs/screenshots (uses the installed Chrome)
 npm run content:placeholders   # no rendered text may keep a { or } (the same check also runs inside next build)
 npm run check:rendered         # after a build: prerendered /parent and /stations/S1–S3 show no placeholder
 ```

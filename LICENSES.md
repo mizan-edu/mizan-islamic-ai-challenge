@@ -22,3 +22,18 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Licence:** SIL Open Font License, Version 1.1.
   - Full text: `public/fonts/NotoNaskhArabic-OFL.txt`, copied verbatim from the package's `LICENSE` (SHA-256 `91053c23e8a0fe5fc9b5fdbe5ff74ceffd66f6f996c123f1a6ca4c23487c1fff`).
   - The font files are used as published by Fontsource; MIZAN does not modify or rename them.
+
+## Baloo Bhaijaan 2 (display font)
+
+- **Package:** `@fontsource/baloo-bhaijaan-2` 5.3.0 (Fontsource, npm), pinned exactly in package.json and package-lock.json.
+- **Self-hosted:** the woff2 files are bundled by `next/font/local` (app/layout.tsx) and served from the app's own origin. Child devices make no third-party font requests.
+- **Use:** headings, buttons and child lines («حديقة الآيات» design, built 4–6 Oct). Weights 700 and 800, Arabic and Latin subsets. It is never used for Qur'an text, which uses the KFGQPC font above. Body and parent text stay in Noto Naskh Arabic.
+- **Files (SHA-256):**
+  - `baloo-bhaijaan-2-arabic-700-normal.woff2` d14d2500adfe6d1e2b78962e2131e5aa61cecf3e66cd2d4f6cb1a728fff97880
+  - `baloo-bhaijaan-2-arabic-800-normal.woff2` 6607c57381fb866acfab32bf8683c09f5fc3d810d39f20261bae8d661b4ad44f
+  - `baloo-bhaijaan-2-latin-700-normal.woff2` 2b14379a28bd7e3dcb803c79ea94768f9a292e1f7ae0adf5323e62bb2f255591
+  - `baloo-bhaijaan-2-latin-800-normal.woff2` e23687948b255f58f5f31263669e67214b565a71165949549156dd808a96a42a
+- **Owner:** The Baloo 2 Project Authors (https://github.com/EkType/Baloo2), copyright 2019.
+- **Licence:** SIL Open Font License, Version 1.1.
+  - Full text: `public/fonts/BalooBhaijaan2-OFL.txt`, copied verbatim from the package's `LICENSE` (SHA-256 `273d4bb4d30d7f7011adfa11ee858b1d70a6b1f94cae89e6fa261ed8f1b8839a`).
+  - The font files are used as published by Fontsource; MIZAN does not modify or rename them.

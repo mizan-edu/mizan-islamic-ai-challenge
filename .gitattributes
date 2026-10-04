@@ -2,6 +2,7 @@
 public/fonts/*.ttf binary
 public/fonts/KFGQPC-LICENSE.txt -text
 public/fonts/NotoNaskhArabic-OFL.txt -text
+public/fonts/BalooBhaijaan2-OFL.txt -text
 
 # Generated narration audio (ElevenLabs; never Qur'an).
 public/audio/**/*.mp3 binary
