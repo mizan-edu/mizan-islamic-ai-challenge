@@ -2430,6 +2430,16 @@
       "packetSha256": "92a4ae7cefc35c767608485b2a48cd8b0a0d3f640901b80d9803ff8fd94800df",
       "srRange": "SR-01–SR-47",
       "sr": "SR-47"
+    },
+    {
+      "id": "UI.PARENTS",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:33:20+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "task approval 2026-10-04 (Runbook 2.5 brief specifies the label text)"
     }
   ]
 }
