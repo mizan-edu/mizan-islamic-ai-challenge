@@ -52,7 +52,12 @@ QuranEnc's `arabic_text` field is never stored: verse text comes only from the K
 
 ## Source access routes
 
-- King Fahd Complex Qur'an text: KFGQPC Hafs Uthmanic Data v2.0 (read.me dated 2022-09-07), file hafsData_v2-0.json from UthmanicHafs_v2-0.zip, obtained from: https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip
+- **King Fahd Complex Qur'an text:**
+  - **What:** the official KFGQPC Hafs Uthmanic Data v2.0 (read.me dated 2022-09-07), file `hafsData_v2-0.json`, unchanged.
+  - **Package:** `UthmanicHafs_v2-0.zip`. The same package holds the v2.0 font; see LICENSES.md.
+  - **How it was obtained:** on 2026-10-03, from the Internet Archive snapshot (2025-04-17) of the official URL https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip, because the official hosts did not respond.
+  - **Hashes:** zip SHA-256 `a7b0e5591945712ec5e4d6142938ae4d1e9b49bdc89dff06222789bfebdfd72c`; `hafsData_v2-0.json` SHA-256 `d2960b3217962e7e4252abdcece67bea3d6b48271e4cd3af45bbbb2dd5c872ca`.
+  - **Follow-up:** re-verify both hashes from the official host when it is reachable (docs/decisions.md D21).
 - The routes listed in the Reference Package (15-page edition) and Runbook §5.1 (qurancomplex.gov.sa/quran-dev), and the Complex's announced route (qurancomplex.gov.sa/techquran/dev), did not resolve from Hussein's network on 3 Oct 2026.
 
 - QuranEnc tafsir: `GET /api/v1/translations/list/ar` returned no Arabic entries on 3 Oct 2026, so `arabic_mokhtasar` is "unlisted". An unlisted key is still accepted, but only per ayah: the ayah endpoint must return HTTP 200, the requested sura/aya, and a non-empty `translation` in which at least 90% of the letters are Arabic script. Otherwise the run stops. The run log records `version: null` and `listStatus: "unlisted"`, and the platformId has no `:v{version}` part.

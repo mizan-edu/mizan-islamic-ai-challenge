@@ -149,8 +149,6 @@ sources/kfc/*
 # Local snapshot review pages (contain source text; never committed)
 .snapshot-preview/
 
-# KFC Uthmanic font: served locally, committed only after its licence is verified (CLAUDE.md §5)
-public/fonts/uthmanic_hafs_v20.ttf
 # Next.js generated types
 next-env.d.ts
 

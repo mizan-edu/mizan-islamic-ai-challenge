@@ -19,3 +19,5 @@
 2026-10-04 — Tag v0-baseline (annotated) created on commit 38c7882 (committed 2026-10-03 13:28 +03:00, last commit before the build window, Sun 4 Oct 09:00 Riyadh); tag created 2026-10-04 11:03:27 +03:00 and pushed to origin. Approved by Hussein.
 
 2026-10-04 — D20 Scholar Review 2: all packet items (SR range SR-01–SR-47) approved without change; method: signed written confirmation dated 2026-10-04; packet SHA-256 92a4ae7cefc35c767608485b2a48cd8b0a0d3f640901b80d9803ff8fd94800df; scholar not named at their request; evidence held by Hussein. The reviewed packet (9338262) did not include the instructions page.
+
+2026-10-04 — D21 Deviation from Runbook v1.2 §5.1 access route: KFC v2.0 package (Qur'an text and font) retrieved via an Internet Archive snapshot of the official URL because the official hosts were unreachable. Integrity controls: byte-identical official package with KFC vendor metadata; verses checked by Hussein against the Mushaf; displayed verse cards approved by the scholar reviewer in Review 2. Action: re-verify the hashes from the official host when reachable, before the Tue 16:00 freeze.

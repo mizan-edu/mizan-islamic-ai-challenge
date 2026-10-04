@@ -1,0 +1,3 @@
+# Third-party assets are stored byte-exact (no line-ending conversion, no diffs as text).
+public/fonts/*.ttf binary
+public/fonts/KFGQPC-LICENSE.txt -text

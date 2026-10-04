@@ -15,5 +15,5 @@
 - **R9:** an ESLint rule (`no-restricted-imports`) blocks app code from importing `/scripts`, and the snapshot tool's static test asserts the same.
 - **Fonts:**
   - **UI:** Noto Naskh Arabic via `@fontsource/noto-naskh-arabic` (SIL OFL 1.1), self-hosted from npm with no runtime font requests. Only the Arabic and Latin subsets are loaded, at weights 400 and 700.
-  - **Verse text only:** KFGQPC Uthmanic Hafs v2.0 (`uthmanic_hafs_v20.ttf`), used unchanged (no conversion or subsetting) and served from `/fonts` (`public/fonts`). The file is git-ignored until its licence is verified and recorded in LICENSES.md. For a local run, copy it from `sources/kfc/`.
+  - **Verse text only:** KFGQPC Uthmanic Hafs v2.0 (`uthmanic_hafs_v20.ttf`), used unchanged (no conversion or subsetting) and served from `/fonts` (`public/fonts`). It is committed byte-identical with its licence text alongside (`public/fonts/KFGQPC-LICENSE.txt`); see LICENSES.md.
 - **Health:** `GET /api/health` returns `{"status":"ok"}`. It returns no environment values and does no logging.
