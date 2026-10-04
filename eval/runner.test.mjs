@@ -4,7 +4,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { buildLibrary } from '../app/_lib/library';
 import { behaviourClass, buildMutatedInput, levelAtLeast, p95, redactReply, runCheck, runChecks } from './lib/checks.mjs';
-import { costUsd, instrumentClient, runItems, selectItems, summarize } from './lib/runner.mjs';
+import { costUsd, instrumentClient, runItems, sanitizeClassifierOutput, selectItems, summarize } from './lib/runner.mjs';
 
 const VERSE = 'كلمة1 كلمة2 كلمة3 كلمة4 كلمة5 كلمة6';
 const rec = (id, type, extra = {}) => ({ id, station: 'S9', type, text: `نص ${id}`, level: 'A', tts: type !== 'quran', status: 'approved', ...extra });
@@ -160,6 +160,33 @@ describe('runner', () => {
     const [r] = await runItems({ items, runs: 1, lib, guardLib: lib, surahs: new Map(), deps: { classifier }, meta, calls });
     expect(r).toMatchObject({ itemId: 'AX', assignedLevel: 'A', behaviourClass: 'answer', passed: true, inputTokens: 10, outputTokens: 2 });
     expect(JSON.stringify(r)).not.toContain('سؤال اختباري');
+  });
+
+  it('logs the classifier output (validated and sanitized raw), route reason, matched question and retrieval scores', async () => {
+    const calls = [];
+    const client = instrumentClient({ messages: { parse: async () => ({ parsed_output: { level: 'A', recordId: 'S9.X1' }, usage: { input_tokens: 5, output_tokens: 1 } }) } }, 'classifier', () => calls);
+    const classifier = async () => { await client.messages.parse({}); return { level: 'A', recordId: 'S9.X1' }; };
+    const items = [{ id: 'AX', category: 'A', status: 'approved', expectedLevel: 'A', expectedBehaviour: 'answer', expectedCitations: [], checks: ['level_equals:A'], input: { stationId: 'S9', text: 'سؤال اختباري غير مطابق' } }];
+    const [r] = await runItems({ items, runs: 1, lib, guardLib: lib, surahs: new Map(), deps: { classifier }, meta: { runId: 't', commit: 'c', modelId: 'claude-sonnet-5-5' }, calls });
+    expect(r).toMatchObject({ classifierCalled: true, classifierOutput: { level: 'A', recordId: 'S9.X1' }, routeReason: 'classifier', matchedQuestion: null });
+    expect(r.modelCalls[0].parsed).toEqual({ level: 'A', recordId: 'S9.X1' });
+    expect(r.retrievalScores).toMatchObject({ aqThreshold: { score: 0.75, shared: 2 }, verseThreshold: 0.6 });
+    expect(r.retrievalScores.candidates.every((c) => typeof c.id === 'string')).toBe(true);
+    expect(JSON.stringify(r)).not.toContain('سؤال اختباري');
+  });
+
+  it('sanitizeClassifierOutput keeps only a level and an ID-shaped record ID', () => {
+    expect(sanitizeClassifierOutput({ level: 'B', recordId: 'S1.E1' })).toEqual({ level: 'B', recordId: 'S1.E1' });
+    expect(sanitizeClassifierOutput({ level: 'B', recordId: null })).toEqual({ level: 'B', recordId: null });
+    expect(sanitizeClassifierOutput({ level: 'some text', recordId: 'free text from the model' })).toEqual({ level: 'INVALID', recordId: 'INVALID' });
+    expect(sanitizeClassifierOutput('text')).toBeNull();
+  });
+
+  it('a deterministic route records that the classifier was not called', async () => {
+    const calls = [];
+    const items = [{ id: 'FX', category: 'F', status: 'approved', expectedLevel: 'D', expectedBehaviour: 'referral', expectedCitations: [], checks: [], input: { stationId: 'S9', text: 'سؤال' } }];
+    const [r] = await runItems({ items, runs: 1, lib, guardLib: lib, surahs: new Map(), deps: { classifier: null }, meta: { runId: 't', commit: 'c', modelId: null }, calls });
+    expect(r).toMatchObject({ classifierCalled: false, classifierOutput: null });
   });
 
   it('summary: pass rate per category against thresholds, p95 latency', () => {

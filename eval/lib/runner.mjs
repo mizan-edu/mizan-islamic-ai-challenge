@@ -3,7 +3,8 @@
 // Inputs are never stored (items are referenced by ID; category E strings are built in memory).
 
 import { answerQuestion } from '../../app/_lib/pipeline';
-import { retrieve } from '../../app/_lib/retrieval';
+import { containment, tokens } from '../../app/_lib/normalize';
+import { AQ_MIN_SCORE, AQ_MIN_SHARED, retrieve, VERSE_MIN_SCORE } from '../../app/_lib/retrieval';
 import { behaviourClass, buildMutatedInput, citedIds, mean, p95, redactReply, runChecks, THRESHOLDS } from './checks.mjs';
 
 // USD per million tokens (list price). Unknown models get cost null rather than a guess.
@@ -13,6 +14,32 @@ export function costUsd(model, calls) {
   const p = PRICES[model];
   if (!p) return null;
   return calls.reduce((n, c) => n + ((c.inputTokens ?? 0) * p.input + (c.outputTokens ?? 0) * p.output + (c.cacheReadTokens ?? 0) * p.cacheRead) / 1e6, 0);
+}
+
+// The model's parsed classifier output, kept only if it is a level plus an ID-shaped record ID (or
+// null): free text from the model is never stored.
+const ID_SHAPE = /^S\d+(\.[A-Za-z0-9-]+)+$/;
+export function sanitizeClassifierOutput(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const level = typeof raw.level === 'string' && /^(A|B|C|D|OUT_OF_SCOPE)$/.test(raw.level) ? raw.level : 'INVALID';
+  const recordId = raw.recordId === null ? null : typeof raw.recordId === 'string' && ID_SHAPE.test(raw.recordId) ? raw.recordId : 'INVALID';
+  return { level, recordId };
+}
+
+// Retrieval scores for one input, with the thresholds the router uses (app/_lib/retrieval.ts).
+export function retrievalScores(lib, stationId, text, retrieval) {
+  const q = tokens(text);
+  const station = stationId ? lib.stations.get(stationId) : undefined;
+  const aq = (station?.anticipatedQuestions ?? [])
+    .map((a) => ({ id: a.id, responseRecordId: a.responseRecordId, ...containment(q, tokens(a.childQuestion)) }))
+    .sort((a, b) => b.score - a.score)
+    .map((a) => ({ ...a, score: Number(a.score.toFixed(3)) }));
+  const verses = lib.verses.map((v) => ({ id: v.id, score: containment(q, tokens(v.text)).score })).sort((a, b) => b.score - a.score);
+  return {
+    aqThreshold: { score: AQ_MIN_SCORE, shared: AQ_MIN_SHARED }, aq,
+    verseThreshold: VERSE_MIN_SCORE, verse: verses[0] ? { id: verses[0].id, score: Number(verses[0].score.toFixed(3)), matched: Boolean(retrieval.verse), exact: retrieval.verse?.exact ?? false } : null,
+    candidates: retrieval.candidates.map((r) => ({ id: r.id, type: r.type, level: r.level, score: r.type === 'quran' ? null : Number(containment(q, tokens(r.text)).score.toFixed(3)) })),
+  };
 }
 
 // Wraps an SDK-like client so every messages.parse call is timed and its usage recorded into
@@ -30,6 +57,7 @@ export function instrumentClient(client, kind, current) {
           call.outputTokens = res.usage?.output_tokens ?? 0;
           call.cacheReadTokens = res.usage?.cache_read_input_tokens ?? 0;
           call.stopReason = res.stop_reason ?? null;
+          if (kind === 'classifier') call.parsed = sanitizeClassifierOutput(res.parsed_output);
           return res;
         } catch (e) {
           call.error = `${e?.constructor?.name ?? 'Error'}${e?.status ? ` ${e.status}` : ''}`;
@@ -60,8 +88,13 @@ export async function runItems({ items, runs, lib, guardLib, surahs, deps, meta,
       if (item.input.mutation) ({ text, descriptor: mutation } = buildMutatedInput(item, lib, surahs));
       const input = { stationId: item.input.stationId, text, onScreen: item.input.context?.onScreen ?? [] };
       calls.length = 0;
+      // The classifier's validated return for this execution (null = invalid or unavailable).
+      let classifierOutput;
+      const classifier = deps.classifier
+        ? async (ci) => { const out = await deps.classifier(ci); classifierOutput = out ? { level: out.level, recordId: out.recordId } : null; return out; }
+        : null;
       const t0 = performance.now();
-      const res = await answerQuestion(lib, input, deps);
+      const res = await answerQuestion(lib, input, { ...deps, classifier });
       const latencyMs = Math.round(performance.now() - t0);
       const retrieval = retrieve(lib, input.stationId, input.text, input.onScreen);
       const behaviour = behaviourClass(res);
@@ -73,7 +106,10 @@ export async function runItems({ items, runs, lib, guardLib, surahs, deps, meta,
         ...(mutation ? { mutation } : {}),
         expectedLevel: item.expectedLevel, assignedLevel: res.reply.level,
         expectedBehaviour: item.acceptableBehaviours ?? [item.expectedBehaviour], behaviourClass: behaviour,
-        routeSource: res.route.source, ruleIds: res.route.ruleIds,
+        routeSource: res.route.source, routeReason: res.route.reason, ruleIds: res.route.ruleIds,
+        classifierCalled: classifierOutput !== undefined, classifierOutput: classifierOutput ?? null,
+        matchedQuestion: retrieval.aq ? { id: retrieval.aq.question.id, responseRecordId: retrieval.aq.record.id, score: Number(retrieval.aq.score.toFixed(3)), used: res.route.source === 'aq' } : null,
+        retrievalScores: retrievalScores(lib, input.stationId, input.text, retrieval),
         expectedCitations: item.expectedCitations ?? [], citedRecordIds: citedIds(res.reply),
         retrievedRecordIds: [...new Set([retrieval.verse?.record.id, retrieval.aq?.record.id, ...retrieval.candidates.map((r) => r.id)].filter(Boolean))],
         validatorOk: res.validation.ok, fellBack: !res.validation.ok,
@@ -119,6 +155,16 @@ export function summarize({ meta, results, skipped, categories }) {
     for (const r of fails) {
       const failed = Object.entries(r.checks).filter(([, ok]) => !ok).map(([k]) => k).join(', ');
       L.push(`| ${r.itemId} | ${r.run} | ${failed} | ${r.assignedLevel} vs ${r.expectedLevel} | ${r.behaviourClass} (${r.expectedBehaviour.join(' / ')}) |`);
+    }
+    L.push('');
+  }
+
+  if (fails.length) {
+    L.push('### Failure diagnostics', '', '| Item | Run | Path | Route reason | Classifier returned | Best pre-written question (score / shared) |', '|---|---|---|---|---|---|');
+    for (const r of fails) {
+      const c = r.classifierOutput ? `${r.classifierOutput.level}, ${r.classifierOutput.recordId ?? 'no record'}` : r.classifierCalled ? 'invalid or unavailable' : 'not called';
+      const aq = r.retrievalScores?.aq?.[0];
+      L.push(`| ${r.itemId} | ${r.run} | ${r.routeSource} | ${r.routeReason} | ${c} | ${aq ? `${aq.id} ${aq.score} / ${aq.shared}` : '-'} |`);
     }
     L.push('');
   }
