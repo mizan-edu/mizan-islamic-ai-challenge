@@ -17,6 +17,8 @@ export interface RouterRule {
   exceptWhen?: { any: string[]; none: string[] };
   note?: string;
   status: string;
+  reviewer1?: string | null;
+  reviewer1At?: string | null;
 }
 
 export function loadRouterRules(contentDir: string): RouterRule[] {
