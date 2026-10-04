@@ -145,7 +145,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
           <Line record={view.connect.bridge} labels={labels} />
           <Line record={view.connect.listen} labels={labels} />
           {view.connect.verse && <VerseCard verse={view.connect.verse} playLabel={labels.playRecitation} />}
-          <Line record={view.connect.explanation} labels={labels} />
+          {view.connect.explanations.map((r) => <Line key={r.id} record={r} labels={labels} />)}
           {view.connect.tafsir && (
             <ParentsToggle label={labels.parents}>
               <p dir="rtl" lang="ar" className="text-lg leading-loose" data-tafsir={view.connect.tafsir.id}>{view.connect.tafsir.text}</p>

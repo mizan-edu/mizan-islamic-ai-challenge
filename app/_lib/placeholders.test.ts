@@ -13,7 +13,7 @@ const noFiles = () => false;
 function allRecordViews(v: StationView): RecordView[] {
   const out: (RecordView | null)[] = [v.title, ...v.frame, ...v.close.lines, ...v.parent];
   if (v.observe) out.push(v.observe.question, ...v.observe.choices, v.observe.praise, ...Object.values(v.observe.redirects), ...v.observe.hints, v.observe.together);
-  if (v.connect) out.push(...v.connect.science, v.connect.bridge, v.connect.listen, v.connect.explanation);
+  if (v.connect) out.push(...v.connect.science, v.connect.bridge, v.connect.listen, ...v.connect.explanations);
   if (v.narrate) out.push(v.narrate.intro, ...v.narrate.cards, v.narrate.praise, v.narrate.retry);
   return out.filter((r): r is RecordView => r !== null);
 }

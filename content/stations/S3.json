@@ -60,7 +60,11 @@
       "verseCard": {
         "quranId": "S3.V1-ALT",
         "tafsirId": "S3.T1-ALT",
-        "explanationId": "S3.E1"
+        "explanationId": "S3.E1",
+        "explanationIds": [
+          "S3.E1",
+          "S3.E2"
+        ]
       },
       "conceptIds": [
         "S3.C1"
@@ -577,6 +581,28 @@
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
       "reviewer2At": "2026-10-04",
       "status": "approved"
+    },
+    {
+      "id": "S3.E2",
+      "station": "S3",
+      "type": "explanation",
+      "text": "السَّماءُ في لُغتِنا العربيّةِ هي كلُّ ما ارتفعَ فوقَنا؛ فالطائرةُ العاليةُ نقولُ إنّها في السَّماءِ، والغيومُ التي ينزلُ منها المطرُ في السَّماءِ أيضًا.",
+      "basedOn": [
+        "S3.V1-ALT",
+        "S3.T1-ALT"
+      ],
+      "level": "B",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "note": "Scholar Review 2 addendum: meaning of السماء in Arabic",
+      "reviewer1": null,
+      "reviewer1At": null,
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "draft"
     },
     {
       "id": "S3.N0",

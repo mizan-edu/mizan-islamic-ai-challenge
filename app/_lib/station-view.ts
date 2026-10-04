@@ -46,7 +46,7 @@ export interface StationView {
     listen: RecordView | null;
     verse: VerseView | null;
     tafsir: { id: string; text: string; reference: string; platformId: string } | null;
-    explanation: RecordView | null;
+    explanations: RecordView[]; // verseCard.explanationIds in order (approved only), else explanationId
   } | null;
   ask: { id: string; text: string }[];
   narrate: {
@@ -117,7 +117,7 @@ export function buildStationView(
   const together = view(observe?.togetherId);
   const togetherRec = together ? lib.byId.get(together.id) : undefined;
 
-  const vc = (connect?.verseCard ?? {}) as { quranId?: string; tafsirId?: string; explanationId?: string };
+  const vc = (connect?.verseCard ?? {}) as { quranId?: string; tafsirId?: string; explanationId?: string; explanationIds?: string[] };
   const verseRec = vc.quranId ? lib.byId.get(vc.quranId) : undefined;
   const tafsirRec = vc.tafsirId ? lib.byId.get(vc.tafsirId) : undefined;
 
@@ -152,7 +152,7 @@ export function buildStationView(
         listen: view(connect.listenId),
         verse: verseRec?.type === 'quran' ? toVerseView(verseRec) : null,
         tafsir: tafsirRec?.type === 'tafsir' ? { id: tafsirRec.id, text: tafsirRec.text, reference: String(tafsirRec.reference), platformId: String(tafsirRec.platformId) } : null,
-        explanation: view(vc.explanationId),
+        explanations: views(Array.isArray(vc.explanationIds) ? vc.explanationIds : [vc.explanationId]),
       }
       : null,
     ask: station.anticipatedQuestions.slice(0, MAX_QUESTIONS).map((q) => ({ id: q.id, text: q.childQuestion })),

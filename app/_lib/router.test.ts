@@ -163,3 +163,25 @@ describe('classifier fallback (router rules switched off)', () => {
     expect(verseCands.every((c) => c.text === undefined)).toBe(true);
   });
 });
+
+describe('silent safety nets kept after the Scholar Review 2 addendum (D23)', () => {
+  const lib = runtimeLibrary();
+  const nets = { B04: 'RR-C-SCHOLARS', B10: 'RR-C-SCHOLARS', C08: 'RR-C-SELF-JUDGEMENT' } as const;
+
+  it.each(Object.entries(nets))('%s is rejected from the test set but still refers via %s, in every station', async (id, ruleId) => {
+    const t = item(id);
+    expect(t.status).toBe('rejected');
+    for (const stationId of [null, 'S1', 'S2', 'S3']) {
+      const routed = await route(lib, { stationId, text: t.input.text }, neverCalled);
+      expect(routed.source).toBe('rule');
+      expect(routed.ruleIds).toContain(ruleId);
+      expect(['referral', 'fallback']).toContain(routed.behaviour);
+      const rec = lib.byId.get(routed.recordId!)!;
+      expect(['referral', 'fallback']).toContain(rec.type);
+      // The referral never opens the topic: its own text fires no router rule (no scholars,
+      // disagreement or verdict on the child) and it cites nothing.
+      expect(fireRules(lib.rules, rec.text)).toEqual([]);
+      expect(buildReply(lib, stationId, routed).segments.map((s) => s.recordId)).toEqual([rec.id]);
+    }
+  });
+});

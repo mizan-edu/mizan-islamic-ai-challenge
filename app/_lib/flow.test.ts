@@ -27,7 +27,7 @@ describe('S1 view from the approved library', () => {
     expect(S1.observe?.highlightChoiceId).toBe('S1.Q1.c1');
     expect(S1.connect?.verse?.id).toBe('S1.V1');
     expect(S1.connect?.tafsir?.id).toBe('S1.T1');
-    expect(S1.connect?.explanation?.id).toBe('S1.E1');
+    expect(S1.connect?.explanations[0]?.id).toBe('S1.E1');
     expect(S1.ask.length).toBeGreaterThanOrEqual(2);
     expect(S1.ask.length).toBeLessThanOrEqual(3);
     expect(S1.narrate).toMatchObject({ mode: 'order', expectedOrder: ['S1.N1', 'S1.N2', 'S1.N3'] });
@@ -37,7 +37,7 @@ describe('S1 view from the approved library', () => {
   });
 
   it('no verse, tafsir or rejected record leaks into ordinary lines', () => {
-    const all = [S1.title, ...S1.frame, S1.observe?.question, ...(S1.observe?.choices ?? []), S1.connect?.bridge, S1.connect?.listen, S1.connect?.explanation, ...(S1.narrate?.cards ?? [])];
+    const all = [S1.title, ...S1.frame, S1.observe?.question, ...(S1.observe?.choices ?? []), S1.connect?.bridge, S1.connect?.listen, ...(S1.connect?.explanations ?? []), ...(S1.narrate?.cards ?? [])];
     for (const r of all) expect(['quran', 'tafsir', 'hadith']).not.toContain(r?.type);
     expect(JSON.stringify(S1)).not.toContain('S1.V1-ALT');
   });

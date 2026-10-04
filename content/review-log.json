@@ -2561,6 +2561,102 @@
       "decision": "A",
       "resultingStatus": "approved",
       "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "D-SR2-ADDENDUM",
+      "kind": "decision",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "A",
+      "resultingStatus": "logged",
+      "decisionRef": "D23",
+      "comment": "Four comments after the signed approval (D20); evidence held by Hussein.",
+      "source": "Scholar Review 2 addendum (second scholar reviewer)"
+    },
+    {
+      "id": "B04",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "B10",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "C08",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "D01",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "D02",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "D03",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "D05",
+      "kind": "test-item",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "X",
+      "resultingStatus": "rejected",
+      "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
+      "decisionRef": "D23",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
     }
   ]
 }
