@@ -1,4 +1,4 @@
-import { approvedText, loadStations, loadUiStrings } from '@/lib/content';
+import { approvedText, loadStations, loadUiStrings } from '@/app/_lib/content';
 
 // Home: journey title + one card per station. All Arabic text comes from approved /content records;
 // nothing child-facing is hard-coded here (CLAUDE.md §5.3).

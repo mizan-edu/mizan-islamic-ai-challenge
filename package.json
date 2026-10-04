@@ -5,11 +5,11 @@
     "node": ">=22.12.0"
   },
   "scripts": {
-    "dev": "next dev app",
-    "build": "next build app",
-    "start": "next start app",
-    "lint": "eslint app",
-    "typecheck": "next typegen app && tsc -p app/tsconfig.json --noEmit",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "snapshot": "node scripts/snapshot/snapshot.mjs",
     "test:snapshot": "node --test \"scripts/snapshot/test/*.test.mjs\"",

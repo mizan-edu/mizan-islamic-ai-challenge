@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* KFC Uthmanic Hafs v2.0 — verse display only (R3). The .ttf is served unchanged from
-   /fonts (app/public/fonts); it stays out of git until its licence is verified (CLAUDE.md §5). */
+   /fonts (public/fonts); it stays out of git until its licence is verified (CLAUDE.md §5). */
 @font-face {
   font-family: "KFGQPC Uthmanic Hafs";
   src: url("/fonts/uthmanic_hafs_v20.ttf") format("truetype");

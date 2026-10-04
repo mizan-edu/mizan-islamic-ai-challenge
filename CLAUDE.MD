@@ -66,7 +66,7 @@ Retrieval	In-app hybrid search (Arabic-normalized keywords + embeddings) over ap
 Ingestion	/scripts snapshots texts by ID from King Fahd Complex (Qur'an JSON), QuranEnc, HadeethEnc and Dorar into /content, keeping platform, platform ID and retrieval date. Disclosed as pre-build tooling.
 Recitation	Ingestion stores reciter ID, audio URL and ayah start/end timings from the mp3quran.net API. At runtime the client streams that audio — the only permitted runtime call to an external content source. If audio fails, show the verse text without audio.
 Voice	Scripted non-Qur'anic lines pre-rendered (ElevenLabs) and committed as audio files; dynamic TTS for tutor replies, never for verses.
-Fonts	King Fahd Complex Uthmanic font self-hosted under /app/public/fonts. [VERIFY: fonts.qurancomplex.gov.sa licence terms] before committing; record in LICENSES.md.
+Fonts	King Fahd Complex Uthmanic font self-hosted under /public/fonts. [VERIFY: fonts.qurancomplex.gov.sa licence terms] before committing; record in LICENSES.md.
 5.1 Request flow
 Input (tap choice ID, or typed text in judge mode) → normalize Arabic for matching only.
 Router assigns A/B/C/D/OUT_OF_SCOPE; deterministic rules override when stricter.

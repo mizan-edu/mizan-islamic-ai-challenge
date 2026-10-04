@@ -4,7 +4,7 @@ import '@fontsource/noto-naskh-arabic/arabic-700.css';
 import '@fontsource/noto-naskh-arabic/latin-400.css';
 import '@fontsource/noto-naskh-arabic/latin-700.css';
 import './globals.css';
-import { approvedText, loadUiStrings } from '@/lib/content';
+import { approvedText, loadUiStrings } from '@/app/_lib/content';
 
 export function generateMetadata(): Metadata {
   const title = approvedText(loadUiStrings().values(), 'UI.JOURNEY_TITLE') ?? 'MIZAN';
