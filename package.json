@@ -8,6 +8,7 @@
     "dev": "next dev",
     "build": "next build",
     "check:rendered": "node scripts/content/check-rendered.mjs",
+    "verify:clean-build": "node scripts/verify-clean-build.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",

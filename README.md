@@ -13,6 +13,7 @@ Requires Node.js ≥ 22.12. Run all commands from the repository root:
 npm ci
 npm run dev         # local app
 npm run build       # production build
+npm run verify:clean-build   # before every push: fresh clone of HEAD, npm ci + npm run build, no .env.local (as Vercel builds)
 npm run lint
 npm run typecheck
 npm test            # app unit tests (Vitest)
