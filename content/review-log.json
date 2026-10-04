@@ -1,6 +1,6 @@
 {
   "meta": {
-    "description": "Review log (CLAUDE.md §7). One entry per reviewed record, decision or test item. Ids and outcomes only; no record text.",
+    "description": "Review log (CLAUDE.md §7). One entry per reviewed record, decision or test item. Entries for non-scripture records may include before/after text for traceability (e.g. Q1, D29); quran, tafsir and hadith records stay IDs and outcomes only.",
     "decisionCodes": {
       "A": "approved at this review",
       "X": "rejected at this review"
