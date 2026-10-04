@@ -63,8 +63,14 @@ async function playStation(page: Page, id: string, prefix: string) {
   }
 
   await page.locator(`[data-record="${ob.correctChoiceId}"]`).click();
+  // Magic moment: full screen, then back (S1 waits for the auto-close; S2 and S3 tap to skip).
+  const moment = page.locator(`[data-moment="${id}"]`);
+  await expect(moment).toBeVisible();
+  await shot(page, `${prefix}-5-moment`, 1200);
+  if (id === 'S1') await expect(moment).toBeHidden({ timeout: 4000 });
+  else { await moment.click(); await expect(moment).toBeHidden(); }
   await expect(page.locator('[data-strip="praise"]')).toBeVisible();
-  await shot(page, `${prefix}-5-correct-moment`, 1100);
+  await shot(page, `${prefix}-5-correct`, 600);
 
   await next(page);
   await expect(page.locator('[data-screen="connect"] [data-verse-text]')).toBeVisible();
@@ -121,6 +127,7 @@ test('phone width: map, question and verse card', async ({ page }) => {
   await page.locator('[data-action="start"]').click();
   await shot(page, 'phone-s1-question', 300);
   await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
+  await page.locator('[data-moment="S1"]').click();
   await next(page);
   await shot(page, 'phone-s1-verse-card', 400);
 });
@@ -135,5 +142,7 @@ test('prefers-reduced-motion: nothing animates', async ({ page }) => {
   await page.locator('[data-action="start"]').click();
   await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
   expect(await running()).toBe(0);
-  await expect(page.locator('[data-moment="S1"]')).toHaveAttribute('data-moment-state', 'rain');
+  // No moment at all under reduced motion; the praise shows straight away.
+  await expect(page.locator('[data-strip="praise"]')).toBeVisible();
+  expect(await page.locator('[data-moment]').count()).toBe(0);
 });

@@ -96,22 +96,19 @@
 
 /* ---------- Motion (CSS/SVG only; all of it switched off by prefers-reduced-motion) ---------- */
 
-@keyframes drift { from { transform: translateX(-12%); } to { transform: translateX(112%); } }
-@keyframes flow { to { stroke-dashoffset: -400; } }
 @keyframes pulse-ring { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(1.45); opacity: 0; } }
-@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 @keyframes spin { to { transform: rotate(360deg); } }
-@keyframes rays { to { transform: rotate(360deg); } }
 @keyframes glow { 0%, 100% { box-shadow: 0 0 0 6px rgba(255, 201, 74, 0.55), var(--shadow-card); } 50% { box-shadow: 0 0 0 14px rgba(255, 201, 74, 0.25), var(--shadow-card); } }
 @keyframes burst { 0% { transform: translate(0, 0) scale(0.4); opacity: 0; } 20% { opacity: 1; } 100% { transform: translate(var(--bx), var(--by)) scale(1); opacity: 0; } }
-@keyframes fall { 0% { transform: translateY(-10px); opacity: 0; } 15% { opacity: 1; } 100% { transform: translateY(120px); opacity: 0; } }
-@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.25); } 100% { transform: scale(1); } }
 @keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes grow-in { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes rainfall { from { transform: translateY(-12vh); } to { transform: translateY(112vh); } }
+@keyframes moment-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out-late { 0%, 30% { opacity: 1; } 70%, 100% { opacity: 0; } }
+@keyframes fade-in-late { 0%, 30% { opacity: 0; } 70%, 100% { opacity: 1; } }
+@keyframes stage-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
+@keyframes step-in { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
 
-.anim-drift { animation: drift linear infinite; }
-.anim-flow { animation: flow 6s linear infinite; }
-.anim-bob { animation: bob 2.8s ease-in-out infinite; }
 .anim-pulse::before {
   content: "";
   position: absolute;
@@ -121,17 +118,17 @@
   animation: pulse-ring 2.2s ease-out infinite;
   z-index: -1;
 }
-.anim-rays { transform-box: fill-box; transform-origin: center; animation: rays 40s linear infinite; }
 .anim-glow { animation: glow 1.6s ease-in-out infinite; }
 .anim-burst { animation: burst 900ms ease-out forwards; }
-.anim-fall { animation: fall 1.4s ease-in infinite; }
-.anim-pop { transform-box: fill-box; transform-origin: 50% 100%; animation: pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both; }
 .anim-rise { animation: rise 400ms ease-out both; }
 .anim-grow-in { transform-origin: 50% 90%; animation: grow-in 600ms cubic-bezier(0.34, 1.3, 0.64, 1) both; }
+.anim-rainfall { animation: rainfall 1100ms linear infinite both; }
+.anim-moment { animation: moment-in 250ms ease-out both; }
+.anim-fade-out-late { animation: fade-out-late 2200ms ease-in-out both; }
+.anim-fade-in-late { animation: fade-in-late 2200ms ease-in-out both; }
+.anim-stage-in { animation: stage-in 500ms ease-out both; }
+.anim-step { animation: step-in 250ms ease-out both; }
 .anim-spin { animation: spin 8s linear infinite; }
-
-/* Moments: state changes are transitions (also off under reduced motion). */
-.grow { transform-box: fill-box; transition: transform 900ms cubic-bezier(0.34, 1.3, 0.64, 1), opacity 600ms ease; }
 
 @media (prefers-reduced-motion: reduce) {
   *,

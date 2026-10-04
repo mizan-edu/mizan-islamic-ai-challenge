@@ -91,7 +91,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false }: 
       className={`press relative flex min-h-56 flex-col items-center justify-center gap-3 rounded-[28px] bg-card p-4 text-center ${look}`}
     >
       {record.image ? (
-        <span className={`flex w-full items-center justify-center overflow-hidden rounded-[20px] bg-sky-soft ${frame === 'square' ? 'mx-auto aspect-square max-w-56' : frame === 'card' ? 'aspect-[4/3]' : ''}`}
+        <span className={`flex w-full items-center justify-center overflow-hidden rounded-[20px] bg-sky-soft ${frame === 'square' ? 'mx-auto aspect-square max-w-[min(18rem,34dvh)]' : frame === 'card' ? 'aspect-[4/3]' : ''}`}
           style={frame !== 'natural' || !size ? undefined : { aspectRatio: `${size.width} / ${size.height}` }} data-picture-frame={frame}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={record.image} alt={record.text} width={size?.width} height={size?.height} className="size-full object-contain" />
@@ -117,7 +117,7 @@ const Star = ({ className }: { className: string }) => (
 
 // Verse card: calm and still. Stored text in the KFC font (never animated), the reference, and the
 // real recitation limited to the ayah. Only the recitation button moves, and only while playing.
-export function VerseCard({ verse, playLabel, label }: { verse: VerseView; playLabel?: string; label?: string }) {
+export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { verse: VerseView; playLabel?: string; label?: string; surahLabel?: string; ayahLabel?: string }) {
   const ref = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const rc = verse.recitation;
@@ -142,7 +142,10 @@ export function VerseCard({ verse, playLabel, label }: { verse: VerseView; playL
         <Star className="start-2 top-2" /><Star className="end-2 top-2" /><Star className="bottom-2 start-2" /><Star className="bottom-2 end-2" />
         {label && <p className="font-display text-center text-xl text-ink-2" data-verse-label>{label}</p>}
         <blockquote dir="rtl" lang="ar" className="font-quran text-center text-4xl leading-[2.2] text-ink md:text-5xl" data-verse-text>{verse.text}</blockquote>
-        <p dir="ltr" className="text-center text-lg text-ink-2" data-reference>{verse.reference}</p>
+        {/* «سورة <KFC name> · الآية <n>» (Western numerals); the plain reference when a label is missing. */}
+        {surahLabel && ayahLabel && verse.surahName && verse.ayah !== null
+          ? <p className="font-display text-center text-lg text-ink-2" data-reference={verse.reference}>{surahLabel} {verse.surahName} · {ayahLabel} {verse.ayah}</p>
+          : <p dir="ltr" className="text-center text-lg text-ink-2" data-reference={verse.reference}>{verse.reference}</p>}
       </div>
       {rc && (
         <figcaption className="flex justify-center pb-3">

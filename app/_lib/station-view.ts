@@ -21,6 +21,8 @@ export interface VerseView {
   id: string;
   text: string;
   reference: string;
+  surahName: string | null; // KFC hafsData name (content/kfc-surahs.json), for the reference line
+  ayah: number | null;
   platformId: string;
   recitation: { src: string; audioUrl: string; startMs: number; endMs: number } | null;
 }
@@ -151,7 +153,7 @@ export function buildStationView(
         science: views(connect.scienceIds),
         bridge: view(connect.bridgeId),
         listen: view(connect.listenId),
-        verse: verseRec?.type === 'quran' ? toVerseView(verseRec) : null,
+        verse: verseRec?.type === 'quran' ? toVerseView(verseRec, lib.surahs) : null,
         tafsir: tafsirRec?.type === 'tafsir' ? { id: tafsirRec.id, text: tafsirRec.text, reference: String(tafsirRec.reference), platformId: String(tafsirRec.platformId) } : null,
         explanations: views(Array.isArray(vc.explanationIds) ? vc.explanationIds : [vc.explanationId]),
       }
@@ -179,13 +181,16 @@ function toView(stationId: string, r: ContentRecord, exists: FileExists): Record
   return { id: r.id, type: r.type, role: r.role ?? null, level: r.level, text: r.text, audio: narrationSrc(stationId, r, exists), image, imageSize: image ? pictureSize(r.id) : null };
 }
 
-export function toVerseView(r: ContentRecord): VerseView {
+export function toVerseView(r: ContentRecord, surahs: Map<number, string> = new Map()): VerseView {
+  const ref = /^(\d+):(\d+)$/.exec(String(r.reference));
   const rc = r.recitation as { audioUrl?: unknown; startMs?: unknown; endMs?: unknown } | undefined;
   const ok = rc && typeof rc.audioUrl === 'string' && Number.isInteger(rc.startMs) && Number.isInteger(rc.endMs);
   return {
     id: r.id,
     text: r.text,
     reference: String(r.reference),
+    surahName: ref ? surahs.get(Number(ref[1])) ?? null : null,
+    ayah: ref ? Number(ref[2]) : null,
     platformId: String(r.platformId),
     recitation: ok ? { src: recitationSrc(rc!.audioUrl as string, rc!.startMs as number, rc!.endMs as number), audioUrl: rc!.audioUrl as string, startMs: rc!.startMs as number, endMs: rc!.endMs as number } : null,
   };

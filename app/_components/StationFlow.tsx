@@ -5,12 +5,12 @@
 // state machine. Tap input only: there is no text input anywhere on these screens.
 
 import Link from 'next/link';
-import { useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import { initialState, reducer, type FlowState } from '@/app/_lib/flow';
 import type { Labels } from '@/app/_lib/labels';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
 import { NarrationButton, PictureCard, PlantMarker, VerseCard } from './media';
-import { Moment } from './moments';
+import { MomentOverlay, prefersReducedMotion } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -66,6 +66,20 @@ function ParentsToggle({ label, children }: { label?: string; children: React.Re
   );
 }
 
+// Step progress dots (frame, observe, connect, narrate, close); the ask step shares connect's dot.
+const DOTS = ['frame', 'observe', 'connect', 'narrate', 'close'] as const;
+const DOT_OF: Record<FlowState['step'], number> = { frame: 0, observe: 1, connect: 2, ask: 2, narrate: 3, close: 4, done: 4 };
+function StepDots({ step }: { step: FlowState['step'] }) {
+  const at = DOT_OF[step];
+  return (
+    <ol className="flex items-center justify-center gap-2" aria-hidden="true" data-step-dots={at}>
+      {DOTS.map((d, i) => (
+        <li key={d} data-dot={d} className={`h-3 rounded-full transition-all duration-200 ${i === at ? 'w-8 bg-water' : i < at ? 'w-3 bg-leaf' : 'w-3 bg-stone'}`} />
+      ))}
+    </ol>
+  );
+}
+
 interface AskReply {
   segments: { kind: 'text' | 'verse'; recordId: string; text: string }[];
   verses: VerseView[];
@@ -75,6 +89,8 @@ interface AskReply {
 export default function StationFlow({ view, labels, initial }: { view: StationView; labels: Labels; initial?: FlowState }) {
   const [state, dispatch] = useReducer((s: FlowState, a: Parameters<typeof reducer>[2]) => reducer(view, s, a), initial ?? initialState());
   const [ask, setAsk] = useState<{ id: string; reply: AskReply | null; busy: boolean } | null>(null);
+  const [moment, setMoment] = useState(false);
+  const endMoment = useCallback(() => setMoment(false), []);
   const byId = useMemo(() => {
     const m = new Map<string, RecordView>();
     const add = (r: RecordView | null | undefined) => { if (r) m.set(r.id, r); };
@@ -115,8 +131,13 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
   };
   const narrateKind = (id: string | null): 'praise' | 'redirect' | 'none' => (!id ? 'none' : id === view.narrate?.praise?.id ? 'praise' : 'redirect');
   const finished = state.step === 'close' || state.step === 'done';
-  // S3's moment stays mounted from observe to close so it grows one stage per step.
-  const persistentMoment = view.stationId === 'S3' && state.step !== 'frame';
+  // Scene picture beside the prompt: the question's own picture (S2, S3), else the first narration
+  // card's picture (S1: S1.N1). Moment pictures: S1 scene = S1.N1; S2 from S2.Q1 to S2.N1.
+  const firstCard = view.narrate?.cards[0] ?? null;
+  const choose = (choiceId: string) => {
+    dispatch({ type: 'choose', choiceId, t: now() });
+    if (o && choiceId === o.correctChoiceId && !state.observe.solved && !prefersReducedMotion()) setMoment(true);
+  };
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 px-4 py-5 sm:px-8" data-step={state.step} data-station={view.stationId}>
@@ -126,10 +147,12 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
         <PlantMarker done={finished ? view.close.stage : Math.max(view.close.stage - 1, 0)} className="size-16 shrink-0 md:size-20" />
       </header>
 
-      {persistentMoment && <Moment stationId={view.stationId} step={state.step} solved={state.observe.solved} />}
+      <StepDots step={state.step} />
+
+      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: firstCard?.image, from: o?.question.image, to: firstCard?.image }} onDone={endMoment} />}
 
       {state.step === 'frame' && (
-        <section className="card anim-rise flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="frame">
+        <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="frame">
           {view.frame[0] && <NarrationButton src={view.frame[0].audio} label={labels.play} big />}
           {view.frame.map((r) => <p key={r.id} data-line={r.id} className="font-display text-3xl leading-relaxed text-ink">{r.text}</p>)}
           <button type="button" onClick={() => dispatch({ type: 'start' })} aria-label={labels.start} data-action="start"
@@ -140,43 +163,49 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       )}
 
       {state.step === 'observe' && o && (
-        <section className="flex flex-col gap-5" data-screen="observe">
-          <div className={`grid items-center gap-5 ${persistentMoment ? '' : 'md:grid-cols-[1fr_minmax(0,18rem)]'}`}>
-            <div className="card flex flex-wrap items-center gap-5 p-5">
+        <section className="anim-step flex flex-col gap-4" data-screen="observe">
+          <div className="flex items-stretch gap-3">
+            <div className="card flex flex-1 items-center gap-4 p-4">
               <NarrationButton src={o.question.audio} label={labels.play} big />
-              <p className="font-display flex-1 text-3xl leading-relaxed text-ink" data-line={o.question.id}>{o.question.text}</p>
-              {o.question.image && (
+              <p className="font-display flex-1 text-2xl leading-relaxed text-ink md:text-3xl" data-line={o.question.id}>{o.question.text}</p>
+              {o.question.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={o.question.image} alt={o.question.text} width={o.question.imageSize?.width} height={o.question.imageSize?.height}
-                  className="w-44 rounded-[20px] bg-sky-soft object-contain md:w-56" data-question-picture
+                  className="hidden w-40 shrink-0 rounded-[20px] bg-sky-soft object-contain sm:block md:w-48" data-question-picture
                   style={o.question.imageSize ? { aspectRatio: `${o.question.imageSize.width} / ${o.question.imageSize.height}` } : undefined} />
+              ) : firstCard?.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={firstCard.image} alt="" width={firstCard.imageSize?.width} height={firstCard.imageSize?.height}
+                  className="hidden w-40 shrink-0 rounded-[20px] bg-sky-soft object-contain sm:block md:w-48" data-scene-picture={firstCard.id}
+                  style={firstCard.imageSize ? { aspectRatio: `${firstCard.imageSize.width} / ${firstCard.imageSize.height}` } : undefined} />
+              ) : null}
+            </div>
+            <div className="flex shrink-0 items-center">
+              {!state.observe.solved ? (
+                <button type="button" onClick={() => dispatch({ type: 'hint', t: now() })} aria-label={labels.hint} data-action="hint"
+                  disabled={state.observe.hintIndex >= o.hints.length}
+                  className="pill flex size-20 items-center justify-center bg-sun text-ink disabled:opacity-40"><BulbIcon /></button>
+              ) : (
+                <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
               )}
             </div>
-            {!persistentMoment && <Moment stationId={view.stationId} step={state.step} solved={state.observe.solved} />}
           </div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {o.choices.map((c) => (
               <PictureCard key={c.id} record={c}
                 state={state.observe.highlightId === c.id ? 'highlight' : state.observe.greyed.includes(c.id) ? 'greyed' : 'idle'}
                 celebrate={state.observe.solved}
-                onTap={state.observe.solved ? undefined : () => dispatch({ type: 'choose', choiceId: c.id, t: now() })} />
+                onTap={state.observe.solved ? undefined : () => choose(c.id)} />
             ))}
           </div>
           <div className="min-h-16" aria-live="polite" data-feedback={state.observe.feedbackId ?? ''}>
             <Strip kind={observeKind(state.observe.feedbackId)} record={feedback(state.observe.feedbackId)} labels={labels} />
           </div>
-          <div className="flex items-center justify-between gap-4">
-            {!state.observe.solved && (
-              <button type="button" onClick={() => dispatch({ type: 'hint', t: now() })} aria-label={labels.hint} data-action="hint"
-                disabled={state.observe.hintIndex >= o.hints.length}
-                className="pill flex size-20 items-center justify-center bg-sun text-ink disabled:opacity-40"><BulbIcon /></button>
-            )}
-            {state.observe.solved && <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />}
-          </div>
         </section>
       )}
 
       {state.step === 'connect' && view.connect && (
+        // No step animation here: nothing moves on or near the verse.
         <section className="flex flex-col gap-6" data-screen="connect">
           {(view.connect.science.length > 0 || view.connect.bridge || view.connect.listen) && (
             <div className="card flex flex-col gap-4 p-5">
@@ -185,7 +214,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
               <Line record={view.connect.listen} labels={labels} />
             </div>
           )}
-          {view.connect.verse && <VerseCard verse={view.connect.verse} playLabel={labels.playRecitation} label={labels.verseLabel} />}
+          {view.connect.verse && <VerseCard verse={view.connect.verse} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />}
           {view.connect.explanations.length > 0 && (
             <div className="card flex flex-col gap-4 p-5" data-explanations>
               {view.connect.explanations.map((r) => <Line key={r.id} record={r} labels={labels} />)}
@@ -202,7 +231,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       )}
 
       {state.step === 'ask' && (
-        <section className="flex flex-col gap-6" data-screen="ask">
+        <section className="anim-step flex flex-col gap-6" data-screen="ask">
           <div className="flex flex-wrap gap-4">
             {view.ask.map((q) => (
               <button key={q.id} type="button" data-question={q.id} onClick={() => askQuestion(q.id)} disabled={ask?.busy}
@@ -210,9 +239,9 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
             ))}
           </div>
           {ask?.reply && (
-            <div className="card anim-rise flex flex-col gap-4 p-5" aria-live="polite" data-answer={ask.id}>
+            <div className={`card flex flex-col gap-4 p-5 ${ask.reply.verses.length ? '' : 'anim-rise'}`} aria-live="polite" data-answer={ask.id}>
               {ask.reply.segments.filter((s) => s.kind === 'text').map((s) => <p key={s.recordId} className="font-display text-2xl leading-relaxed text-ink" data-line={s.recordId}>{s.text}</p>)}
-              {ask.reply.verses.map((v) => <VerseCard key={v.id} verse={v} playLabel={labels.playRecitation} label={labels.verseLabel} />)}
+              {ask.reply.verses.map((v) => <VerseCard key={v.id} verse={v} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />)}
             </div>
           )}
           <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
@@ -220,7 +249,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       )}
 
       {state.step === 'narrate' && view.narrate && (
-        <section className="flex flex-col gap-5" data-screen="narrate" data-mode={view.narrate.mode}>
+        <section className="anim-step flex flex-col gap-5" data-screen="narrate" data-mode={view.narrate.mode}>
           <div className="card p-5"><Line record={view.narrate.intro} labels={labels} size="text-3xl" big /></div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             {view.narrate.cards.map((c) => {
@@ -243,7 +272,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       )}
 
       {finished && (
-        <section className="card flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="close">
+        <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="close">
           <PlantMarker done={view.close.stage} grow className="size-56 md:size-64" />
           {view.close.lines.map((r) => <Line key={r.id} record={r} labels={labels} size="text-3xl" />)}
           <div className="flex flex-wrap items-center justify-center gap-5">

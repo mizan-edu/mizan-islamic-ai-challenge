@@ -17,7 +17,7 @@ function respond(lib: ReturnType<typeof loadLibrary>, reply: ReturnType<typeof f
     .filter((s) => s.kind === 'verse')
     .map((s) => lib.byId.get(s.recordId))
     .filter((r) => r?.type === 'quran')
-    .map((r) => toVerseView(r!));
+    .map((r) => toVerseView(r!, lib.surahs));
   return Response.json({
     behaviour: reply.behaviour,
     level: reply.level,

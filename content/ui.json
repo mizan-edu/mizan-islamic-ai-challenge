@@ -231,6 +231,44 @@
       "reviewer2": null,
       "reviewer2At": null,
       "status": "approved"
+    },
+    {
+      "station": null,
+      "type": "ui",
+      "level": "NA",
+      "tts": false,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "id": "UI.SURAH",
+      "role": "frame",
+      "text": "سورة",
+      "note": "verse card reference: word before the KFC surah name",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:05:41+03:00",
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "approved"
+    },
+    {
+      "station": null,
+      "type": "ui",
+      "level": "NA",
+      "tts": false,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "id": "UI.AYAH",
+      "role": "frame",
+      "text": "الآية",
+      "note": "verse card reference: word before the ayah number",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T01:05:41+03:00",
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "approved"
     }
   ]
 }

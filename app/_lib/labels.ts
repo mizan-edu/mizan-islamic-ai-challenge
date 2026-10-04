@@ -16,6 +16,8 @@ export interface Labels {
   verseLabel?: string;
   tafsirToggle?: string;
   comingSoon?: string;
+  surah?: string;
+  ayah?: string;
 }
 
 const KEYS: Record<keyof Labels, string> = {
@@ -31,6 +33,8 @@ const KEYS: Record<keyof Labels, string> = {
   verseLabel: 'UI.VERSE_LABEL',
   tafsirToggle: 'UI.TAFSIR_TOGGLE',
   comingSoon: 'UI.COMING_SOON',
+  surah: 'UI.SURAH',
+  ayah: 'UI.AYAH',
 };
 
 export function loadLabels(): Labels {
