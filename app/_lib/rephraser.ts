@@ -1,9 +1,9 @@
 // Model rephrasing of NA science/UI lines only (reply.ts decides eligibility; validator.ts checks
 // the result). JSON output only; model ID from env. Any failure keeps the approved wording.
 
-import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { z } from 'zod';
+import { createAnthropicClient } from './anthropic';
 import type { Rephraser } from './reply';
 
 const Schema = z.object({ text: z.string() });
@@ -20,7 +20,7 @@ interface MessagesParseClient {
 }
 
 export function createAnthropicRephraser(opts: { model: string; client?: MessagesParseClient }): Rephraser {
-  const client: MessagesParseClient = opts.client ?? (new Anthropic() as unknown as MessagesParseClient);
+  const client: MessagesParseClient = opts.client ?? (createAnthropicClient() as unknown as MessagesParseClient);
   return async (text) => {
     try {
       const res = await client.messages.parse({
@@ -41,5 +41,5 @@ export function createAnthropicRephraser(opts: { model: string; client?: Message
 
 export function rephraserFromEnv(env: NodeJS.ProcessEnv = process.env): Rephraser | null {
   if (env.LLM_PROVIDER !== 'anthropic' || !env.LLM_MODEL || env.LLM_REPHRASE !== 'on') return null;
-  return createAnthropicRephraser({ model: env.LLM_MODEL });
+  return createAnthropicRephraser({ model: env.LLM_MODEL, client: createAnthropicClient(env) as unknown as MessagesParseClient });
 }

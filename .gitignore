@@ -154,3 +154,6 @@ next-env.d.ts
 
 # Generated scholar packets (the committed Review 2 evidence is docs/review/scholar-review2-packet.html)
 docs/review/out/
+
+# .env.example lists variable names only and is committed
+!.env.example

@@ -2,9 +2,9 @@
 // It returns a level and a record ID from the candidate list, never free text. Output is
 // constrained by structured outputs and validated again here. Model ID comes from env only.
 
-import Anthropic from '@anthropic-ai/sdk';
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
 import { z } from 'zod';
+import { createAnthropicClient } from './anthropic';
 import { isRouteLevel, type RouteLevel } from './levels';
 
 export interface ClassifierCandidate {
@@ -70,7 +70,7 @@ export interface AnthropicClassifierOptions {
 }
 
 export function createAnthropicClassifier(opts: AnthropicClassifierOptions): Classifier {
-  const client: MessagesParseClient = opts.client ?? (new Anthropic() as unknown as MessagesParseClient);
+  const client: MessagesParseClient = opts.client ?? (createAnthropicClient() as unknown as MessagesParseClient);
   return async (input) => {
     try {
       const res = await client.messages.parse({
@@ -88,9 +88,10 @@ export function createAnthropicClassifier(opts: AnthropicClassifierOptions): Cla
   };
 }
 
-// LLM_PROVIDER / LLM_MODEL / LLM_EFFORT come from the environment (set by the Saturday spike).
+// LLM_PROVIDER / LLM_MODEL / LLM_EFFORT come from the environment (set by the Saturday spike);
+// ANTHROPIC_WORKSPACE_ID, when set, is sent as the anthropic-workspace-id header (anthropic.ts).
 export function classifierFromEnv(env: NodeJS.ProcessEnv = process.env): Classifier | null {
   if (env.LLM_PROVIDER !== 'anthropic' || !env.LLM_MODEL) return null;
   const effort = env.LLM_EFFORT === 'low' || env.LLM_EFFORT === 'medium' || env.LLM_EFFORT === 'high' ? env.LLM_EFFORT : undefined;
-  return createAnthropicClassifier({ model: env.LLM_MODEL, effort });
+  return createAnthropicClassifier({ model: env.LLM_MODEL, effort, client: createAnthropicClient(env) as unknown as MessagesParseClient });
 }
