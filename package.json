@@ -19,6 +19,7 @@
     "assets:briefs": "node scripts/assets/image-briefs.mjs",
     "assets:narrate": "node scripts/assets/narrate.mjs",
     "assets:images": "node scripts/assets/place-images.mjs",
+    "assets:q3": "node scripts/assets/place-q3-assets.mjs",
     "test:snapshot": "node --test \"scripts/snapshot/test/*.test.mjs\"",
     "test:testset": "node scripts/eval/check-testset.mjs",
     "eval:run": "node eval/run.mjs",

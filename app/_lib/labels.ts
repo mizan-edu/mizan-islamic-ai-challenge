@@ -15,6 +15,7 @@ export interface Labels {
   nextStation?: string;
   verseLabel?: string;
   tafsirToggle?: string;
+  comingSoon?: string;
 }
 
 const KEYS: Record<keyof Labels, string> = {
@@ -29,6 +30,7 @@ const KEYS: Record<keyof Labels, string> = {
   nextStation: 'UI.BTN_NEXT_STATION',
   verseLabel: 'UI.VERSE_LABEL',
   tafsirToggle: 'UI.TAFSIR_TOGGLE',
+  comingSoon: 'UI.COMING_SOON',
 };
 
 export function loadLabels(): Labels {

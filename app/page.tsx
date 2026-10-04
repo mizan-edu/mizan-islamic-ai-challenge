@@ -16,5 +16,5 @@ export default function Home() {
     const close = st.script.find((s) => s.step === 'close');
     return { id, number: i + 1, title: approvedText(st.records, titleId), stage: stageFromMarker(close?.progressMarker) };
   });
-  return <JourneyMap title={labels.journeyTitle ?? null} stations={stations} parentsLabel={labels.parents} startLabel={labels.start} />;
+  return <JourneyMap title={labels.journeyTitle ?? null} stations={stations} parentsLabel={labels.parents} startLabel={labels.start} comingSoonLabel={labels.comingSoon} />;
 }

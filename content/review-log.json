@@ -3990,6 +3990,16 @@
       "decisionRef": "D33",
       "comment": "Review 1 approved; Review 2 (scholar) pending Mon 15:00",
       "source": "chat decision (D33)"
+    },
+    {
+      "id": "UI.COMING_SOON",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T00:55:54+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat brief 2026-10-05 (Q3 pass; label text from D26 A6)"
     }
   ]
 }

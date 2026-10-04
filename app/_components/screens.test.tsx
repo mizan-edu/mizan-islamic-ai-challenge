@@ -45,6 +45,16 @@ describe('no text input on child screens', () => {
     expect(html).toMatch(/data-station="S1" data-open="true"/);
     expect(html).toMatch(/data-station="S2" data-open="false"/);
   });
+
+  it('journey map shows S4-S5 only as roadmap stones: badge, no title, not tappable (D26 A6)', () => {
+    const html = renderToString(<JourneyMap title="FIXTURE" comingSoonLabel="FIXTURE_SOON" stations={[1, 2, 3].map((n) => ({ id: `S${n}`, number: n, title: `FIXTURE_${n}`, stage: n }))} />);
+    for (const id of ['S4', 'S5']) {
+      const m = new RegExp(`<li[^>]*data-soon="${id}"[\\s\\S]*?</li>`).exec(html);
+      expect(m, id).not.toBeNull();
+      expect(m![0]).toContain('FIXTURE_SOON');
+      expect(m![0]).not.toMatch(/<button|<a |FIXTURE_[45]/);
+    }
+  });
 });
 
 describe('verse card renders from the approved library', () => {

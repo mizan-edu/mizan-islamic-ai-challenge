@@ -4,9 +4,7 @@
 // npm run snapshot:surahs), never typed by hand. The format was set by Hussein on 2026-10-04.
 // A text that still contains "{" or "}" after resolution is never rendered.
 
-import { existsSync, readFileSync } from 'node:fs';
-import path from 'node:path';
-import { findContentDir, loadUiStrings, type ContentRecord } from './content';
+import { loadUiStrings, type ContentRecord } from './content';
 import type { Library } from './library';
 import { loadSurahNames, type SurahNames } from './surahs';
 
@@ -20,7 +18,6 @@ export const hasBraces = (text: string): boolean => /[{}]/.test(text);
 // Only parent lines may carry placeholders: they render through the station view, which resolves
 // them. Every other record is also served raw (replies, narration) and must be brace-free.
 export const PLACEHOLDER_ROLES = new Set(['parent_line']);
-
 
 // The station's verse-card verse: the script's connect.verseCard.quranId, approved quran records only.
 export function verseCardRecordId(lib: Library, stationId: string): string | null {

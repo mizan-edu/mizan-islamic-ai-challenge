@@ -164,24 +164,16 @@ export function VerseCard({ verse, playLabel, label }: { verse: VerseView; playL
   );
 }
 
-// Seedling in a pot: one leaf per completed stage (max 3, no text). `pop` animates the newest leaf.
-const LEAVES = [
-  'M60 92 C44 90 36 80 37 70 C50 71 58 80 60 92',
-  'M60 76 C76 74 85 63 83 52 C70 54 62 63 60 76',
-  'M60 60 C45 57 38 47 40 37 C52 39 59 48 60 60',
-];
-export function Seedling({ stage, pop = false, className = 'h-28 w-24' }: { stage: number; pop?: boolean; className?: string }) {
-  const leaves = Math.max(0, Math.min(stage, 3));
-  const top = [104, 90, 74, 58][leaves];
+// Plant marker (D26 A7): one pot picture per stage — seed, sprout, plant, flower, fruit. `done` is
+// the number of completed stations: 0 shows stage 1 faded; 1-3 show stages 1-3 (stages 4-5 belong to
+// the roadmap Stations 4-5 and appear only as faint locked thumbnails on the map). Decorative.
+export const plantSrc = (stage: number): string => `/images/plant/stage-${Math.min(Math.max(stage, 1), 5)}.webp`;
+
+export function PlantMarker({ done, className = 'size-20', grow = false }: { done: number; className?: string; grow?: boolean }) {
+  const stage = Math.min(Math.max(done, 1), 5);
   return (
-    <svg viewBox="0 0 120 150" className={className} aria-hidden="true" data-seedling={leaves}>
-      <path d={`M60 112 V${top}`} stroke="#1F6B3A" strokeWidth="5" strokeLinecap="round" />
-      {LEAVES.slice(0, leaves).map((d, i) => (
-        <path key={i} d={d} fill={i % 2 ? '#3BA55C' : '#2E8F4C'} className={pop && i === leaves - 1 ? 'anim-pop' : undefined} />
-      ))}
-      <path d="M28 108 h64 l-8 36 h-48 z" fill="#C97B4A" />
-      <rect x="22" y="100" width="76" height="14" rx="5" fill="#B4693B" />
-      <ellipse cx="60" cy="102" rx="30" ry="4" fill="#6B4226" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={plantSrc(stage)} alt="" aria-hidden="true" width={800} height={800} data-plant={done}
+      className={`${className} rounded-[22%] object-contain ${done === 0 ? 'opacity-40' : ''} ${grow ? 'anim-grow-in' : ''}`} />
   );
 }

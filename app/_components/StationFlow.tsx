@@ -9,7 +9,7 @@ import { useEffect, useMemo, useReducer, useState } from 'react';
 import { initialState, reducer, type FlowState } from '@/app/_lib/flow';
 import type { Labels } from '@/app/_lib/labels';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
-import { NarrationButton, PictureCard, Seedling, VerseCard } from './media';
+import { NarrationButton, PictureCard, PlantMarker, VerseCard } from './media';
 import { Moment } from './moments';
 import { addEvents, markCompleted } from './session';
 
@@ -123,7 +123,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       <header className="flex items-center justify-between gap-4">
         <Link href="/" aria-label={labels.home} className="pill flex size-16 shrink-0 items-center justify-center bg-card text-water"><HomeIcon /></Link>
         {view.title && <h1 className="font-display text-center text-2xl leading-snug text-ink md:text-4xl">{view.title.text}</h1>}
-        <Seedling stage={finished ? view.close.stage : Math.max(view.close.stage - 1, 0)} className="h-16 w-14 shrink-0 md:h-20 md:w-16" />
+        <PlantMarker done={finished ? view.close.stage : Math.max(view.close.stage - 1, 0)} className="size-16 shrink-0 md:size-20" />
       </header>
 
       {persistentMoment && <Moment stationId={view.stationId} step={state.step} solved={state.observe.solved} />}
@@ -244,7 +244,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
 
       {finished && (
         <section className="card flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="close">
-          <Seedling stage={view.close.stage} pop className="h-48 w-40" />
+          <PlantMarker done={view.close.stage} grow className="size-56 md:size-64" />
           {view.close.lines.map((r) => <Line key={r.id} record={r} labels={labels} size="text-3xl" />)}
           <div className="flex flex-wrap items-center justify-center gap-5">
             <Link href="/" aria-label={labels.home} className="pill flex size-20 items-center justify-center bg-sky text-water"><HomeIcon /></Link>

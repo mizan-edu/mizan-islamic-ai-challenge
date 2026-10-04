@@ -212,6 +212,25 @@
       "reviewer2": null,
       "reviewer2At": null,
       "status": "approved"
+    },
+    {
+      "station": null,
+      "type": "ui",
+      "level": "NA",
+      "tts": false,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "id": "UI.COMING_SOON",
+      "role": "frame",
+      "text": "قريبًا",
+      "note": "map badge on Stations 4-5 (roadmap, not built)",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T00:55:54+03:00",
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "approved"
     }
   ]
 }
