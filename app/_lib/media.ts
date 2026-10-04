@@ -4,6 +4,7 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import type { ContentRecord } from './content';
+import { SFX_CUES, sfxPath, type SfxCue } from './sfx';
 
 export type FileExists = (publicPath: string) => boolean;
 
@@ -22,6 +23,12 @@ export function narrationSrc(stationId: string, r: ContentRecord, exists: FileEx
 export function pictureSrc(stationId: string, r: ContentRecord, exists: FileExists = publicFileExists): string | null {
   const p = picturePath(stationId, r.id);
   return exists(p) ? p : null;
+}
+
+// Sound-effect cues whose file exists (D38); the client plays only these, so a missing file makes
+// no request at all.
+export function availableSfx(exists: FileExists = publicFileExists): SfxCue[] {
+  return SFX_CUES.filter((cue) => exists(sfxPath(cue)));
 }
 
 export interface PictureSize { width: number; height: number }

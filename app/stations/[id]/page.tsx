@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import StationFlow from '@/app/_components/StationFlow';
 import { loadLabels } from '@/app/_lib/labels';
 import { loadLibrary } from '@/app/_lib/library';
+import { availableSfx } from '@/app/_lib/media';
 import { assertNoPlaceholderProblems } from '@/app/_lib/placeholders';
 import { buildStationView } from '@/app/_lib/station-view';
 
@@ -19,5 +20,5 @@ export default async function StationPage({ params }: { params: Promise<{ id: st
   assertNoPlaceholderProblems(lib); // fails the build, never a request: these pages are static
   const view = buildStationView(lib, id);
   if (!view) notFound();
-  return <StationFlow view={view} labels={loadLabels()} />;
+  return <StationFlow view={view} labels={loadLabels()} sfxCues={availableSfx()} />;
 }

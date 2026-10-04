@@ -5,7 +5,8 @@
 // Decoration is nature only (no faces or characters) and every animation is CSS, switched off by
 // prefers-reduced-motion (globals.css).
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { sfx } from '@/app/_lib/sfx';
 import type { RecordView, VerseView } from '@/app/_lib/station-view';
 
 const SpeakerIcon = ({ className = 'size-8' }: { className?: string }) => (
@@ -18,10 +19,15 @@ const PlayIcon = ({ className = 'size-10' }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor" /></svg>
 );
 
-// Plays /audio/<station>/<id>.mp3 when it exists; otherwise the button is shown disabled.
-export function NarrationButton({ src, label, big = false }: { src: string | null; label?: string; big?: boolean }) {
+// Plays /audio/<station>/<id>.mp3 when it exists; otherwise the button is shown disabled. While it
+// plays, sound effects are lowered (D38). autoPlay: play once on mount (the praise after a moment).
+export function NarrationButton({ src, label, big = false, autoPlay = false }: { src: string | null; label?: string; big?: boolean; autoPlay?: boolean }) {
   const ref = useRef<HTMLAudioElement>(null);
   const size = big ? 'size-24' : 'size-16';
+  useEffect(() => {
+    const a = ref.current;
+    if (autoPlay && a) { a.currentTime = 0; void a.play().catch(() => { /* autoplay refused: the button still works */ }); }
+  }, [autoPlay]);
   return (
     <>
       <button
@@ -34,7 +40,7 @@ export function NarrationButton({ src, label, big = false }: { src: string | nul
       >
         <SpeakerIcon className={big ? 'size-12' : 'size-8'} />
       </button>
-      {src && <audio ref={ref} src={src} preload="none" />}
+      {src && <audio ref={ref} src={src} preload={autoPlay ? 'auto' : 'none'} onPlay={() => sfx.narrationStarted()} onPause={() => sfx.narrationStopped()} />}
     </>
   );
 }
@@ -78,7 +84,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false }: 
   const size = record.imageSize;
   const frame = record.role === 'choice' ? 'square' : record.role === 'narration_card' ? 'card' : 'natural';
   const look = state === 'highlight'
-    ? (celebrate ? 'ring-8 ring-leaf' : 'ring-4 ring-sun anim-glow')
+    ? (celebrate ? 'ring-8 ring-leaf anim-correct' : 'ring-4 ring-sun anim-glow')
     : state === 'picked' ? 'ring-8 ring-water-light'
       : state === 'greyed' ? 'opacity-45 grayscale shadow-none' : '';
   return (
@@ -129,7 +135,9 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { 
     // The tap itself starts playback (required on iPad/Android); seek as soon as metadata is known.
     if (a.readyState >= 1) a.currentTime = start;
     else a.addEventListener('loadedmetadata', () => { a.currentTime = start; }, { once: true });
-    void a.play().then(() => setPlaying(true)).catch(() => setPlaying(false));
+    // Qur'an recitation: sound effects stop and stay silent until it ends (D38).
+    sfx.recitationStarted();
+    void a.play().then(() => setPlaying(true)).catch(() => { setPlaying(false); sfx.recitationStopped(); });
   };
   const onTime = () => {
     const a = ref.current;
@@ -162,7 +170,7 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { 
           </span>
         </figcaption>
       )}
-      {rc && <audio ref={ref} src={rc.src} preload="none" onTimeUpdate={onTime} onPause={() => setPlaying(false)} onEnded={() => setPlaying(false)} />}
+      {rc && <audio ref={ref} src={rc.src} preload="none" onTimeUpdate={onTime} onPlay={() => sfx.recitationStarted()} onPause={() => { setPlaying(false); sfx.recitationStopped(); }} onEnded={() => { setPlaying(false); sfx.recitationStopped(); }} />}
     </figure>
   );
 }

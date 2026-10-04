@@ -18,6 +18,7 @@ export interface Labels {
   comingSoon?: string;
   surah?: string;
   ayah?: string;
+  sfx?: string;
 }
 
 const KEYS: Record<keyof Labels, string> = {
@@ -35,6 +36,7 @@ const KEYS: Record<keyof Labels, string> = {
   comingSoon: 'UI.COMING_SOON',
   surah: 'UI.SURAH',
   ayah: 'UI.AYAH',
+  sfx: 'UI.SFX_TOGGLE',
 };
 
 export function loadLabels(): Labels {

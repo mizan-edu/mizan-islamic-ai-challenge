@@ -65,9 +65,9 @@ async function playStation(page: Page, id: string, prefix: string) {
   await page.locator(`[data-record="${ob.correctChoiceId}"]`).click();
   // Magic moment: full screen, then back (S1 waits for the auto-close; S2 and S3 tap to skip).
   const moment = page.locator(`[data-moment="${id}"]`);
-  await expect(moment).toBeVisible();
-  await shot(page, `${prefix}-5-moment`, 1200);
-  if (id === 'S1') await expect(moment).toBeHidden({ timeout: 4000 });
+  await expect(moment).toBeVisible(); // appears ~700 ms after the green ring
+  await shot(page, `${prefix}-5-moment`, 1500);
+  if (id === 'S1') await expect(moment).toBeHidden({ timeout: 6000 }); // 700 + 3000 + 600 ms
   else { await moment.click(); await expect(moment).toBeHidden(); }
   await expect(page.locator('[data-strip="praise"]')).toBeVisible();
   await shot(page, `${prefix}-5-correct`, 600);
@@ -115,8 +115,35 @@ test('Station 3 screens', async ({ page }) => { await playStation(page, 'S3', 's
 
 test('parent summary', async ({ page }) => {
   await page.goto('/parent');
+  await expect(page.locator('[role="switch"]')).toHaveAttribute('aria-checked', 'true');
   await shot(page, 'parent');
 });
+
+// D38: every moment shows its whole picture: the picture box lies fully inside the viewport at
+// every size (blurred copy behind fills the edges). Screenshots: moment-<station>-<width>.png.
+const SIZES = [[1024, 768], [1180, 820], [1366, 1024], [768, 1024], [390, 844]] as const;
+for (const [width, height] of SIZES) {
+  test(`moments fit the screen at ${width}x${height}`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    for (const id of ['S1', 'S2', 'S3']) {
+      await page.goto(`/stations/${id}`);
+      await page.locator('[data-action="start"]').click();
+      await page.locator(`[data-record="${observe(id).correctChoiceId}"]`).click();
+      const box = page.locator(`[data-moment="${id}"] [data-moment-box]`);
+      await expect(box).toBeVisible();
+      await page.waitForTimeout(900); // fade-in and scale settle (700 ms)
+      const b = (await box.boundingBox())!;
+      expect(b.x, `${id} ${width} left`).toBeGreaterThanOrEqual(-0.5);
+      expect(b.y, `${id} ${width} top`).toBeGreaterThanOrEqual(-0.5);
+      expect(b.x + b.width, `${id} ${width} right`).toBeLessThanOrEqual(width + 0.5);
+      expect(b.y + b.height, `${id} ${width} bottom`).toBeLessThanOrEqual(height + 0.5);
+      expect(Math.max(b.width / width, b.height / height), `${id} ${width} fills one axis`).toBeGreaterThan(0.98);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), `${id} ${width} no sideways overflow`).toBeLessThanOrEqual(0);
+      await page.screenshot({ path: `${SHOTS}/moment-${id}-${width}.png` });
+      await page.locator(`[data-moment="${id}"]`).click();
+    }
+  });
+}
 
 test('phone width: map, question and verse card', async ({ page }) => {
   await page.setViewportSize(PHONE);

@@ -59,7 +59,8 @@ describe('step dots', () => {
 });
 
 describe('moments (full screen, decorative)', () => {
-  const pics = { scene: '/images/S1/S1.N1.webp', from: '/images/S2/S2.Q1.webp', to: '/images/S2/S2.N1.webp' };
+  const pic = (src: string) => ({ src, width: 1168, height: 880 });
+  const pics = { scene: pic('/images/S1/S1.N1.webp'), from: pic('/images/S2/S2.Q1.webp'), to: pic('/images/S2/S2.N1.webp') };
   it.each(['S1', 'S2', 'S3'])('%s renders a text-free, aria-hidden overlay', (s) => {
     const html = renderToString(<MomentOverlay stationId={s} pictures={pics} onDone={() => {}} />);
     expect(html).toContain(`data-moment="${s}"`);

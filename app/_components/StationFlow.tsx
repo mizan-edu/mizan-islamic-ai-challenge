@@ -5,12 +5,13 @@
 // state machine. Tap input only: there is no text input anywhere on these screens.
 
 import Link from 'next/link';
-import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { initialState, reducer, type FlowState } from '@/app/_lib/flow';
 import type { Labels } from '@/app/_lib/labels';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
 import { NarrationButton, PictureCard, PlantMarker, VerseCard } from './media';
-import { MomentOverlay, prefersReducedMotion } from './moments';
+import { sfx } from '@/app/_lib/sfx';
+import { MOMENT, MomentOverlay, prefersReducedMotion, type MomentPicture } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -25,11 +26,11 @@ const HomeIcon = () => (
   <svg viewBox="0 0 24 24" className="size-8" aria-hidden="true"><path d="M3 11 12 4l9 7v9h-6v-6H9v6H3z" fill="currentColor" /></svg>
 );
 
-function Line({ record, labels, size = 'text-2xl', big = false }: { record: RecordView | null; labels: Labels; size?: string; big?: boolean }) {
+function Line({ record, labels, size = 'text-2xl', big = false, autoPlay = false }: { record: RecordView | null; labels: Labels; size?: string; big?: boolean; autoPlay?: boolean }) {
   if (!record) return null;
   return (
     <div className="flex items-center gap-4" data-line={record.id}>
-      <NarrationButton src={record.audio} label={labels.play} big={big} />
+      <NarrationButton src={record.audio} label={labels.play} big={big} autoPlay={autoPlay} />
       <p className={`font-display ${size} leading-relaxed text-ink`}>{record.text}</p>
     </div>
   );
@@ -38,18 +39,18 @@ function Line({ record, labels, size = 'text-2xl', big = false }: { record: Reco
 // Feedback strip under the choices: praise is leafy, hints are sunny, a redirect after a wrong
 // choice is a soft blue strip. Never red, never "wrong".
 const STRIP = { praise: 'bg-leaf-soft border-leaf', hint: 'bg-sun-soft border-sun', redirect: 'bg-sky border-water-light', none: '' } as const;
-function Strip({ kind, record, labels }: { kind: keyof typeof STRIP; record: RecordView | null; labels: Labels }) {
+function Strip({ kind, record, labels, autoPlay = false }: { kind: keyof typeof STRIP; record: RecordView | null; labels: Labels; autoPlay?: boolean }) {
   if (!record) return null;
   return (
     <div className={`anim-rise rounded-[28px] border-s-8 px-4 py-3 ${STRIP[kind]}`} data-strip={kind} key={record.id}>
-      <Line record={record} labels={labels} />
+      <Line record={record} labels={labels} autoPlay={autoPlay} />
     </div>
   );
 }
 
 function NextButton({ onClick, label, disabled = false }: { onClick: () => void; label?: string; disabled?: boolean }) {
   return (
-    <button type="button" onClick={onClick} disabled={disabled} aria-label={label} data-action="next"
+    <button type="button" onClick={() => { sfx.play('tap'); onClick(); }} disabled={disabled} aria-label={label} data-action="next"
       className="pill flex min-h-20 min-w-36 items-center justify-center self-center bg-leaf-dark px-10 text-white disabled:opacity-30">
       <ArrowIcon />
     </button>
@@ -86,11 +87,18 @@ interface AskReply {
   event: Record<string, unknown> | null;
 }
 
-export default function StationFlow({ view, labels, initial }: { view: StationView; labels: Labels; initial?: FlowState }) {
+export default function StationFlow({ view, labels, initial, sfxCues = [] }: { view: StationView; labels: Labels; initial?: FlowState; sfxCues?: readonly string[] }) {
   const [state, dispatch] = useReducer((s: FlowState, a: Parameters<typeof reducer>[2]) => reducer(view, s, a), initial ?? initialState());
   const [ask, setAsk] = useState<{ id: string; reply: AskReply | null; busy: boolean } | null>(null);
+  // Moment sequence (D38): correct tap -> green ring -> after 700 ms the full-screen scene -> back,
+  // then the praise line with its narration. momentPending holds the praise back meanwhile.
+  const [momentPending, setMomentPending] = useState(false);
   const [moment, setMoment] = useState(false);
-  const endMoment = useCallback(() => setMoment(false), []);
+  const [praiseAuto, setPraiseAuto] = useState(false);
+  const momentTimer = useRef<number | null>(null);
+  const endMoment = useCallback(() => { setMoment(false); setMomentPending(false); setPraiseAuto(true); }, []);
+  useEffect(() => () => { if (momentTimer.current) window.clearTimeout(momentTimer.current); }, []);
+  useEffect(() => { sfx.setAvailable(sfxCues); }, [sfxCues]);
   const byId = useMemo(() => {
     const m = new Map<string, RecordView>();
     const add = (r: RecordView | null | undefined) => { if (r) m.set(r.id, r); };
@@ -106,7 +114,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
   }, [state.events]);
 
   useEffect(() => {
-    if (state.step === 'close') markCompleted(view.stationId);
+    if (state.step === 'close') { markCompleted(view.stationId); sfx.play('close'); }
   }, [state.step, view.stationId]);
 
   const askQuestion = async (questionId: string) => {
@@ -134,13 +142,21 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
   // Scene picture beside the prompt: the question's own picture (S2, S3), else the first narration
   // card's picture (S1: S1.N1). Moment pictures: S1 scene = S1.N1; S2 from S2.Q1 to S2.N1.
   const firstCard = view.narrate?.cards[0] ?? null;
+  const picture = (r: RecordView | null | undefined): MomentPicture | null =>
+    r?.image && r.imageSize ? { src: r.image, width: r.imageSize.width, height: r.imageSize.height } : null;
+  const tap = () => sfx.play('tap');
   const choose = (choiceId: string) => {
     dispatch({ type: 'choose', choiceId, t: now() });
-    if (o && choiceId === o.correctChoiceId && !state.observe.solved && !prefersReducedMotion()) setMoment(true);
+    if (!o || state.observe.solved) return;
+    if (choiceId !== o.correctChoiceId) { sfx.play('tryAgain'); return; }
+    sfx.play('correct');
+    if (prefersReducedMotion()) return; // no overlay; the praise shows at once, as before
+    setMomentPending(true);
+    momentTimer.current = window.setTimeout(() => setMoment(true), MOMENT.delayMs);
   };
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 px-4 py-5 sm:px-8" data-step={state.step} data-station={view.stationId}>
+    <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 overflow-x-clip px-4 py-5 sm:px-8" data-step={state.step} data-station={view.stationId}>
       <header className="flex items-center justify-between gap-4">
         <Link href="/" aria-label={labels.home} className="pill flex size-16 shrink-0 items-center justify-center bg-card text-water"><HomeIcon /></Link>
         {view.title && <h1 className="font-display text-center text-2xl leading-snug text-ink md:text-4xl">{view.title.text}</h1>}
@@ -149,13 +165,13 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
 
       <StepDots step={state.step} />
 
-      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: firstCard?.image, from: o?.question.image, to: firstCard?.image }} onDone={endMoment} />}
+      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(o?.question), to: picture(firstCard) }} onDone={endMoment} />}
 
       {state.step === 'frame' && (
         <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="frame">
           {view.frame[0] && <NarrationButton src={view.frame[0].audio} label={labels.play} big />}
           {view.frame.map((r) => <p key={r.id} data-line={r.id} className="font-display text-3xl leading-relaxed text-ink">{r.text}</p>)}
-          <button type="button" onClick={() => dispatch({ type: 'start' })} aria-label={labels.start} data-action="start"
+          <button type="button" onClick={() => { tap(); dispatch({ type: 'start' }); }} aria-label={labels.start} data-action="start"
             className="pill font-display flex min-h-20 min-w-48 items-center justify-center gap-3 bg-leaf-dark px-10 text-2xl text-white">
             {labels.start && <span aria-hidden="true">{labels.start}</span>}<ArrowIcon />
           </button>
@@ -182,7 +198,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
             </div>
             <div className="flex shrink-0 items-center">
               {!state.observe.solved ? (
-                <button type="button" onClick={() => dispatch({ type: 'hint', t: now() })} aria-label={labels.hint} data-action="hint"
+                <button type="button" onClick={() => { tap(); dispatch({ type: 'hint', t: now() }); }} aria-label={labels.hint} data-action="hint"
                   disabled={state.observe.hintIndex >= o.hints.length}
                   className="pill flex size-20 items-center justify-center bg-sun text-ink disabled:opacity-40"><BulbIcon /></button>
               ) : (
@@ -199,7 +215,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
             ))}
           </div>
           <div className="min-h-16" aria-live="polite" data-feedback={state.observe.feedbackId ?? ''}>
-            <Strip kind={observeKind(state.observe.feedbackId)} record={feedback(state.observe.feedbackId)} labels={labels} />
+            {!momentPending && <Strip kind={observeKind(state.observe.feedbackId)} record={feedback(state.observe.feedbackId)} labels={labels} autoPlay={praiseAuto && observeKind(state.observe.feedbackId) === 'praise'} />}
           </div>
         </section>
       )}
@@ -234,7 +250,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
         <section className="anim-step flex flex-col gap-6" data-screen="ask">
           <div className="flex flex-wrap gap-4">
             {view.ask.map((q) => (
-              <button key={q.id} type="button" data-question={q.id} onClick={() => askQuestion(q.id)} disabled={ask?.busy}
+              <button key={q.id} type="button" data-question={q.id} onClick={() => { tap(); void askQuestion(q.id); }} disabled={ask?.busy}
                 className={`pill font-display min-h-16 px-6 py-3 text-2xl text-ink ${ask?.id === q.id ? 'bg-sky ring-4 ring-water' : 'bg-card'}`}>{q.text}</button>
             ))}
           </div>
@@ -260,7 +276,7 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}
-                  onTap={state.narrate.done ? undefined : () => dispatch({ type: 'pick', cardId: c.id, t: now() })} />
+                  onTap={state.narrate.done ? undefined : () => { tap(); dispatch({ type: 'pick', cardId: c.id, t: now() }); }} />
               );
             })}
           </div>
