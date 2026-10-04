@@ -1790,6 +1790,16 @@
       "resultingStatus": "approved",
       "reason": "expectedCitations changed (S3.SC2 added; S3 verse moved to S3.V1-ALT)",
       "source": "docs/review/review1-S1-S3.csv"
+    },
+    {
+      "id": "UI.JOURNEY_TITLE",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T11:33:19+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (Runbook 2.2 scaffold task: \"Approve now\")"
     }
   ]
 }

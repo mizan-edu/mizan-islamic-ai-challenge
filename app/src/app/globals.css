@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+/* KFC Uthmanic Hafs v2.0 — verse display only (R3). The .ttf is served unchanged from
+   /fonts (app/public/fonts); it stays out of git until its licence is verified (CLAUDE.md §5). */
+@font-face {
+  font-family: "KFGQPC Uthmanic Hafs";
+  src: url("/fonts/uthmanic_hafs_v20.ttf") format("truetype");
+  font-display: block;
+}
+
+@theme {
+  --font-ui: "Noto Naskh Arabic", "Segoe UI", Tahoma, sans-serif;
+  --font-quran: "KFGQPC Uthmanic Hafs", serif;
+  --color-paper: #f7f4ec;
+  --color-ink: #1f2a2c;
+  --color-water: #2f7f9f;
+  --color-leaf: #3f8a4f;
+  --color-sand: #e8dcc0;
+  --color-muted: #6b6a63;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-ui);
+    font-size: 1.25rem;
+    line-height: 1.9;
+  }
+  /* Tap-first: every interactive element is at least 64 px tall. */
+  button,
+  [role="button"],
+  a {
+    min-height: 64px;
+    touch-action: manipulation;
+  }
+}
+
+/* Verse text only. Never apply to UI or tafsir text. */
+.font-quran {
+  font-family: var(--font-quran);
+}

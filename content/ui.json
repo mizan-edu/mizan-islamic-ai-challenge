@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "id": "UI",
+    "description": "Child-facing UI strings (CLAUDE.md §5.3). Same record schema as station files; only approved records load at runtime.",
+    "contentVersion": "0.1",
+    "status": "draft"
+  },
+  "records": [
+    {
+      "id": "UI.JOURNEY_TITLE",
+      "station": null,
+      "type": "ui",
+      "role": "title",
+      "text": "آيات الله في الماء والنبات",
+      "level": "A",
+      "tts": true,
+      "sourcePlatform": null,
+      "platformId": null,
+      "retrievedAt": null,
+      "reference": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T11:33:19+03:00",
+      "reviewer2": null,
+      "reviewer2At": null,
+      "status": "approved"
+    }
+  ]
+}
