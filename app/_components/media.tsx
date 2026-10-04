@@ -65,18 +65,18 @@ function Burst() {
 // A picture choice or narration card. Missing picture: a soft panel showing the record's text.
 // highlight + celebrate = the child's correct answer (green ring and burst); highlight alone = the
 // last hint pointing at the right card (soft yellow glow). Wrong choices grey out; never red.
-// Pictures are never cropped: choices share one square frame (the same for all three, so the frame
-// never hints at the answer); other pictures keep their own aspect ratio. Alt text = record text.
-export function PictureCard({ record, state, onTap, order, celebrate = false, wide = false }: {
+// Pictures are never cropped (object-contain): choices share one square frame and narration cards
+// one 4:3 frame (a wider picture such as the S3.N2 strip is letterboxed inside it), so no card's
+// frame or size hints at the answer; question pictures keep their own aspect ratio.
+export function PictureCard({ record, state, onTap, order, celebrate = false }: {
   record: RecordView;
   state: 'idle' | 'greyed' | 'highlight' | 'picked';
   onTap?: () => void;
   order?: number;
   celebrate?: boolean;
-  wide?: boolean;
 }) {
   const size = record.imageSize;
-  const square = record.role === 'choice';
+  const frame = record.role === 'choice' ? 'square' : record.role === 'narration_card' ? 'card' : 'natural';
   const look = state === 'highlight'
     ? (celebrate ? 'ring-8 ring-leaf' : 'ring-4 ring-sun anim-glow')
     : state === 'picked' ? 'ring-8 ring-water-light'
@@ -88,11 +88,11 @@ export function PictureCard({ record, state, onTap, order, celebrate = false, wi
       data-state={state}
       disabled={state === 'greyed' || !onTap}
       onClick={onTap}
-      className={`press relative flex min-h-56 flex-col items-center justify-center gap-3 rounded-[28px] bg-card p-4 text-center ${wide ? 'sm:col-span-full' : ''} ${look}`}
+      className={`press relative flex min-h-56 flex-col items-center justify-center gap-3 rounded-[28px] bg-card p-4 text-center ${look}`}
     >
       {record.image ? (
-        <span className={`flex w-full items-center justify-center overflow-hidden rounded-[20px] bg-sky-soft ${square ? 'mx-auto aspect-square max-w-56' : wide ? 'mx-auto max-w-3xl' : ''}`}
-          style={square || !size ? undefined : { aspectRatio: `${size.width} / ${size.height}` }} data-picture-frame={square ? 'square' : wide ? 'wide' : 'natural'}>
+        <span className={`flex w-full items-center justify-center overflow-hidden rounded-[20px] bg-sky-soft ${frame === 'square' ? 'mx-auto aspect-square max-w-56' : frame === 'card' ? 'aspect-[4/3]' : ''}`}
+          style={frame !== 'natural' || !size ? undefined : { aspectRatio: `${size.width} / ${size.height}` }} data-picture-frame={frame}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={record.image} alt={record.text} width={size?.width} height={size?.height} className="size-full object-contain" />
         </span>

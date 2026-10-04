@@ -56,35 +56,48 @@ describe('station pictures', () => {
 describe('pictures on the station screens', () => {
   const lib = runtimeLibrary();
 
-  it.each(['S1', 'S2', 'S3'])('%s: choice pictures share one frame (no hint at the answer) and alt text is the record text', (s) => {
-    const view = buildStationView(lib, s, publicFileExists)!;
-    const state = reducer(view, initialState(), { type: 'start' });
-    const html = renderToString(createElement(StationFlow, { view, labels: {}, initial: state }));
-    const buttons = view.observe!.choices.map((c) => {
+  // A card's markup with its own record ID, picture path, alt text, intrinsic pixel size (the frame
+  // is fixed by CSS; the img fills it with object-contain) and visible text removed. Cards that
+  // must look alike have to reduce to exactly the same string.
+  function frames(html: string, cards: { id: string; text: string }[]): string[] {
+    return cards.map((c) => {
       const m = new RegExp(`<button[^>]*data-record="${c.id.replace(/\./g, '\\.')}"[^>]*>([\\s\\S]*?)</button>`).exec(html);
       expect(m, c.id).not.toBeNull();
       const img = /<img[^>]*>/.exec(m![1])![0];
       expect(img.includes(`alt="${c.text}"`), `${c.id} alt`).toBe(true);
-      // Everything except the record's own ID, picture path and alt text must be identical.
-      return m![0].replace(/data-record="[^"]*"/, '').replace(/src="[^"]*"/, '').replace(/alt="[^"]*"/, '').replace(/>[^<]+</g, '><');
+      expect(img, c.id).toContain('object-contain');
+      return m![0].replace(/data-record="[^"]*"/, '').replace(/src="[^"]*"/, '').replace(/alt="[^"]*"/, '')
+        .replace(/ width="\d+"/, '').replace(/ height="\d+"/, '').replace(/>[^<]+</g, '><');
     });
-    expect(new Set(buttons).size).toBe(1);
+  }
+  const render = (s: string, step: 'observe' | 'narrate') => {
+    const view = buildStationView(lib, s, publicFileExists)!;
+    const state = { ...reducer(view, initialState(), { type: 'start' }), step };
+    return { view, html: renderToString(createElement(StationFlow, { view, labels: {}, initial: state })) };
+  };
+
+  it.each(['S1', 'S2', 'S3'])('%s: the three choices share one identical square frame; alt text is the record text', (s) => {
+    const { view, html } = render(s, 'observe');
+    const f = frames(html, view.observe!.choices);
+    expect(f[0]).toContain('data-picture-frame="square"');
+    expect(new Set(f).size).toBe(1);
     // Only S2 and S3 have a question picture (S1.Q1 has no imageBrief).
     expect(html.includes('data-question-picture')).toBe(view.observe!.question.image !== null);
     if (view.observe!.question.image) expect(html.includes(`alt="${view.observe!.question.text}"`)).toBe(true);
   });
 
-  it('S3.N2 spans the full row and is never cropped', () => {
-    const view = buildStationView(lib, 'S3', publicFileExists)!;
-    const card = view.narrate!.cards.find((c) => c.id === 'S3.N2')!;
+  it.each(['S1', 'S2', 'S3'])('%s: the narration cards share one identical 4:3 frame (S3.N2 letterboxed, uncropped)', (s) => {
+    const { view, html } = render(s, 'narrate');
+    expect(view.narrate!.cards).toHaveLength(3);
+    const f = frames(html, view.narrate!.cards);
+    expect(f[0]).toContain('data-picture-frame="card"');
+    expect(f[0]).toContain('aspect-[4/3]');
+    expect(new Set(f).size).toBe(1);
+    expect(html).not.toContain('col-span');
+  });
+
+  it('S3.N2 is a 16:9 strip, shown whole inside the 4:3 card frame', () => {
+    const card = buildStationView(lib, 'S3', publicFileExists)!.narrate!.cards.find((c) => c.id === 'S3.N2')!;
     expect(card.imageSize!.width / card.imageSize!.height).toBeGreaterThan(1.5);
-    let state = reducer(view, initialState(), { type: 'start' });
-    state = { ...state, step: 'narrate' };
-    const html = renderToString(createElement(StationFlow, { view, labels: {}, initial: state }));
-    const m = /<button[^>]*data-record="S3\.N2"[^>]*>[\s\S]*?<\/button>/.exec(html)![0];
-    expect(m).toContain('sm:col-span-full');
-    expect(m).toContain('data-picture-frame="wide"');
-    expect(m).toContain('object-contain');
-    expect(m).not.toContain('object-cover');
   });
 });

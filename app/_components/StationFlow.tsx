@@ -14,8 +14,6 @@ import { Moment } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
-// A wide picture (e.g. a 16:9 strip) spans the full row and is never cropped.
-const isWide = (r: RecordView): boolean => !!r.imageSize && r.imageSize.width / r.imageSize.height > 1.5;
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" className="size-9 -scale-x-100" aria-hidden="true"><path d="M5 12h12m-5-6 6 6-6 6" stroke="currentColor" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -224,13 +222,12 @@ export default function StationFlow({ view, labels, initial }: { view: StationVi
       {state.step === 'narrate' && view.narrate && (
         <section className="flex flex-col gap-5" data-screen="narrate" data-mode={view.narrate.mode}>
           <div className="card p-5"><Line record={view.narrate.intro} labels={labels} size="text-3xl" big /></div>
-          <div className={`grid grid-cols-1 gap-5 ${view.narrate.cards.some(isWide) ? 'sm:grid-flow-dense sm:grid-cols-2' : 'sm:grid-cols-3'}`}>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
             {view.narrate.cards.map((c) => {
               const pos = state.narrate.picked.indexOf(c.id);
               const highlight = state.narrate.done && (view.narrate!.mode === 'order' || c.id === view.narrate!.bestCardId);
               return (
                 <PictureCard key={c.id} record={c}
-                  wide={isWide(c)}
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}
