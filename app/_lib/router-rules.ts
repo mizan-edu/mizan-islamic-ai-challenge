@@ -1,0 +1,41 @@
+// Deterministic router rules from /content/router-rules.json (reviewed data, CLAUDE.md §5).
+// Only rules with status "approved" are loaded. Patterns run on normalized text (normalize.ts).
+// Rules can only raise the level (R5); they never select an answer.
+
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import type { RouteLevel } from './levels';
+import { isRouteLevel } from './levels';
+import { normalizeArabic } from './normalize';
+
+export interface RouterRule {
+  id: string;
+  level: RouteLevel; // level the rule raises the question to
+  route: 'referral' | 'fallback';
+  patterns: string[]; // regular expressions over normalized text
+  note?: string;
+  status: string;
+}
+
+export function loadRouterRules(contentDir: string): RouterRule[] {
+  const file = path.join(contentDir, 'router-rules.json');
+  if (!existsSync(file)) return [];
+  const data = JSON.parse(readFileSync(file, 'utf8')) as { rules?: RouterRule[] };
+  return (data.rules ?? []).filter((r) => r.status === 'approved' && isRouteLevel(r.level));
+}
+
+export interface FiredRule {
+  id: string;
+  level: RouteLevel;
+  route: 'referral' | 'fallback';
+}
+
+export function fireRules(rules: RouterRule[], text: string): FiredRule[] {
+  const norm = normalizeArabic(text);
+  const fired: FiredRule[] = [];
+  for (const r of rules) {
+    if (r.status !== 'approved') continue;
+    if (r.patterns.some((p) => new RegExp(p, 'u').test(norm))) fired.push({ id: r.id, level: r.level, route: r.route });
+  }
+  return fired;
+}

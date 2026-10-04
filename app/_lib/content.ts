@@ -21,8 +21,23 @@ export interface ContentRecord {
   [key: string]: unknown;
 }
 
+export interface AnticipatedQuestion {
+  id: string;
+  childQuestion: string;
+  level: Level;
+  responseRecordId: string;
+}
+
+export interface ScriptStep {
+  step: string;
+  conceptIds?: string[] | null;
+  [key: string]: unknown;
+}
+
 interface ContentFile {
   meta?: { stationId?: string; titleRecordId?: string };
+  script?: ScriptStep[];
+  anticipatedQuestions?: AnticipatedQuestion[];
   records?: ContentRecord[];
 }
 
@@ -30,6 +45,9 @@ export interface Station {
   stationId: string;
   titleRecordId: string | null;
   records: ContentRecord[]; // approved only
+  // Only questions whose response record is approved; the rest do not exist at runtime.
+  anticipatedQuestions: AnticipatedQuestion[];
+  script: ScriptStep[];
 }
 
 export const isApproved = (r: { status?: unknown }): boolean => r.status === 'approved';
@@ -58,10 +76,14 @@ export function loadStations(contentDir: string = findContentDir()): Station[] {
     .sort()
     .map((name) => {
       const file = readContentFile(path.join(dir, name));
+      const records = approvedOnly(file.records ?? []);
+      const approvedIds = new Set(records.map((r) => r.id));
       return {
         stationId: file.meta?.stationId ?? path.basename(name, '.json'),
         titleRecordId: file.meta?.titleRecordId ?? null,
-        records: approvedOnly(file.records ?? []),
+        records,
+        anticipatedQuestions: (file.anticipatedQuestions ?? []).filter((q) => approvedIds.has(q.responseRecordId)),
+        script: file.script ?? [],
       };
     });
 }
