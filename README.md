@@ -28,5 +28,15 @@ npm test            # app unit tests (Vitest)
 | `LLM_MODEL` | Model ID, set from the spike; never hard-coded. |
 | `LLM_EFFORT` | Optional: `low`, `medium` or `high`. |
 | `LLM_REPHRASE` | Optional: `on` lets the model rephrase NA science and UI lines. |
+| `ELEVENLABS_API_KEY` | Narration generator only (`npm run assets:narrate`); never used by the running app. |
+
+**Asset tooling (pre-build, run locally):**
+
+```
+npm run assets:briefs -- --copy <file>   # docs/review/image-briefs.json: English picture briefs for approved S1–S3 records
+npm run assets:narrate -- S1 S2 S3       # public/audio/<station>/<recordId>.mp3 + manifest.json (add --force to regenerate, --dry-run to list)
+```
+
+The narration generator sends only approved `tts: true` records of type ui, explanation, answer, referral or fallback to ElevenLabs (voice `29hj550woDeJpvjtiu26`, model `eleven_multilingual_v2`, `mp3_44100_128`). Quran, tafsir and hadith records are never sent, and every line must also pass the app's TTS guard and the citation validator's Qur'anic-text checks (R4). Each station's `manifest.json` stores the SHA-256 of the text each file was made from; the generator reports a file as stale when the record text has changed since.
 
 The model is only a fallback classifier. Every answer the app shows comes from approved library records (see CLAUDE.md §5).

@@ -12,6 +12,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "snapshot": "node scripts/snapshot/snapshot.mjs",
+    "assets:briefs": "node scripts/assets/image-briefs.mjs",
+    "assets:narrate": "node scripts/assets/narrate.mjs",
     "test:snapshot": "node --test \"scripts/snapshot/test/*.test.mjs\"",
     "test:testset": "node scripts/eval/check-testset.mjs",
     "review:scholar-packet": "node scripts/review/scholar-packet.mjs"

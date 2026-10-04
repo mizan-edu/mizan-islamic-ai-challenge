@@ -1,0 +1,145 @@
+{
+  "note": "Picture briefs for approved S1-S3 records (English only). Output path per record: public/images/<stationId>/<recordId>.webp",
+  "generatedAt": "2026-10-04T13:06:14.656Z",
+  "total": 20,
+  "stations": [
+    {
+      "stationId": "S1",
+      "count": 6,
+      "briefs": [
+        {
+          "recordId": "S1.Q1.c1",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A grey rain cloud in a blue sky with raindrops falling from it."
+        },
+        {
+          "recordId": "S1.Q1.c2",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A kitchen water tap with a thin stream of water running into a sink."
+        },
+        {
+          "recordId": "S1.Q1.c3",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A green tree in a sunny field, dry weather, no rain."
+        },
+        {
+          "recordId": "S1.N1",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "A big soft grey cloud, heavy with water, over green hills."
+        },
+        {
+          "recordId": "S1.N2",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "Gentle rain falling from a cloud onto hills; no figures."
+        },
+        {
+          "recordId": "S1.N3",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "Wet soil with puddles and small green sprouts after rain."
+        }
+      ]
+    },
+    {
+      "stationId": "S2",
+      "count": 7,
+      "briefs": [
+        {
+          "recordId": "S2.Q1",
+          "type": "ui",
+          "role": "question",
+          "imageBrief": "A single drooping flower in a pot of dry soil on a sunny windowsill."
+        },
+        {
+          "recordId": "S2.Q1.c1",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A small watering can pouring clear water into a flowerpot."
+        },
+        {
+          "recordId": "S2.Q1.c2",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A small pile of dry, cracked, sand-coloured soil on a plain background."
+        },
+        {
+          "recordId": "S2.Q1.c3",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "Wind drawn as soft swirling lines carrying a few leaves through the air."
+        },
+        {
+          "recordId": "S2.N1",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "A flower drinking water poured from a small watering can."
+        },
+        {
+          "recordId": "S2.N2",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "A flower, a small bird and a camel each beside the same small pond under a clear sky."
+        },
+        {
+          "recordId": "S2.N3",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "Soft wind lines blowing around a dry, drooping flower."
+        }
+      ]
+    },
+    {
+      "stationId": "S3",
+      "count": 7,
+      "briefs": [
+        {
+          "recordId": "S3.Q1",
+          "type": "ui",
+          "role": "question",
+          "imageBrief": "A small seed in moist soil inside a clear pot, with a few water drops on the soil."
+        },
+        {
+          "recordId": "S3.Q1.c1",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A tiny green sprout with two small leaves pushing up out of the soil."
+        },
+        {
+          "recordId": "S3.Q1.c2",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "A small grey pebble lying on top of the soil."
+        },
+        {
+          "recordId": "S3.Q1.c3",
+          "type": "ui",
+          "role": "choice",
+          "imageBrief": "The same small seed lying unchanged on top of the soil."
+        },
+        {
+          "recordId": "S3.N1",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "A seed beside a small green sprout, joined by a curved arrow."
+        },
+        {
+          "recordId": "S3.N2",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "A row of three pictures: a seed, a sprout, and a tall leafy tree under a clear sky."
+        },
+        {
+          "recordId": "S3.N3",
+          "type": "ui",
+          "role": "narration_card",
+          "imageBrief": "A single seed on dry soil with nothing growing."
+        }
+      ]
+    }
+  ]
+}
