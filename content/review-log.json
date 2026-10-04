@@ -2657,6 +2657,56 @@
       "comment": "Scholar Review 2 addendum: not suitable for ages 4–6",
       "decisionRef": "D23",
       "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "S1.E2",
+      "kind": "station-record",
+      "station": "S1",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T16:25:19+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D24",
+      "source": "chat approval 2026-10-04 (Scholar Review 2 addendum)"
+    },
+    {
+      "id": "S1.E2",
+      "kind": "station-record",
+      "station": "S1",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D24",
+      "comment": "approved as written",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
+    },
+    {
+      "id": "S3.E2",
+      "kind": "station-record",
+      "station": "S3",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T16:25:19+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D24",
+      "source": "chat approval 2026-10-04 (Scholar Review 2 addendum)"
+    },
+    {
+      "id": "S3.E2",
+      "kind": "station-record",
+      "station": "S3",
+      "review": 2,
+      "reviewer": "Scholar reviewer (مراجع شرعي; name on file)",
+      "timestamp": "2026-10-04",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D24",
+      "comment": "approved as written",
+      "source": "Scholar Review 2 addendum (second scholar reviewer); evidence held by Hussein"
     }
   ]
 }

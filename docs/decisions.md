@@ -25,3 +25,5 @@
 2026-10-04 — D22 Router rules Review 1 (Hussein): all 12 rules in content/router-rules.json approved and active at runtime. RR-C-DEATH narrowed: it does not fire on a plant question (نبتة / نبات / زهرة / وردة / شجرة / شجر / زرع / بذرة / ورقة) that has no person, animal or afterlife word. The over-triggers on حديث / جنة / غرق are accepted as deliberate caution (the stricter level wins).
 
 2026-10-04 — D23 Scholar Review 2 addendum: after the signed approval (D20), a second scholar reviewer sent four comments: (1) explain السماء as everything above us → new S1.E2/S3.E2, draft pending confirmation; (2) remove scholarly-disagreement questions; (3) remove the self-judgement question; (4) remove pointless-detail questions → test items rejected (B04, B10, C08, D01, D02, D03, D05), bubbles removed (none in S1–S3 matched these topics), router safety nets kept (RR-C-SCHOLARS, RR-C-SELF-JUDGEMENT). Evidence held by Hussein.
+
+2026-10-04 — D24 S1.E2 and S3.E2 approved as written: Review 2 by the second scholar reviewer (Scholar reviewer (مراجع شرعي; name on file)), Review 1 by Hussein. The verse cards in S1 and S3 now show E1 then E2. Evidence held by Hussein.
