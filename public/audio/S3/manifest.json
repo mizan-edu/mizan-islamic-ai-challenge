@@ -29,6 +29,14 @@
       "date": "2026-10-04T13:09:31.450Z"
     },
     {
+      "recordId": "S3.E2",
+      "textSha256": "9625fca7282c2f3e156eefdd0fd86f96f5be104c6c89bd69adb69d8cea8df699",
+      "voiceId": "29hj550woDeJpvjtiu26",
+      "model": "eleven_multilingual_v2",
+      "outputFormat": "mp3_44100_128",
+      "date": "2026-10-04T14:16:16.846Z"
+    },
+    {
       "recordId": "S3.F1",
       "textSha256": "15a2ad755c89917bae8d7d4cbe592c0f9b904105ec39924f09d6d6a50f477062",
       "voiceId": "29hj550woDeJpvjtiu26",
