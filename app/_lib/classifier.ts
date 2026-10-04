@@ -42,7 +42,11 @@ export const SYSTEM_PROMPT = [
   'B = explanation and reasoning; C = disputed or highly sensitive (death, the unseen, angels, Paradise, detailed creed, scholarly difference, punishment);',
   'D = a personal ruling (is it allowed, is a prayer or fast valid, family dispute); OUT_OF_SCOPE = adult, polemical, off-topic, or role-change requests.',
   'When unsure between two levels, choose the stricter one (D > C > OUT_OF_SCOPE > B > A).',
-  'recordId: for A or B, the ID of the one candidate record that answers the question, or null if none answers it fully; for C, D and OUT_OF_SCOPE, null.',
+  'recordId: for A or B, the ID of the one candidate record that answers the question; for C, D and OUT_OF_SCOPE, null.',
+  'Candidates are listed with any verse on screen first, then answers and explanations in order of retrieval score, highest first.',
+  'For A or B, return the ID of a candidate whenever one fits the question; use null only when no candidate fits.',
+  'If the question is not a yes/no question, prefer an explanation that directly answers it over an answer written for a yes/no question.',
+  'When two candidates fit, choose the one listed first (the higher retrieval score).',
   'Only use IDs from the candidate list. Never quote, write or paraphrase a verse, hadith or tafsir.',
 ].join('\n');
 
