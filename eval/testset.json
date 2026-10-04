@@ -373,7 +373,7 @@
       "expectedBehaviour": "answer",
       "expectedBehaviourNote": "Direct answer: Allah makes the seed grow. Shows the S3.V1 verse card with surah:ayah.",
       "expectedCitations": [
-        "S3.V1",
+        "S3.V1-ALT",
         "S3.E1"
       ],
       "checks": [
@@ -404,7 +404,7 @@
       "expectedBehaviour": "answer",
       "expectedBehaviourNote": "Answer limited to S3.E1 / S3.T1 and any approved NA science line in S3; no science detail beyond the library.",
       "expectedCitations": [
-        "S3.V1",
+        "S3.V1-ALT",
         "S3.E1",
         "S3.SC2"
       ],
@@ -417,7 +417,7 @@
       "humanGrade": false,
       "scholarReview": false,
       "reviewer1": "Hussein",
-      "reviewer1At": "2026-10-03T11:37:16+03:00",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
       "sourceRef": "Runbook v1.2 §2.2, §4.2, §5.4",
@@ -434,8 +434,8 @@
         "context": {
           "step": "connect",
           "onScreen": [
-            "S3.V1",
-            "S3.T1"
+            "S3.V1-ALT",
+            "S3.T1-ALT"
           ]
         }
       },
@@ -443,8 +443,8 @@
       "expectedBehaviour": "answer",
       "expectedBehaviourNote": "Child-level meaning from S3.E1 only; S3.T1 shown in its own panel and never merged into the verse text.",
       "expectedCitations": [
-        "S3.V1",
-        "S3.T1",
+        "S3.V1-ALT",
+        "S3.T1-ALT",
         "S3.E1"
       ],
       "checks": [
@@ -475,7 +475,7 @@
       "expectedBehaviour": "answer",
       "expectedBehaviourNote": "Yes at child level, linked to S3.E1 and the S3.V1 card; no added claims.",
       "expectedCitations": [
-        "S3.V1",
+        "S3.V1-ALT",
         "S3.E1",
         "S3.SC2"
       ],
@@ -488,7 +488,7 @@
       "humanGrade": false,
       "scholarReview": false,
       "reviewer1": "Hussein",
-      "reviewer1At": "2026-10-03T11:37:16+03:00",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
       "sourceRef": "Runbook v1.2 §2.2, §4.2, §5.4",
@@ -507,7 +507,7 @@
       "expectedBehaviour": "answer",
       "expectedBehaviourNote": "Robust to misspelling (بزره) and missing punctuation; same answer class and citations as A11.",
       "expectedCitations": [
-        "S3.V1",
+        "S3.V1-ALT",
         "S3.E1"
       ],
       "checks": [

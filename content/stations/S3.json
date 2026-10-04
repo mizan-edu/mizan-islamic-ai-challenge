@@ -58,8 +58,8 @@
       "bridgeId": "S3.B1",
       "listenId": "S3.L1",
       "verseCard": {
-        "quranId": "S3.V1",
-        "tafsirId": "S3.T1",
+        "quranId": "S3.V1-ALT",
+        "tafsirId": "S3.T1-ALT",
         "explanationId": "S3.E1"
       },
       "conceptIds": [
@@ -130,11 +130,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.F1",
@@ -148,11 +148,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.Q1",
@@ -167,11 +167,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.Q1.c1",
@@ -186,11 +186,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.Q1.c2",
@@ -205,11 +205,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.Q1.c3",
@@ -224,11 +224,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.P1",
@@ -242,11 +242,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.R1",
@@ -260,11 +260,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.R2",
@@ -278,11 +278,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.H1",
@@ -296,11 +296,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.H2",
@@ -314,11 +314,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.H3",
@@ -332,11 +332,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.H4",
@@ -350,11 +350,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.H5",
@@ -369,11 +369,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.SC1",
@@ -387,11 +387,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.SC2",
@@ -405,11 +405,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.SC3",
@@ -423,11 +423,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.B1",
@@ -441,11 +441,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.L1",
@@ -459,17 +459,18 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.V1",
       "station": "S3",
       "type": "quran",
       "text": "وَهُوَ ٱلَّذِيٓ أَنزَلَ مِنَ ٱلسَّمَآءِ مَآءٗ فَأَخۡرَجۡنَا بِهِۦ نَبَاتَ كُلِّ شَيۡءٖ فَأَخۡرَجۡنَا مِنۡهُ خَضِرٗا نُّخۡرِجُ مِنۡهُ حَبّٗا مُّتَرَاكِبٗا وَمِنَ ٱلنَّخۡلِ مِن طَلۡعِهَا قِنۡوَانٞ دَانِيَةٞ وَجَنَّٰتٖ مِّنۡ أَعۡنَابٖ وَٱلزَّيۡتُونَ وَٱلرُّمَّانَ مُشۡتَبِهٗا وَغَيۡرَ مُتَشَٰبِهٍۗ ٱنظُرُوٓاْ إِلَىٰ ثَمَرِهِۦٓ إِذَآ أَثۡمَرَ وَيَنۡعِهِۦٓۚ إِنَّ فِي ذَٰلِكُمۡ لَأٓيَٰتٖ لِّقَوۡمٖ يُؤۡمِنُونَ ﱢ",
+      "note": "Review 1: alternative candidate selected",
       "sourcePlatform": "King Fahd Complex",
       "platformId": "kfc-hafs:888",
       "reference": "6:99",
@@ -486,11 +487,11 @@
       "level": "A",
       "tts": false,
       "retrievedAt": "2026-10-03T10:27:42.443Z",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "rejected"
     },
     {
       "id": "S3.V1-ALT",
@@ -513,8 +514,8 @@
       "level": "A",
       "tts": false,
       "retrievedAt": "2026-10-03T10:27:42.443Z",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
       "status": "draft"
@@ -524,6 +525,7 @@
       "station": "S3",
       "type": "tafsir",
       "text": "وهو سبحانه وتعالى الذي أنزل من السماء ماء هو ماء المطر، فأنبتنا به كل صنف من أصناف النبات، فأخرجنا من النبات زرعًا وشجرًا أخضر، نخرج منه حبًّا يركب بعضه بعضًا كما يقع في السنابل، ومن طَلْع النخل تخرج عذوقه قريبة ينالها القائم والقاعد، وأخرجنا بساتين من العنب، وأخرجنا الزيتون والرمان متماثلًا ورقهما، مختلفًا ثمرهما، انظروا - أيها الناس - إلى ثمره أول ما يبدو، وإليه حين ينضج، إن في ذلكم - أيها الناس - لأدلة واضحة على قدرة الله لقوم يؤمنون بالله، فهم الذين يستفيدون من هذه الأدلة والبراهين.",
+      "note": "Review 1: alternative candidate selected",
       "sourcePlatform": "QuranEnc",
       "platformId": "quranenc:arabic_mokhtasar:6:99",
       "reference": "6:99",
@@ -531,11 +533,11 @@
       "level": "A",
       "tts": false,
       "retrievedAt": "2026-10-03T10:27:42.443Z",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "rejected"
     },
     {
       "id": "S3.T1-ALT",
@@ -549,8 +551,8 @@
       "level": "A",
       "tts": false,
       "retrievedAt": "2026-10-03T10:27:42.443Z",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
       "status": "draft"
@@ -561,8 +563,8 @@
       "type": "explanation",
       "text": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ يُنزلُ المطرَ فيُخرجُ به النباتَ الأخضرَ؛ فاللهُ هو الذي يُنبتُ البذرةَ.",
       "basedOn": [
-        "S3.V1",
-        "S3.T1"
+        "S3.V1-ALT",
+        "S3.T1-ALT"
       ],
       "level": "A",
       "tts": true,
@@ -570,8 +572,8 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
       "status": "draft"
@@ -588,11 +590,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.N1",
@@ -607,11 +609,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.N2",
@@ -626,11 +628,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.N3",
@@ -645,11 +647,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.NR",
@@ -663,11 +665,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.NP",
@@ -681,11 +683,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.CL1",
@@ -699,11 +701,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.X1",
@@ -720,11 +722,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.X2",
@@ -741,11 +743,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.X3",
@@ -761,11 +763,11 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.X4",
@@ -778,8 +780,8 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
       "status": "draft"
@@ -796,29 +798,29 @@
       "platformId": null,
       "retrievedAt": null,
       "reference": null,
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "S3.PS1",
       "station": "S3",
       "type": "ui",
       "role": "parent_line",
-      "text": "استكشفَ طفلُكم كيف تخرجُ النبتةُ من البذرةِ، واستمعَ إلى الآيةِ 99 من سورةِ الأنعامِ.",
+      "text": "استكشفَ طفلُكم كيف تخرجُ النبتةُ من البذرةِ، واستمعَ إلى الآيةِ 63 من سورةِ الحجِّ.",
       "level": "NA",
       "tts": false,
       "sourcePlatform": null,
       "platformId": null,
       "retrievedAt": null,
-      "reference": "6:99",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reference": "22:63",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     }
   ]
 }

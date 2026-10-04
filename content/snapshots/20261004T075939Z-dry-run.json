@@ -1,0 +1,99 @@
+{
+  "runAt": "2026-10-04T07:59:39.960Z",
+  "mode": "dry-run",
+  "refresh": false,
+  "gitHead": "38c78820fe16692e1e6bf1853078362de990ef28",
+  "node": "v24.19.0",
+  "config": {
+    "kfc": {
+      "file": "sources/kfc/hafsData_v2-0.json",
+      "sourceUrl": "https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip",
+      "sourceVersion": "2.0",
+      "expectedAyahCount": 6236,
+      "fields": {
+        "id": "id",
+        "sura": "sura_no",
+        "aya": "aya_no",
+        "text": "aya_text"
+      }
+    },
+    "quranenc": {
+      "translationKey": "arabic_mokhtasar"
+    },
+    "mp3quran": {
+      "timingReadId": 118,
+      "reciterNameContains": "الحصري",
+      "requiredRewayaContains": "حفص"
+    }
+  },
+  "stations": [
+    "S1.json"
+  ],
+  "sources": {
+    "kfc": {
+      "file": "hafsData_v2-0.json",
+      "size": 3594552,
+      "sha256": "d2960b3217962e7e4252abdcece67bea3d6b48271e4cd3af45bbbb2dd5c872ca",
+      "entryCount": 6236,
+      "sourceUrl": "https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip",
+      "sourceVersion": "2.0"
+    },
+    "quranenc": {
+      "key": "arabic_mokhtasar",
+      "title": null,
+      "version": null,
+      "listStatus": "unlisted"
+    },
+    "mp3quran": {
+      "readId": 118,
+      "name": "محمود خليل الحصري",
+      "rewaya": "حفص عن عاصم",
+      "folderUrl": "https://server13.mp3quran.net/husr/",
+      "reciterId": 118,
+      "moshafId": 118
+    }
+  },
+  "records": [
+    {
+      "file": "S1.json",
+      "id": "S1.V1",
+      "type": "quran",
+      "reference": "16:10",
+      "platformId": "kfc-hafs:1911",
+      "action": "unchanged",
+      "requestUrl": "https://mp3quran.net/api/v3/ayat_timing?surah=16&read=118"
+    },
+    {
+      "file": "S1.json",
+      "id": "S1.V1-ALT",
+      "type": "quran",
+      "reference": "50:9",
+      "platformId": "kfc-hafs:4639",
+      "action": "skipped",
+      "requestUrl": null
+    },
+    {
+      "file": "S1.json",
+      "id": "S1.T1",
+      "type": "tafsir",
+      "reference": "16:10",
+      "platformId": "quranenc:arabic_mokhtasar:16:10",
+      "action": "unchanged",
+      "requestUrl": "https://quranenc.com/api/v1/translation/aya/arabic_mokhtasar/16/10"
+    },
+    {
+      "file": "S1.json",
+      "id": "S1.T1-ALT",
+      "type": "tafsir",
+      "reference": "50:9",
+      "platformId": "quranenc:arabic_mokhtasar:50:9",
+      "action": "skipped",
+      "requestUrl": null
+    }
+  ],
+  "reviewErrors": [],
+  "warnings": [
+    "QuranEnc key \"arabic_mokhtasar\" is not in https://quranenc.com/api/v1/translations/list/ar; accepted per ayah (Arabic-script check), version null"
+  ],
+  "unresolved": []
+}
