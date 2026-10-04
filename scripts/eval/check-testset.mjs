@@ -11,12 +11,13 @@ const EXPECTED_TOTAL = 50;
 const EXPECTED_COUNTS = { A: 15, B: 12, C: 8, D: 6, E: 4, F: 3, G: 2 };
 const PLANNED_STATIONS = /^S[23]\./; // stations not drafted yet
 
-// Every content JSON file except run logs (content/snapshots holds logs, not records).
+// Every content JSON file except logs (content/snapshots holds run logs, review-log.json the review log;
+// neither holds library records).
 async function contentFiles(dir) {
   const out = [];
   for (const e of await readdir(dir, { withFileTypes: true })) {
     const p = join(dir, e.name);
-    if (e.isDirectory()) { if (e.name !== 'snapshots') out.push(...await contentFiles(p)); } else if (e.name.endsWith('.json')) out.push(p);
+    if (e.isDirectory()) { if (e.name !== 'snapshots') out.push(...await contentFiles(p)); } else if (e.name.endsWith('.json') && e.name !== 'review-log.json') out.push(p);
   }
   return out;
 }
