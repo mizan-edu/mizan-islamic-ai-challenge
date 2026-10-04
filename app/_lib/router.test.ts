@@ -6,7 +6,8 @@ import type { Library } from './library';
 import { sourcesOf } from './library';
 import { buildReply } from './reply';
 import { isAnswerable, route } from './router';
-import { item, libraryWithDraftRules, runtimeLibrary, testItems, type TestItem } from './test-helpers';
+import { fireRules } from './router-rules';
+import { item, libraryWithoutRules, rulesFile, runtimeLibrary, testItems, type TestItem } from './test-helpers';
 
 const neverCalled: Classifier = vi.fn(async () => { throw new Error('classifier must not be called'); });
 
@@ -47,8 +48,8 @@ describe('category A (in-station, levels A/B): answered only from approved recor
   });
 });
 
-describe('levels C and D (draft router rules switched on): referral, no model call, no content', () => {
-  const lib = libraryWithDraftRules();
+describe('levels C and D (approved router rules): referral, no model call, no content', () => {
+  const lib = runtimeLibrary();
   const cases = [
     ...['C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'C07', 'C08', 'B04', 'B10', 'D01'].map((id) => [id, 'C'] as const),
     ...['F01', 'F02', 'F03', 'B05'].map((id) => [id, 'D'] as const),
@@ -67,7 +68,7 @@ describe('levels C and D (draft router rules switched on): referral, no model ca
 });
 
 describe('out of scope, hadith requests, role and privacy attempts: fallback', () => {
-  const lib = libraryWithDraftRules();
+  const lib = runtimeLibrary();
   it.each(['B01', 'B02', 'B03', 'B06', 'B07', 'B08', 'B09', 'B12', 'E03', 'E04', 'G01', 'G02'])('%s', async (id) => {
     const t = item(id);
     const routed = await route(lib, { stationId: t.input.stationId, text: t.input.text }, neverCalled);
@@ -78,7 +79,7 @@ describe('out of scope, hadith requests, role and privacy attempts: fallback', (
 
 describe('R5: deterministic rules run first and the model can never lower the level', () => {
   it('a rule-matched C question never reaches the model', async () => {
-    const lib = libraryWithDraftRules();
+    const lib = runtimeLibrary();
     const lowering: Classifier = vi.fn(async () => ({ level: 'A' as const, recordId: 'S1.X1' }));
     const routed = await route(lib, { stationId: 'S1', text: item('C02').input.text }, lowering);
     expect(routed.level).toBe('C');
@@ -93,19 +94,45 @@ describe('R5: deterministic rules run first and the model can never lower the le
   });
 
   it('a rule raises an anticipated A question to its stricter level', async () => {
-    const lib = libraryWithDraftRules();
+    const lib = runtimeLibrary();
     const aq = lib.stations.get('S3')!.anticipatedQuestions.find((q) => q.level === 'A')!;
     const routed = await route(lib, { stationId: 'S3', text: `${aq.childQuestion} ${item('C01').input.text}` }, neverCalled);
     expect(routed.level).toBe('C');
   });
 });
 
-describe('runtime today: draft rules are inactive, so unmatched questions go to the classifier', () => {
-  const lib = runtimeLibrary();
-
-  it('no approved router rules are loaded while the rules file is draft', () => {
-    expect(lib.rules).toEqual([]);
+describe('router rules at runtime (Review 1, D22)', () => {
+  it('all 12 rules are approved and load at runtime', () => {
+    expect(rulesFile().every((r) => r.status === 'approved' && r.reviewer1 === 'Hussein')).toBe(true);
+    expect(runtimeLibrary().rules.map((r) => r.id).sort()).toEqual(rulesFile().map((r) => r.id).sort());
   });
+
+  it('no rule fires on the in-station questions A01-A15', () => {
+    const rules = runtimeLibrary().rules;
+    for (const t of testItems().filter((i) => i.category === 'A')) expect(fireRules(rules, t.input.text).map((f) => f.id), t.id).toEqual([]);
+  });
+});
+
+describe('RR-C-DEATH: narrowed for plant questions (Review 1)', () => {
+  const rules = runtimeLibrary().rules;
+  const fires = (text: string) => fireRules(rules, text).some((f) => f.id === 'RR-C-DEATH');
+
+  it('does not fire on a plant question with no person, animal or afterlife word', () => {
+    expect(fires('ليش ماتت الوردة؟')).toBe(false);
+    expect(fires('ليش ماتت النبتة؟')).toBe(false);
+  });
+
+  it('still fires for a pet, for C01 and C06, and when a plant question also names a person or the afterlife', () => {
+    expect(fires('ماتت قطتي، وين راحت؟')).toBe(true);
+    expect(fires(item('C01').input.text)).toBe(true);
+    expect(fires(item('C06').input.text)).toBe(true);
+    expect(fires('ماتت الشجرة اللي زرعها جدي؟')).toBe(true);
+    expect(fires('الوردة ماتت، هل تذهب إلى الجنة؟')).toBe(true);
+  });
+});
+
+describe('classifier fallback (router rules switched off)', () => {
+  const lib = libraryWithoutRules();
 
   it('C01 uses the classifier; its level decides the referral', async () => {
     const c: Classifier = vi.fn(async () => ({ level: 'C' as const, recordId: null }));

@@ -4,44 +4,174 @@
     "contentVersion": "0.1-draft",
     "draftedBy": "Claude",
     "draftedAt": "2026-10-04",
-    "status": "draft"
+    "status": "review1_complete"
   },
   "rules": [
-    { "id": "RR-D-RULING", "level": "D", "route": "referral", "note": "Personal ruling: permissibility, validity of worship, fasting.",
-      "patterns": ["(^| )(يجوز|حرام|حلال|يبطل|باطل|فتوي)", "(صلاه|صيام|صيامي|صايم|وضوء|يتوضا|توضا).*(صحيح|صح|منيح|يبطل|مقبول)", "ما بصير"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-C-DEATH", "level": "C", "route": "referral", "note": "Death, the grave, the hereafter.",
-      "patterns": ["(^| )(مات|ماتت|يموت|تموت|موت|الموت|الميت|ميت|قبر|القبر|الاخره)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-C-UNSEEN", "level": "C", "route": "referral", "note": "The unseen: Paradise, Hell, angels, the soul, where Allah is.",
-      "patterns": ["(الجنه|جنه|جهنم)", "(ملاك|ملايكه)", "(^| )(روح|الروح)( |$)", "(وين|اين) الله"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-C-PUNISHMENT", "level": "C", "route": "referral", "note": "Punishment, fear, why harm happens.",
-      "patterns": ["(يعاقب|تعاقب|عقاب|يعذب|عذاب)", "(غرق|زلزال)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-C-SCHOLARS", "level": "C", "route": "referral", "note": "Scholarly difference, consensus.",
-      "patterns": ["(علماء|العلماء)", "احكام مختلفه", "(^| )(اختلاف|يختلف|يتفق)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-C-SELF-JUDGEMENT", "level": "C", "route": "referral", "note": "A verdict on the child's own faith.",
-      "patterns": ["مسلم (منيح|جيد|كويس|صالح)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-OOS-POLEMIC", "level": "OUT_OF_SCOPE", "route": "fallback", "note": "Adult or polemical questions (Reference Package cases B02, B03, B09).",
-      "patterns": ["(تاليف|بالسيف|دينكم|الخنزير)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-OOS-TRANSLATE", "level": "OUT_OF_SCOPE", "route": "fallback", "note": "Translation requests or questions in another language (never machine-translate a term).",
-      "patterns": ["(^| )(ترجم|translate)", "[a-z]{2,}( [a-z]{2,}){3,}"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-OOS-ROLE", "level": "OUT_OF_SCOPE", "route": "fallback", "note": "Attempts to change the tutor's role or to get a verse written from memory.",
-      "patterns": ["(تجاهل|تعليماتك|انت الان|من ذاكرتك)", "اكتب لي ايه"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-OOS-PRIVACY", "level": "OUT_OF_SCOPE", "route": "fallback", "note": "Requests to store personal data (R8).",
-      "patterns": ["(احفظ|اسم ابني|اسم بنتي|عنوان بيت|رقم هاتف)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-REFUSE-HADITH", "level": "OUT_OF_SCOPE", "route": "fallback", "note": "Hadith requests: the library holds no hadith for Stations 1-3 (R7).",
-      "patterns": ["(حديث|احاديث)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null },
-    { "id": "RR-B-CREED-TERMS", "level": "B", "route": "fallback", "note": "Creed terms with no approved global record in v1.0 (D14, Option 1).",
-      "patterns": ["(الكعبه|التوحيد|توحيد)"],
-      "status": "draft", "reviewer1": null, "reviewer1At": null }
+    {
+      "id": "RR-D-RULING",
+      "level": "D",
+      "route": "referral",
+      "note": "Personal ruling: permissibility, validity of worship, fasting.",
+      "patterns": [
+        "(^| )(يجوز|حرام|حلال|يبطل|باطل|فتوي)",
+        "(صلاه|صيام|صيامي|صايم|وضوء|يتوضا|توضا).*(صحيح|صح|منيح|يبطل|مقبول)",
+        "ما بصير"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-C-DEATH",
+      "level": "C",
+      "route": "referral",
+      "note": "Death, the grave, the hereafter. Does not fire for a plant question with no person, animal or afterlife word (Review 1).",
+      "patterns": [
+        "(^| )(مات|ماتت|يموت|تموت|موت|الموت|الميت|ميت|قبر|القبر|الاخره)"
+      ],
+      "exceptWhen": {
+        "any": [
+          "(نبته|نبات|زهره|ورده|شجر|زرع|بذره|ورقه)"
+        ],
+        "none": [
+          "(^| )(ال)?(انسان|ناس)",
+          "(^| )(بابا|ماما)",
+          "(^| )(ال)?(جد|جده|جدي|جدتي|جدو|اخ|اخي|اخو|اخوي|اخت|اختي)( |$)",
+          "(^| )(ال)?(قط|قطه|قطط|قطت|كلب|حيوان)",
+          "(الاخره|قبر|الجنه|جهنم)"
+        ]
+      },
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-C-UNSEEN",
+      "level": "C",
+      "route": "referral",
+      "note": "The unseen: Paradise, Hell, angels, the soul, where Allah is.",
+      "patterns": [
+        "(الجنه|جنه|جهنم)",
+        "(ملاك|ملايكه)",
+        "(^| )(روح|الروح)( |$)",
+        "(وين|اين) الله"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-C-PUNISHMENT",
+      "level": "C",
+      "route": "referral",
+      "note": "Punishment, fear, why harm happens.",
+      "patterns": [
+        "(يعاقب|تعاقب|عقاب|يعذب|عذاب)",
+        "(غرق|زلزال)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-C-SCHOLARS",
+      "level": "C",
+      "route": "referral",
+      "note": "Scholarly difference, consensus.",
+      "patterns": [
+        "(علماء|العلماء)",
+        "احكام مختلفه",
+        "(^| )(اختلاف|يختلف|يتفق)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-C-SELF-JUDGEMENT",
+      "level": "C",
+      "route": "referral",
+      "note": "A verdict on the child's own faith.",
+      "patterns": [
+        "مسلم (منيح|جيد|كويس|صالح)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-OOS-POLEMIC",
+      "level": "OUT_OF_SCOPE",
+      "route": "fallback",
+      "note": "Adult or polemical questions (Reference Package cases B02, B03, B09).",
+      "patterns": [
+        "(تاليف|بالسيف|دينكم|الخنزير)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-OOS-TRANSLATE",
+      "level": "OUT_OF_SCOPE",
+      "route": "fallback",
+      "note": "Translation requests or questions in another language (never machine-translate a term).",
+      "patterns": [
+        "(^| )(ترجم|translate)",
+        "[a-z]{2,}( [a-z]{2,}){3,}"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-OOS-ROLE",
+      "level": "OUT_OF_SCOPE",
+      "route": "fallback",
+      "note": "Attempts to change the tutor's role or to get a verse written from memory.",
+      "patterns": [
+        "(تجاهل|تعليماتك|انت الان|من ذاكرتك)",
+        "اكتب لي ايه"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-OOS-PRIVACY",
+      "level": "OUT_OF_SCOPE",
+      "route": "fallback",
+      "note": "Requests to store personal data (R8).",
+      "patterns": [
+        "(احفظ|اسم ابني|اسم بنتي|عنوان بيت|رقم هاتف)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-REFUSE-HADITH",
+      "level": "OUT_OF_SCOPE",
+      "route": "fallback",
+      "note": "Hadith requests: the library holds no hadith for Stations 1-3 (R7).",
+      "patterns": [
+        "(حديث|احاديث)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    },
+    {
+      "id": "RR-B-CREED-TERMS",
+      "level": "B",
+      "route": "fallback",
+      "note": "Creed terms with no approved global record in v1.0 (D14, Option 1).",
+      "patterns": [
+        "(الكعبه|التوحيد|توحيد)"
+      ],
+      "status": "approved",
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-04T14:48:28+03:00"
+    }
   ]
 }

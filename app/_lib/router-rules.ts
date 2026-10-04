@@ -13,6 +13,8 @@ export interface RouterRule {
   level: RouteLevel; // level the rule raises the question to
   route: 'referral' | 'fallback';
   patterns: string[]; // regular expressions over normalized text
+  // The rule does not fire when ANY of `any` matches and NONE of `none` matches.
+  exceptWhen?: { any: string[]; none: string[] };
   note?: string;
   status: string;
 }
@@ -33,9 +35,11 @@ export interface FiredRule {
 export function fireRules(rules: RouterRule[], text: string): FiredRule[] {
   const norm = normalizeArabic(text);
   const fired: FiredRule[] = [];
+  const hit = (patterns: string[]) => patterns.some((p) => new RegExp(p, 'u').test(norm));
   for (const r of rules) {
-    if (r.status !== 'approved') continue;
-    if (r.patterns.some((p) => new RegExp(p, 'u').test(norm))) fired.push({ id: r.id, level: r.level, route: r.route });
+    if (r.status !== 'approved' || !hit(r.patterns)) continue;
+    if (r.exceptWhen && hit(r.exceptWhen.any) && !hit(r.exceptWhen.none)) continue;
+    fired.push({ id: r.id, level: r.level, route: r.route });
   }
   return fired;
 }

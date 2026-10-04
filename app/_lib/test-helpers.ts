@@ -11,11 +11,14 @@ export const sameBytes = (a: string, b: string): boolean => Buffer.from(a, 'utf8
 // The repo library as it runs today (approved records; approved router rules only).
 export const runtimeLibrary = (): Library => loadLibrary();
 
-// The repo library with the DRAFT router rules switched on in memory, to test the rules as drafted.
-export function libraryWithDraftRules(): Library {
-  const dir = findContentDir();
-  const raw = JSON.parse(readFileSync(path.join(dir, 'router-rules.json'), 'utf8')) as { rules: RouterRule[] };
-  return buildLibrary(loadStations(dir), raw.rules.map((r) => ({ ...r, status: 'approved' })));
+// The repo library with router rules switched off, to exercise the classifier fallback path.
+export function libraryWithoutRules(): Library {
+  return buildLibrary(loadStations(findContentDir()), []);
+}
+
+// All rules from the file, as written (for checks on the file itself).
+export function rulesFile(): RouterRule[] {
+  return (JSON.parse(readFileSync(path.join(findContentDir(), 'router-rules.json'), 'utf8')) as { rules: RouterRule[] }).rules;
 }
 
 export interface TestItem {

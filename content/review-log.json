@@ -2440,6 +2440,127 @@
       "decision": "A",
       "resultingStatus": "approved",
       "source": "task approval 2026-10-04 (Runbook 2.5 brief specifies the label text)"
+    },
+    {
+      "id": "RR-D-RULING",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-C-DEATH",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "change": "exceptWhen added: plant question without person, animal or afterlife word",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-C-UNSEEN",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-C-PUNISHMENT",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-C-SCHOLARS",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-C-SELF-JUDGEMENT",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-OOS-POLEMIC",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-OOS-TRANSLATE",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-OOS-ROLE",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-OOS-PRIVACY",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-REFUSE-HADITH",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
+    },
+    {
+      "id": "RR-B-CREED-TERMS",
+      "kind": "router-rule",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-04T14:48:28+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat approval 2026-10-04 (router rules Review 1)"
     }
   ]
 }
