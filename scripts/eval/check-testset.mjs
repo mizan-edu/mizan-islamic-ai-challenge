@@ -7,8 +7,8 @@ import { join, resolve, dirname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
-const EXPECTED_TOTAL = 50;
-const EXPECTED_COUNTS = { A: 15, B: 12, C: 8, D: 6, E: 4, F: 3, G: 2 };
+const EXPECTED_TOTAL = 54; // 50 + D07-D10 (D33)
+const EXPECTED_COUNTS = { A: 15, B: 12, C: 8, D: 10, E: 4, F: 3, G: 2 };
 const PLANNED_STATIONS = /^S[23]\./; // stations not drafted yet
 
 // Every content JSON file except logs (content/snapshots holds run logs, review-log.json the review log;

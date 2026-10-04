@@ -302,3 +302,13 @@ describe('level floor (D25): never below the chosen record or its sources; never
     }
   });
 });
+
+describe('D10 (D33): a verse claim routes via RR-D-VERSE-CLAIM to the station fallback', () => {
+  it('goes to S1.FB1 by rule, without a model call', async () => {
+    const lib = runtimeLibrary();
+    const t = item('D10');
+    const routed = await route(lib, { stationId: t.input.stationId, text: t.input.text }, neverCalled);
+    expect(routed).toMatchObject({ source: 'rule', behaviour: 'fallback', recordId: 'S1.FB1' });
+    expect(routed.ruleIds).toContain('RR-D-VERSE-CLAIM');
+  });
+});

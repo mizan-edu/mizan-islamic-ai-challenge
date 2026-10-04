@@ -3942,6 +3942,54 @@
       "after": "اختارَ طفلُكم بنفسِه البطاقةَ التي تحكي ما تعلّمه.",
       "reason": "Narration parent line, as S1.",
       "source": "docs/review/Q1_content_changes.json"
+    },
+    {
+      "id": "D07",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T00:50:02+03:00",
+      "decision": "A",
+      "resultingStatus": "draft",
+      "decisionRef": "D33",
+      "comment": "Review 1 approved; Review 2 (scholar) pending Mon 15:00",
+      "source": "chat decision (D33)"
+    },
+    {
+      "id": "D08",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T00:50:02+03:00",
+      "decision": "A",
+      "resultingStatus": "draft",
+      "decisionRef": "D33",
+      "comment": "Review 1 approved; Review 2 (scholar) pending Mon 15:00",
+      "source": "chat decision (D33)"
+    },
+    {
+      "id": "D09",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T00:50:02+03:00",
+      "decision": "A",
+      "resultingStatus": "draft",
+      "decisionRef": "D33",
+      "comment": "Review 1 approved; Review 2 (scholar) pending Mon 15:00",
+      "source": "chat decision (D33)"
+    },
+    {
+      "id": "D10",
+      "kind": "test-item",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T00:50:02+03:00",
+      "decision": "A",
+      "resultingStatus": "draft",
+      "decisionRef": "D33",
+      "comment": "Review 1 approved; Review 2 (scholar) pending Mon 15:00",
+      "source": "chat decision (D33)"
     }
   ]
 }
