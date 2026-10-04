@@ -1,0 +1,754 @@
+{
+  "meta": {
+    "title": "Q1 Arabic content quality — change list",
+    "date": "2026-10-04",
+    "author": "Claude (draft)",
+    "status": "draft — for Review 1 (Hussein); 'Hussein + scholar' rows also need Review 2 at the Mon 15:00 session",
+    "rules": [
+      "No quran, tafsir or hadith record is touched.",
+      "Keep IDs stable; changed records go back to status draft until approved; review-log entry per record (before → after, reason).",
+      "Hussein-only rows: apply after Hussein approves. 'Hussein + scholar' rows: live text stays as the current approved version until the scholar approves; then apply and re-narrate those lines only.",
+      "Narration (Q2) regenerates every changed line with voice Hams (29hj550woDeJpvjtiu26) on eleven_v3, from this vocalized text."
+    ],
+    "counts": {
+      "total": 80,
+      "byReviewer": {
+        "Hussein": 68,
+        "Hussein + scholar": 12
+      },
+      "byChange": {
+        "consistency": 6,
+        "consistency+grammar": 1,
+        "grammar": 9,
+        "wording": 4,
+        "a7": 3,
+        "split": 4,
+        "tashkeel": 49,
+        "grammar+tashkeel": 2,
+        "new": 2
+      }
+    }
+  },
+  "changes": [
+    {
+      "id": "S1.TITLE",
+      "change": "consistency",
+      "reviewer": "Hussein",
+      "before": "مِنْ أَيْنَ يَأْتِي الْمَطَرُ؟",
+      "after": "مِنْ أَيْنَ يَنْزِلُ الْمَطَرُ؟",
+      "words_after": 4,
+      "reason": "One wording per station: title, frame and question all use يَنْزِلُ, which also bridges to the verse."
+    },
+    {
+      "id": "S1.F1",
+      "change": "consistency+grammar",
+      "reviewer": "Hussein",
+      "before": "هَيّا نَكْتَشِفُ: مِنْ أَيْنَ يَأْتِي الْمَطَرُ؟",
+      "after": "هَيّا نَكْتَشِفْ: مِنْ أَيْنَ يَنْزِلُ الْمَطَرُ؟",
+      "words_after": 6,
+      "reason": "يَنْزِلُ for consistency; jussive after هَيّا (جواب الطلب), as in S2/S3."
+    },
+    {
+      "id": "S1.Q1",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "هَيّا نَنْظُرُ إِلى الصُّوَرِ. مِنْ أَيْنَ يَنْزِلُ الْمَطَرُ؟",
+      "after": "هَيّا نَنْظُرْ إِلى الصُّوَرِ. مِنْ أَيْنَ يَنْزِلُ الْمَطَرُ؟",
+      "words_after": 8,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S1.R1",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "الصُّنْبورُ يُعْطينا الْماءَ في الْبَيْتِ. هَيّا نَنْظُرُ إِلى السَّماءِ.",
+      "after": "الصُّنْبورُ يُعْطينا الْماءَ في الْبَيْتِ. هَيّا نَنْظُرْ إِلى السَّماءِ.",
+      "words_after": 9,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S1.R2",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "الشَّجَرَةُ تَشْرَبُ الْمَطَرَ. هَيّا نَنْظُرُ أَعْلى مِنْها.",
+      "after": "الشَّجَرَةُ تَشْرَبُ الْمَطَرَ. هَيّا نَنْظُرْ أَعْلى مِنْها.",
+      "words_after": 7,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S1.H1",
+      "change": "wording",
+      "reviewer": "Hussein",
+      "before": "هَيّا نَنْظُرُ إِلى الْأَعْلى. مِنْ أَيْنَ تَنْزِلُ الْقَطَراتُ؟",
+      "after": "مِنْ أَيْنَ تَنْزِلُ الْقَطَراتُ؟",
+      "words_after": 4,
+      "reason": "First rung must be shorter than the question (child-language rule); simpler re-ask."
+    },
+    {
+      "id": "S1.H5",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "هَيّا نَجِدُها مَعًا: الْغَيْمَةُ في السَّماءِ، وَمِنْها يَنْزِلُ الْمَطَرُ.",
+      "after": "هَيّا نَجِدْها مَعًا: الْغَيْمَةُ في السَّماءِ، وَمِنْها يَنْزِلُ الْمَطَرُ.",
+      "words_after": 9,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S1.L1",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "هَيّا نَسْتَمِعُ إِلى آيَةٍ بِصَوْتِ الْقارِئِ.",
+      "after": "هَيّا نَسْتَمِعْ إِلى آيَةٍ بِصَوْتِ الْقارِئِ.",
+      "words_after": 6,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S1.N0",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "هَيّا نُرَتِّبُ الصُّوَرَ وَنَحْكي الْقِصَّةَ.",
+      "after": "هَيّا نُرَتِّبِ الصُّوَرَ وَنَحْكِ الْقِصَّةَ.",
+      "words_after": 5,
+      "reason": "Jussive after هَيّا (نُرَتِّبْ before ال → نُرَتِّبِ; نَحْكِ)."
+    },
+    {
+      "id": "S1.NR",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "قَريبٌ جِدًّا! هَيّا نَبْدَأُ بِالْغَيْمَةِ.",
+      "after": "قَريبٌ جِدًّا! هَيّا نَبْدَأْ بِالْغَيْمَةِ.",
+      "words_after": 5,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S1.CL1",
+      "change": "a7",
+      "reviewer": "Hussein",
+      "before": "عَمَلٌ رائِعٌ! ظَهَرَتْ لِنَبْتَتِنا وَرَقَةٌ جَديدَةٌ.",
+      "after": "عَمَلٌ رائِعٌ! زَرَعْنا في أَصيصِنا بِذْرَةً صَغيرَةً.",
+      "words_after": 7,
+      "reason": "A7 plant stages: S1 = seed."
+    },
+    {
+      "id": "S1.E2",
+      "change": "split",
+      "reviewer": "Hussein + scholar",
+      "before": "السَّماءُ في لُغتِنا العربيّةِ هي كلُّ ما ارتفعَ فوقَنا؛ فالطائرةُ العاليةُ نقولُ إنّها في السَّماءِ، والغيومُ التي ينزلُ منها المطرُ في السَّماءِ أيضًا.",
+      "after": "السَّماءُ في لُغَتِنا الْعَرَبِيَّةِ هِيَ كُلُّ ما ارْتَفَعَ فَوْقَنا. الطّائِرَةُ الْعالِيَةُ في السَّماءِ. وَالْغُيومُ الَّتي يَنْزِلُ مِنْها الْمَطَرُ في السَّماءِ أَيْضًا.",
+      "words_after": 21,
+      "reason": "Was one 23-word sentence; split into three sentences of 6–10 words. Meaning unchanged; scholar confirms (approved wording, D24)."
+    },
+    {
+      "id": "S1.X3",
+      "change": "grammar",
+      "reviewer": "Hussein + scholar",
+      "before": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلُ أَهْلَنا عَنْهُ مَعًا.",
+      "after": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
+      "words_after": 7,
+      "reason": "Jussive after هَيّا; scholar-approved referral, case ending only."
+    },
+    {
+      "id": "S1.FB1",
+      "change": "grammar",
+      "reviewer": "Hussein",
+      "before": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلُ أَهْلَنا.",
+      "after": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا.",
+      "words_after": 10,
+      "reason": "Jussive after هَيّا. This becomes the shared fallback wording for S1–S3."
+    },
+    {
+      "id": "S1.PS1",
+      "change": "consistency",
+      "reviewer": "Hussein + scholar",
+      "before": "استكشف طفلكم أن المطر ينزل من الغيم، وأن الله هو الذي يُنزله، مع الآية {verseRef}.",
+      "after": "استكشفَ طفلُكم أنّ المطرَ ينزلُ من الغيمِ، وأنّ اللهَ هو الذي يُنزِلُه، واستمعَ إلى الآيةِ {verseRef}.",
+      "words_after": 16,
+      "reason": "Same parent-line pattern in all stations («واستمعَ إلى الآيةِ {verseRef}»)."
+    },
+    {
+      "id": "S2.TITLE",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الماءُ والحياةُ",
+      "after": "الْماءُ وَالْحَياةُ",
+      "words_after": 2,
+      "reason": "Full tashkeel, as in S1."
+    },
+    {
+      "id": "S2.F1",
+      "change": "grammar+tashkeel",
+      "reviewer": "Hussein",
+      "before": "هيّا نُساعدُ الزهرةَ الذابلةَ لتعيشَ!",
+      "after": "هَيّا نُساعِدِ الزَّهْرَةَ الذّابِلَةَ!",
+      "words_after": 4,
+      "reason": "Jussive after هَيّا; shorter."
+    },
+    {
+      "id": "S2.Q1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الزهرةُ ذابلةٌ. ماذا تحتاجُ لتعيشَ؟",
+      "after": "الزَّهْرَةُ ذابِلَةٌ. ماذا تَحْتاجُ لِتَعيشَ؟",
+      "words_after": 5,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.P1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "نظرةٌ جميلةٌ! الزهرةُ تحتاجُ إلى الماءِ.",
+      "after": "نَظْرَةٌ جَميلَةٌ! الزَّهْرَةُ تَحْتاجُ إِلى الْماءِ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.R1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الترابُ هنا جافٌّ. لِنبحثْ عمّا يُبلِّلُه.",
+      "after": "التُّرابُ هُنا جافٌّ. لِنَبْحَثْ عَمّا يُبَلِّلُهُ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.R2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الريحُ تُحرِّكُ الأوراقَ. لِنبحثْ عمّا تشربُه الزهرةُ.",
+      "after": "الرّيحُ تُحَرِّكُ الْأَوْراقَ. لِنَبْحَثْ عَمّا تَشْرَبُهُ الزَّهْرَةُ.",
+      "words_after": 7,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.H1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "ماذا تشربُ الزهرةُ؟",
+      "after": "ماذا تَشْرَبُ الزَّهْرَةُ؟",
+      "words_after": 3,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.H2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "شيءٌ ينزلُ مع المطرِ.",
+      "after": "شَيْءٌ يَنْزِلُ مَعَ الْمَطَرِ.",
+      "words_after": 4,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.H3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "عندما نعطشُ، ماذا نشربُ؟",
+      "after": "عِنْدَما نَعْطَشُ، ماذا نَشْرَبُ؟",
+      "words_after": 4,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.H4",
+      "change": "wording",
+      "reviewer": "Hussein",
+      "before": "ما الذي يُشرَبُ هنا؟",
+      "after": "أَيُّ صورَةٍ فيها شَيْءٌ نَشْرَبُهُ؟",
+      "words_after": 5,
+      "reason": "Passive «يُشرَبُ» is hard for ages 4–6; same pattern as S1.H4."
+    },
+    {
+      "id": "S2.H5",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "لِنجدْه معًا: هذا ماءٌ! الزهرةُ تشربُ الماءَ.",
+      "after": "لِنَجِدْهُ مَعًا: هٰذا ماءٌ! الزَّهْرَةُ تَشْرَبُ الْماءَ.",
+      "words_after": 7,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.SC1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الزهرةُ تحتاجُ إلى الماءِ لتعيشَ.",
+      "after": "الزَّهْرَةُ تَحْتاجُ إِلى الْماءِ لِتَعيشَ.",
+      "words_after": 5,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.SC2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "والحيواناتُ تشربُ الماءَ لتعيشَ.",
+      "after": "وَالْحَيَواناتُ تَشْرَبُ الْماءَ لِتَعيشَ.",
+      "words_after": 4,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.SC3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "ونحنُ أيضًا نشربُ الماءَ كلَّ يومٍ.",
+      "after": "وَنَحْنُ أَيْضًا نَشْرَبُ الْماءَ كُلَّ يَوْمٍ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.B1",
+      "change": "tashkeel",
+      "reviewer": "Hussein + scholar",
+      "before": "الماءُ نعمةٌ من اللهِ.",
+      "after": "الْماءُ نِعْمَةٌ مِنَ اللهِ.",
+      "words_after": 4,
+      "reason": "Diacritics only on a scholar-approved line."
+    },
+    {
+      "id": "S2.L1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "لِنستمعْ إلى آيةٍ من القرآنِ الكريمِ.",
+      "after": "لِنَسْتَمِعْ إِلى آيَةٍ مِنَ الْقُرْآنِ الْكَريمِ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.E1",
+      "change": "split",
+      "reviewer": "Hussein + scholar",
+      "before": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ جعلَ الماءَ لحياةِ كلِّ شيءٍ حيٍّ: النباتِ والحيوانِ والإنسانِ.",
+      "after": "تُعَلِّمُنا هٰذِهِ الْآيَةُ أَنَّ اللهَ جَعَلَ الْماءَ لِحَياةِ كُلِّ حَيٍّ. فَالنَّباتُ وَالْحَيَوانُ وَالْإِنْسانُ يَحْتاجونَ إِلى الْماءِ.",
+      "words_after": 16,
+      "reason": "Was 14 words in one sentence; two sentences (10 + 6). Meaning unchanged; scholar confirms."
+    },
+    {
+      "id": "S2.N0",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "أيُّ بطاقةٍ تحكي ما رأيناه اليومَ؟",
+      "after": "أَيُّ بِطاقَةٍ تَحْكي ما رَأَيْناهُ الْيَوْمَ؟",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.N1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الزهرةُ تشربُ الماءَ",
+      "after": "الزَّهْرَةُ تَشْرَبُ الْماءَ",
+      "words_after": 3,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.N2",
+      "change": "tashkeel",
+      "reviewer": "Hussein + scholar",
+      "before": "اللهُ جعلَ الماءَ لكلِّ حيٍّ",
+      "after": "اللهُ جَعَلَ الْماءَ لِكُلِّ حَيٍّ",
+      "words_after": 5,
+      "reason": "Diacritics only on a scholar-approved line."
+    },
+    {
+      "id": "S2.N3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الريحُ تسقي الزهرةَ",
+      "after": "الرّيحُ تَسْقي الزَّهْرَةَ",
+      "words_after": 3,
+      "reason": "Full tashkeel (distractor card)."
+    },
+    {
+      "id": "S2.NR",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "فكرةٌ جميلةٌ! لِننظرْ إلى البطاقاتِ مرّةً أخرى.",
+      "after": "فِكْرَةٌ جَميلَةٌ! لِنَنْظُرْ إِلى الْبِطاقاتِ مَرَّةً أُخْرى.",
+      "words_after": 7,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.NP",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "حكايةٌ جميلةٌ! هكذا نتذكّرُ ما رأيناه.",
+      "after": "حِكايَةٌ جَميلَةٌ! هٰكَذا نَتَذَكَّرُ ما رَأَيْناهُ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.CL1",
+      "change": "a7",
+      "reviewer": "Hussein",
+      "before": "رائعٌ! نبتتُنا شربتِ الماءَ وكبرتْ قليلًا.",
+      "after": "رائِعٌ! شَرِبَتْ بِذْرَتُنا الْماءَ، فَخَرَجَ مِنْها بُرْعُمٌ صَغيرٌ.",
+      "words_after": 8,
+      "reason": "A7 plant stages: S2 = sprout."
+    },
+    {
+      "id": "S2.X1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "النبتةُ تشربُ الماءَ لتعيشَ وتكبرَ. واللهُ جعلَ الماءَ لحياتِها.",
+      "after": "النَّبْتَةُ تَشْرَبُ الْماءَ لِتَعيشَ وَتَكْبَرَ. وَاللهُ جَعَلَ الْماءَ لِحَياتِها.",
+      "words_after": 9,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.X2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "نعم! الحيواناتُ تشربُ الماءَ لتعيشَ، مثلَ الزهرةِ ومثلَنا.",
+      "after": "نَعَمْ! الْحَيَواناتُ تَشْرَبُ الْماءَ لِتَعيشَ، مِثْلَ الزَّهْرَةِ وَمِثْلَنا.",
+      "words_after": 8,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S2.X3",
+      "change": "wording",
+      "reviewer": "Hussein + scholar",
+      "before": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "after": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
+      "words_after": 7,
+      "reason": "«الأمّ أو الأب» → «أهلنا»: one referral wording in all stations, and inclusive of children without a mother or father at home."
+    },
+    {
+      "id": "S2.FB1",
+      "change": "consistency",
+      "reviewer": "Hussein",
+      "before": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "after": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا.",
+      "words_after": 10,
+      "reason": "Was identical to the referral; the fallback must say plainly that the answer is not here (as S1.FB1, used by RR-D-VERSE-CLAIM)."
+    },
+    {
+      "id": "S2.PS1",
+      "change": "consistency",
+      "reviewer": "Hussein",
+      "before": "استكشفَ طفلُكم أنّ النباتَ والحيوانَ والإنسانَ يحتاجون إلى الماءِ، واستمعَ إلى الآيةِ 30 من سورةِ الأنبياءِ.",
+      "after": "استكشفَ طفلُكم أنّ النباتَ والحيوانَ والإنسانَ يحتاجون إلى الماءِ، واستمعَ إلى الآيةِ {verseRef}.",
+      "words_after": 13,
+      "reason": "Hard-coded reference → {verseRef} template, as S1."
+    },
+    {
+      "id": "S2.PS2",
+      "change": "new",
+      "reviewer": "Hussein",
+      "before": null,
+      "after": "اختارَ طفلُكم بنفسِه البطاقةَ التي تحكي ما تعلّمه.",
+      "words_after": 8,
+      "reason": "S1 has a narration parent line; S2 had none."
+    },
+    {
+      "id": "S3.TITLE",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ الصغيرةُ",
+      "after": "الْبِذْرَةُ الصَّغيرَةُ",
+      "words_after": 2,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.F1",
+      "change": "grammar+tashkeel",
+      "reviewer": "Hussein",
+      "before": "هيّا نكتشفُ: ماذا يخرجُ من البذرةِ؟",
+      "after": "هَيّا نَكْتَشِفْ: ماذا يَخْرُجُ مِنَ الْبِذْرَةِ؟",
+      "words_after": 6,
+      "reason": "Jussive after هَيّا."
+    },
+    {
+      "id": "S3.Q1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "زرعْنا بذرةً وسقيناها. ماذا يخرجُ منها؟",
+      "after": "زَرَعْنا بِذْرَةً وَسَقَيْناها. ماذا يَخْرُجُ مِنْها؟",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.Q1.c1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "نبتةٌ خضراءُ",
+      "after": "نَبْتَةٌ خَضْراءُ",
+      "words_after": 2,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.Q1.c2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "حجرٌ",
+      "after": "حَجَرٌ",
+      "words_after": 1,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.Q1.c3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ كما هي",
+      "after": "الْبِذْرَةُ كَما هِيَ",
+      "words_after": 3,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.P1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "نظرةٌ جميلةٌ! من البذرةِ تخرجُ نبتةٌ خضراءُ.",
+      "after": "نَظْرَةٌ جَميلَةٌ! مِنَ الْبِذْرَةِ تَخْرُجُ نَبْتَةٌ خَضْراءُ.",
+      "words_after": 7,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.R1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الحجرُ لا يكبرُ. لِنبحثْ عمّا يخرجُ من البذرةِ.",
+      "after": "الْحَجَرُ لا يَكْبَرُ. لِنَبْحَثْ عَمّا يَخْرُجُ مِنَ الْبِذْرَةِ.",
+      "words_after": 8,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.R2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ تحتاجُ وقتًا. لِنرَ ماذا يخرجُ منها بعدَ أيامٍ.",
+      "after": "الْبِذْرَةُ تَحْتاجُ وَقْتًا. لِنَرَ ماذا يَخْرُجُ مِنْها بَعْدَ أَيّامٍ.",
+      "words_after": 9,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.H1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "ماذا ينمو من البذرةِ؟",
+      "after": "ماذا يَنْمو مِنَ الْبِذْرَةِ؟",
+      "words_after": 4,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.H2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "شيءٌ أخضرُ صغيرٌ.",
+      "after": "شَيْءٌ أَخْضَرُ صَغيرٌ.",
+      "words_after": 3,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.H3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الطفلُ الصغيرُ يكبرُ… والبذرةُ؟",
+      "after": "الطِّفْلُ الصَّغيرُ يَكْبَرُ… وَالْبِذْرَةُ؟",
+      "words_after": 4,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.H4",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "أيُّ صورةٍ فيها شيءٌ أخضرُ؟",
+      "after": "أَيُّ صورَةٍ فيها شَيْءٌ أَخْضَرُ؟",
+      "words_after": 5,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.H5",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "لِنجدْها معًا: هذه نبتةٌ خضراءُ خرجتْ من البذرةِ.",
+      "after": "لِنَجِدْها مَعًا: هٰذِهِ نَبْتَةٌ خَضْراءُ خَرَجَتْ مِنَ الْبِذْرَةِ.",
+      "words_after": 8,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.SC1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ تشربُ الماءَ في الترابِ لتنموَ.",
+      "after": "الْبِذْرَةُ تَشْرَبُ الْماءَ في التُّرابِ لِتَنْمُوَ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.SC2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "الشجرةُ الكبيرةُ كانتْ بذرةً صغيرةً.",
+      "after": "الشَّجَرَةُ الْكَبيرَةُ كانَتْ بِذْرَةً صَغيرَةً.",
+      "words_after": 5,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.SC3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "النبتةُ تكبرُ يومًا بعدَ يومٍ.",
+      "after": "النَّبْتَةُ تَكْبَرُ يَوْمًا بَعْدَ يَوْمٍ.",
+      "words_after": 5,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.B1",
+      "change": "tashkeel",
+      "reviewer": "Hussein + scholar",
+      "before": "اللهُ يُنبتُ البذرةَ ويُخرجُ منها النبتةَ.",
+      "after": "اللهُ يُنْبِتُ الْبِذْرَةَ وَيُخْرِجُ مِنْها النَّبْتَةَ.",
+      "words_after": 6,
+      "reason": "Diacritics only on a scholar-approved line."
+    },
+    {
+      "id": "S3.L1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "لِنستمعْ إلى آيةٍ من القرآنِ الكريمِ.",
+      "after": "لِنَسْتَمِعْ إِلى آيَةٍ مِنَ الْقُرْآنِ الْكَريمِ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.E1",
+      "change": "split",
+      "reviewer": "Hussein + scholar",
+      "before": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ يُنزلُ المطرَ فيُخرجُ به النباتَ الأخضرَ؛ فاللهُ هو الذي يُنبتُ البذرةَ.",
+      "after": "تُعَلِّمُنا هٰذِهِ الْآيَةُ: اللهُ يُنْزِلُ الْمَطَرَ فَيُخْرِجُ بِهِ النَّباتَ الْأَخْضَرَ. فَاللهُ هُوَ الَّذي يُنْبِتُ الْبِذْرَةَ.",
+      "words_after": 15,
+      "reason": "Was 16 words in one sentence; two sentences (10 + 5). Meaning unchanged; scholar confirms."
+    },
+    {
+      "id": "S3.E2",
+      "change": "split",
+      "reviewer": "Hussein + scholar",
+      "before": "السَّماءُ في لُغتِنا العربيّةِ هي كلُّ ما ارتفعَ فوقَنا؛ فالطائرةُ العاليةُ نقولُ إنّها في السَّماءِ، والغيومُ التي ينزلُ منها المطرُ في السَّماءِ أيضًا.",
+      "after": "السَّماءُ في لُغَتِنا الْعَرَبِيَّةِ هِيَ كُلُّ ما ارْتَفَعَ فَوْقَنا. الطّائِرَةُ الْعالِيَةُ في السَّماءِ. وَالْغُيومُ الَّتي يَنْزِلُ مِنْها الْمَطَرُ في السَّماءِ أَيْضًا.",
+      "words_after": 21,
+      "reason": "Same as S1.E2."
+    },
+    {
+      "id": "S3.N0",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "أيُّ بطاقةٍ تحكي ما رأيناه اليومَ؟",
+      "after": "أَيُّ بِطاقَةٍ تَحْكي ما رَأَيْناهُ الْيَوْمَ؟",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.N1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ صارتْ نبتةً",
+      "after": "الْبِذْرَةُ صارَتْ نَبْتَةً",
+      "words_after": 3,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.N2",
+      "change": "tashkeel",
+      "reviewer": "Hussein + scholar",
+      "before": "اللهُ يُنبتُ البذرةَ",
+      "after": "اللهُ يُنْبِتُ الْبِذْرَةَ",
+      "words_after": 3,
+      "reason": "Diacritics only on a scholar-approved line."
+    },
+    {
+      "id": "S3.N3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ تبقى كما هي",
+      "after": "الْبِذْرَةُ تَبْقى كَما هِيَ",
+      "words_after": 4,
+      "reason": "Full tashkeel (distractor card)."
+    },
+    {
+      "id": "S3.NR",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "فكرةٌ جميلةٌ! لِننظرْ إلى البطاقاتِ مرّةً أخرى.",
+      "after": "فِكْرَةٌ جَميلَةٌ! لِنَنْظُرْ إِلى الْبِطاقاتِ مَرَّةً أُخْرى.",
+      "words_after": 7,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.NP",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "حكايةٌ جميلةٌ! هكذا نتذكّرُ ما رأيناه.",
+      "after": "حِكايَةٌ جَميلَةٌ! هٰكَذا نَتَذَكَّرُ ما رَأَيْناهُ.",
+      "words_after": 6,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.CL1",
+      "change": "a7",
+      "reviewer": "Hussein",
+      "before": "رائعٌ! نبتتُنا صارتْ أطولَ وظهرتْ لها أوراقٌ.",
+      "after": "رائِعٌ! صارَ الْبُرْعُمُ نَبْتَةً خَضْراءَ بِأَوْراقٍ كَثيرَةٍ.",
+      "words_after": 7,
+      "reason": "A7 plant stages: S3 = plant (flower and fruit belong to S4–S5, roadmap)."
+    },
+    {
+      "id": "S3.X1",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "البذرةُ تشربُ الماءَ في الترابِ، واللهُ يُخرجُ منها نبتةً صغيرةً.",
+      "after": "الْبِذْرَةُ تَشْرَبُ الْماءَ في التُّرابِ، وَاللهُ يُخْرِجُ مِنْها نَبْتَةً صَغيرَةً.",
+      "words_after": 10,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.X2",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "نعم! الشجرةُ الكبيرةُ كانتْ بذرةً صغيرةً، واللهُ أنبتَها.",
+      "after": "نَعَمْ! الشَّجَرَةُ الْكَبيرَةُ كانَتْ بِذْرَةً صَغيرَةً، وَاللهُ أَنْبَتَها.",
+      "words_after": 8,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.X3",
+      "change": "tashkeel",
+      "reviewer": "Hussein",
+      "before": "اللهُ هو الذي يُنبتُ البذرةَ ويُخرجُ منها النبتةَ.",
+      "after": "اللهُ هُوَ الَّذي يُنْبِتُ الْبِذْرَةَ وَيُخْرِجُ مِنْها النَّبْتَةَ.",
+      "words_after": 8,
+      "reason": "Full tashkeel."
+    },
+    {
+      "id": "S3.X4",
+      "change": "wording",
+      "reviewer": "Hussein + scholar",
+      "before": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "after": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
+      "words_after": 7,
+      "reason": "Same as S2.X3."
+    },
+    {
+      "id": "S3.FB1",
+      "change": "consistency",
+      "reviewer": "Hussein",
+      "before": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "after": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا.",
+      "words_after": 10,
+      "reason": "Same as S2.FB1."
+    },
+    {
+      "id": "S3.PS1",
+      "change": "consistency",
+      "reviewer": "Hussein",
+      "before": "استكشفَ طفلُكم كيف تخرجُ النبتةُ من البذرةِ، واستمعَ إلى الآيةِ 63 من سورةِ الحجِّ.",
+      "after": "استكشفَ طفلُكم كيف تخرجُ النبتةُ من البذرةِ، واستمعَ إلى الآيةِ {verseRef}.",
+      "words_after": 11,
+      "reason": "Hard-coded reference → {verseRef} template."
+    },
+    {
+      "id": "S3.PS2",
+      "change": "new",
+      "reviewer": "Hussein",
+      "before": null,
+      "after": "اختارَ طفلُكم بنفسِه البطاقةَ التي تحكي ما تعلّمه.",
+      "words_after": 8,
+      "reason": "Narration parent line, as S1."
+    }
+  ]
+}

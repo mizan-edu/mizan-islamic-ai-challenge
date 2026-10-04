@@ -37,3 +37,5 @@
 2026-10-05 — D30 Classifier effort stays at the default (Hussein). Consistency experiment 19acf0e, category A x 3 runs: effort default 93.3% in 3/3 runs; effort low 84.4%, below the 90% threshold.
 
 2026-10-05 — D31 Test item A12 (Hussein): expected citations also accept S3.X1 and its cited sources (S3.X1, S3.SC1, S3.E1, S3.V1-ALT, S3.T1-ALT), because S3.X2 opens with a yes/no answer to a "how" question and the model chose S3.X1 in 6/6 runs. Recorded as an alternative citation set (acceptableCitations) on A12; review-log entry, reviewer Hussein.
+
+2026-10-05 — D29 Q1 Arabic content quality approved by Hussein (Review 1), 2026-10-04: 80 rows in docs/review/Q1_content_changes.json. The 68 "Hussein" rows are applied (66 records updated, S2.PS2 and S3.PS2 created and shown in the parent summary like S1.PS2), one review-log entry per record. The 12 "Hussein + scholar" rows are not applied: they are in docs/review/q1-scholar-pending.json and the Monday packet docs/review/q1-scholar-packet.html, pending Review 2 (Mon 15:00).

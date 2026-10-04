@@ -23,7 +23,8 @@
     "test:testset": "node scripts/eval/check-testset.mjs",
     "eval:run": "node eval/run.mjs",
     "content:placeholders": "node scripts/content/check-placeholders.mjs",
-    "review:scholar-packet": "node scripts/review/scholar-packet.mjs"
+    "review:scholar-packet": "node scripts/review/scholar-packet.mjs",
+    "review:q1-packet": "node scripts/review/q1-scholar-packet.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.131.0",

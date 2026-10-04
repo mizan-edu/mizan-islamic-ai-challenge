@@ -1,0 +1,119 @@
+{
+  "meta": {
+    "title": "Q1 rows pending Review 2 (scholar), Mon 15:00 session",
+    "decisionRef": "D29",
+    "source": "docs/review/Q1_content_changes.json",
+    "note": "Live records are unchanged until Review 2; their current narration audio stays until approved.",
+    "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)"
+  },
+  "rows": [
+    {
+      "id": "S1.E2",
+      "type": "explanation",
+      "change": "split",
+      "before": "السَّماءُ في لُغتِنا العربيّةِ هي كلُّ ما ارتفعَ فوقَنا؛ فالطائرةُ العاليةُ نقولُ إنّها في السَّماءِ، والغيومُ التي ينزلُ منها المطرُ في السَّماءِ أيضًا.",
+      "after": "السَّماءُ في لُغَتِنا الْعَرَبِيَّةِ هِيَ كُلُّ ما ارْتَفَعَ فَوْقَنا. الطّائِرَةُ الْعالِيَةُ في السَّماءِ. وَالْغُيومُ الَّتي يَنْزِلُ مِنْها الْمَطَرُ في السَّماءِ أَيْضًا.",
+      "whatToConfirm": "Was one 23-word sentence; split into three sentences of 6–10 words. Meaning unchanged; scholar confirms (approved wording, D24).",
+      "decision": ""
+    },
+    {
+      "id": "S1.X3",
+      "type": "referral",
+      "change": "grammar",
+      "before": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلُ أَهْلَنا عَنْهُ مَعًا.",
+      "after": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
+      "whatToConfirm": "Jussive after هَيّا; scholar-approved referral, case ending only.",
+      "decision": ""
+    },
+    {
+      "id": "S1.PS1",
+      "type": "ui",
+      "change": "consistency",
+      "before": "استكشف طفلكم أن المطر ينزل من الغيم، وأن الله هو الذي يُنزله، مع الآية {verseRef}.",
+      "after": "استكشفَ طفلُكم أنّ المطرَ ينزلُ من الغيمِ، وأنّ اللهَ هو الذي يُنزِلُه، واستمعَ إلى الآيةِ {verseRef}.",
+      "whatToConfirm": "Same parent-line pattern in all stations («واستمعَ إلى الآيةِ {verseRef}»).",
+      "decision": ""
+    },
+    {
+      "id": "S2.B1",
+      "type": "ui",
+      "change": "tashkeel",
+      "before": "الماءُ نعمةٌ من اللهِ.",
+      "after": "الْماءُ نِعْمَةٌ مِنَ اللهِ.",
+      "whatToConfirm": "Diacritics only on a scholar-approved line.",
+      "decision": ""
+    },
+    {
+      "id": "S2.E1",
+      "type": "explanation",
+      "change": "split",
+      "before": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ جعلَ الماءَ لحياةِ كلِّ شيءٍ حيٍّ: النباتِ والحيوانِ والإنسانِ.",
+      "after": "تُعَلِّمُنا هٰذِهِ الْآيَةُ أَنَّ اللهَ جَعَلَ الْماءَ لِحَياةِ كُلِّ حَيٍّ. فَالنَّباتُ وَالْحَيَوانُ وَالْإِنْسانُ يَحْتاجونَ إِلى الْماءِ.",
+      "whatToConfirm": "Was 14 words in one sentence; two sentences (10 + 6). Meaning unchanged; scholar confirms.",
+      "decision": ""
+    },
+    {
+      "id": "S2.N2",
+      "type": "ui",
+      "change": "tashkeel",
+      "before": "اللهُ جعلَ الماءَ لكلِّ حيٍّ",
+      "after": "اللهُ جَعَلَ الْماءَ لِكُلِّ حَيٍّ",
+      "whatToConfirm": "Diacritics only on a scholar-approved line.",
+      "decision": ""
+    },
+    {
+      "id": "S2.X3",
+      "type": "referral",
+      "change": "wording",
+      "before": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "after": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
+      "whatToConfirm": "«الأمّ أو الأب» → «أهلنا»: one referral wording in all stations, and inclusive of children without a mother or father at home.",
+      "decision": ""
+    },
+    {
+      "id": "S3.B1",
+      "type": "ui",
+      "change": "tashkeel",
+      "before": "اللهُ يُنبتُ البذرةَ ويُخرجُ منها النبتةَ.",
+      "after": "اللهُ يُنْبِتُ الْبِذْرَةَ وَيُخْرِجُ مِنْها النَّبْتَةَ.",
+      "whatToConfirm": "Diacritics only on a scholar-approved line.",
+      "decision": ""
+    },
+    {
+      "id": "S3.E1",
+      "type": "explanation",
+      "change": "split",
+      "before": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ يُنزلُ المطرَ فيُخرجُ به النباتَ الأخضرَ؛ فاللهُ هو الذي يُنبتُ البذرةَ.",
+      "after": "تُعَلِّمُنا هٰذِهِ الْآيَةُ: اللهُ يُنْزِلُ الْمَطَرَ فَيُخْرِجُ بِهِ النَّباتَ الْأَخْضَرَ. فَاللهُ هُوَ الَّذي يُنْبِتُ الْبِذْرَةَ.",
+      "whatToConfirm": "Was 16 words in one sentence; two sentences (10 + 5). Meaning unchanged; scholar confirms.",
+      "decision": ""
+    },
+    {
+      "id": "S3.E2",
+      "type": "explanation",
+      "change": "split",
+      "before": "السَّماءُ في لُغتِنا العربيّةِ هي كلُّ ما ارتفعَ فوقَنا؛ فالطائرةُ العاليةُ نقولُ إنّها في السَّماءِ، والغيومُ التي ينزلُ منها المطرُ في السَّماءِ أيضًا.",
+      "after": "السَّماءُ في لُغَتِنا الْعَرَبِيَّةِ هِيَ كُلُّ ما ارْتَفَعَ فَوْقَنا. الطّائِرَةُ الْعالِيَةُ في السَّماءِ. وَالْغُيومُ الَّتي يَنْزِلُ مِنْها الْمَطَرُ في السَّماءِ أَيْضًا.",
+      "whatToConfirm": "Same as S1.E2.",
+      "decision": ""
+    },
+    {
+      "id": "S3.N2",
+      "type": "ui",
+      "change": "tashkeel",
+      "before": "اللهُ يُنبتُ البذرةَ",
+      "after": "اللهُ يُنْبِتُ الْبِذْرَةَ",
+      "whatToConfirm": "Diacritics only on a scholar-approved line.",
+      "decision": ""
+    },
+    {
+      "id": "S3.X4",
+      "type": "referral",
+      "change": "wording",
+      "before": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "after": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
+      "whatToConfirm": "Same as S2.X3.",
+      "decision": ""
+    }
+  ]
+}
