@@ -37,3 +37,10 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Licence:** SIL Open Font License, Version 1.1.
   - Full text: `public/fonts/BalooBhaijaan2-OFL.txt`, copied verbatim from the package's `LICENSE` (SHA-256 `273d4bb4d30d7f7011adfa11ee858b1d70a6b1f94cae89e6fa261ed8f1b8839a`).
   - The font files are used as published by Fontsource; MIZAN does not modify or rename them.
+
+## Narration audio (ElevenLabs)
+
+- **Files:** `public/audio/S1–S3/*.mp3`, one per approved narratable line; each station's `manifest.json` records the text SHA-256, voice, model and date per file.
+- **Voice and model:** ElevenLabs voice Hams (`29hj550woDeJpvjtiu26`), model `eleven_v3`, output `mp3_44100_128` (D28). 82 lines regenerated 2026-10-05 from fully vocalized text. 11 lines whose new text awaits the scholar's Review 2 keep their earlier audio (same voice, model `eleven_multilingual_v2`, 2026-10-04) until approved.
+- **Never Qur'an:** quran, tafsir and hadith records are never sent; every line passes the app's TTS guard and the citation validator's Qur'anic-text checks (R4).
+- **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]

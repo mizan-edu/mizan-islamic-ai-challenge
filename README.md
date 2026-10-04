@@ -39,11 +39,11 @@ npm run check:rendered         # after a build: prerendered /parent and /station
 
 ```
 npm run assets:briefs -- --copy <file>   # docs/review/image-briefs.json: English picture briefs for approved S1–S3 records
-npm run assets:narrate -- S1 S2 S3       # public/audio/<station>/<recordId>.mp3 + manifest.json (add --force to regenerate, --dry-run to list)
+npm run assets:narrate -- S1 S2 S3       # public/audio/<station>/<recordId>.mp3 + manifest.json (--stale-only to redo changed text/voice/model, --keep-pending, --limit N, --force, --dry-run)
 npm run assets:images -- --base <url>    # public/images/<station>/<recordId>.webp (sharp, WebP q82, max width 1200) + public/images/IMAGES.json
 ```
 
-The narration generator sends only approved `tts: true` records of type ui, explanation, answer, referral or fallback to ElevenLabs (voice `29hj550woDeJpvjtiu26`, model `eleven_multilingual_v2`, `mp3_44100_128`). Quran, tafsir and hadith records are never sent, and every line must also pass the app's TTS guard and the citation validator's Qur'anic-text checks (R4). Each station's `manifest.json` stores the SHA-256 of the text each file was made from; the generator reports a file as stale when the record text has changed since.
+The narration generator sends only approved `tts: true` records of type ui, explanation, answer, referral or fallback to ElevenLabs (voice Hams `29hj550woDeJpvjtiu26`, model `eleven_v3` since D28, `mp3_44100_128`). Quran, tafsir and hadith records are never sent, and every line must also pass the app's TTS guard and the citation validator's Qur'anic-text checks (R4). Each station's `manifest.json` stores the SHA-256 of the text each file was made from; the generator reports a file as stale when the record text has changed since.
 
 **Placeholders:** approved parent lines may contain `{verseRef}`. It is filled at render time with the ayah number and the surah name of the station's approved verse-card record; the record text itself is never edited. Surah names come from the King Fahd Complex hafsData v2.0 metadata via `npm run snapshot:surahs` (writes `content/kfc-surahs.json` with the source file's SHA-256). `npm run build` fails if any approved text would still render with a placeholder or brace (the prerendered pages run the check), and `npm run check:rendered` checks the built `/parent` and `/stations/S1–S3` pages.
 

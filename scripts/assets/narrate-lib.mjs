@@ -11,7 +11,7 @@ import { TtsGuardError, ttsTexts } from '../../app/_lib/tts';
 import { containsVerseWording, hasQuranMarks } from '../../app/_lib/validator';
 
 export const VOICE_ID = '29hj550woDeJpvjtiu26';
-export const MODEL_ID = 'eleven_multilingual_v2';
+export const MODEL_ID = 'eleven_v3'; // D28 (was eleven_multilingual_v2)
 export const OUTPUT_FORMAT = 'mp3_44100_128';
 export const TTS_URL = 'https://api.elevenlabs.io/v1/text-to-speech';
 
@@ -73,8 +73,10 @@ export async function synthesize(text, { apiKey, fetchImpl = fetch, voiceId = VO
     if (res.ok) {
       const audio = Buffer.from(await res.arrayBuffer());
       if (!audio.length) throw new Error('ElevenLabs returned empty audio');
-      const billed = Number(res.headers?.get?.('x-character-count'));
-      return { audio, characters: Number.isFinite(billed) && billed > 0 ? billed : text.length };
+      // Credits ElevenLabs reports for the call, when it sends a cost header; null otherwise.
+      const header = ['character-cost', 'x-character-count'].find((h) => res.headers?.get?.(h));
+      const billed = header ? Number(res.headers.get(header)) : NaN;
+      return { audio, characters: text.length, credits: Number.isFinite(billed) ? billed : null, creditHeader: header ?? null };
     }
     const retryable = res.status === 429 || res.status >= 500;
     if (!retryable || attempt >= retries) {
@@ -93,8 +95,11 @@ export function readManifest(file) {
 
 // Generates public/audio/<station>/<recordId>.mp3 for every narratable record and writes the
 // manifest. Existing files are kept unless force; a kept file whose text hash differs from the
-// manifest is reported as stale.
-export async function narrateStation({ stationId, records, guardLib, audioRoot, apiKey, fetchImpl = fetch, force = false, now = () => new Date() }) {
+// manifest is reported as stale. staleOnly regenerates an existing file only when its manifest
+// entry no longer matches the text, voice or model. keep: IDs whose current audio is never touched
+// (e.g. rows pending Review 2). budget: { left } caps how many lines are generated (shared across
+// stations); lines over the cap keep their current file and entry.
+export async function narrateStation({ stationId, records, guardLib, audioRoot, apiKey, fetchImpl = fetch, force = false, staleOnly = false, keep = new Set(), budget = { left: Infinity }, now = () => new Date() }) {
   if (!apiKey) throw new Error('ELEVENLABS_API_KEY is not set');
   const dir = path.join(audioRoot, stationId);
   const manifestFile = path.join(dir, 'manifest.json');
@@ -105,6 +110,7 @@ export async function narrateStation({ stationId, records, guardLib, audioRoot, 
   const generated = [];
   const kept = [];
   const stale = [];
+  const lines = []; // { id, characters, credits } per generated line
   let characters = 0;
 
   const writeManifest = () => {
@@ -115,20 +121,25 @@ export async function narrateStation({ stationId, records, guardLib, audioRoot, 
   for (const r of include) {
     const file = path.join(dir, `${r.id}.mp3`);
     const textSha256 = sha256(r.text);
-    if (existsSync(file) && !force) {
-      const prev = previous.get(r.id);
+    const prev = previous.get(r.id);
+    const current = prev && prev.textSha256 === textSha256 && prev.model === MODEL_ID && prev.voiceId === VOICE_ID;
+    const exists = existsSync(file);
+    const regenerate = !exists || force || (staleOnly && !current);
+    if (keep.has(r.id) || !regenerate || budget.left <= 0) {
       kept.push(r.id);
-      if (!prev || prev.textSha256 !== textSha256) stale.push(r.id);
+      if (exists && (!prev || prev.textSha256 !== textSha256)) stale.push(r.id);
       if (prev) entries.set(r.id, prev);
       continue;
     }
-    const { audio, characters: used } = await synthesize(r.text, { apiKey, fetchImpl });
+    budget.left--;
+    const { audio, characters: used, credits } = await synthesize(r.text, { apiKey, fetchImpl });
     writeFileSync(file, audio);
     characters += used;
+    lines.push({ id: r.id, characters: used, credits });
     generated.push(r.id);
     entries.set(r.id, { recordId: r.id, textSha256, voiceId: VOICE_ID, model: MODEL_ID, outputFormat: OUTPUT_FORMAT, date: now().toISOString() });
     writeManifest();
   }
   writeManifest();
-  return { stationId, generated, kept, stale, skipped, characters };
+  return { stationId, generated, kept, stale, skipped, characters, lines };
 }

@@ -1,7 +1,7 @@
 // Narration generator: inclusion/exclusion rules (R4) and file/manifest handling. HTTP is mocked;
 // fixtures are synthetic placeholder strings, never Qur'an text (R2). Never prints record text.
 
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -131,6 +131,28 @@ describe('narrateStation (HTTP mocked)', () => {
     expect(fetchImpl).toHaveBeenCalledTimes(5);
     const m = JSON.parse(readFileSync(path.join(dir, 'SX', 'manifest.json'), 'utf8'));
     expect(m.entries.find((e) => e.recordId === 'SX.X1').textSha256).toBe(sha256('نص معدل'));
+  });
+
+  it('staleOnly regenerates only on a text, voice or model change; keep is never touched; budget caps lines', async () => {
+    await run();
+    const m = path.join(dir, 'SX', 'manifest.json');
+    const doc = JSON.parse(readFileSync(m, 'utf8'));
+    doc.entries = doc.entries.map((e) => (e.recordId === 'SX.E1' ? { ...e, model: 'older_model' } : e));
+    writeFileSync(m, JSON.stringify(doc));
+    fetchImpl.mockClear();
+    const out = await run({ staleOnly: true });
+    expect(out.generated).toEqual(['SX.E1']); // only the line whose model changed
+    fetchImpl.mockClear();
+    const forced = await run({ force: true, keep: new Set(['SX.X1']), budget: { left: 2 } });
+    expect(forced.generated).toEqual(['SX.F1', 'SX.E1']); // capped at 2, X1 kept
+    expect(forced.kept).toEqual(expect.arrayContaining(['SX.X1', 'SX.X3', 'SX.FB1']));
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+
+  it('reports the credits ElevenLabs bills per line when it sends a cost header', async () => {
+    const billed = vi.fn(async () => new Response(new Uint8Array([0x49, 0x44, 0x33, 1]), { status: 200, headers: { 'character-cost': '7' } }));
+    const out = await run({ fetchImpl: billed, budget: { left: 1 } });
+    expect(out.lines).toEqual([{ id: 'SX.F1', characters: 'نص SX.F1'.length, credits: 7 }]);
   });
 
   it('refuses to run without an API key and surfaces HTTP errors without the key', async () => {

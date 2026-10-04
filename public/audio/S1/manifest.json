@@ -1,32 +1,32 @@
 {
   "stationId": "S1",
   "voiceId": "29hj550woDeJpvjtiu26",
-  "model": "eleven_multilingual_v2",
+  "model": "eleven_v3",
   "outputFormat": "mp3_44100_128",
   "entries": [
     {
       "recordId": "S1.B1",
       "textSha256": "5ebf205d19da5f0901ac8fba7343843796a2b50aa1f6fee0e493fa3b916dadef",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:20.562Z"
+      "date": "2026-10-04T21:33:05.777Z"
     },
     {
       "recordId": "S1.CL1",
-      "textSha256": "e42402e1ad9b6f1b3f5ecec6b954525decd6829238f4ea89705f2c2febc0dec5",
+      "textSha256": "e881dbd3ea3a7d2523c4ad5ab39a6fa4fc94d412907575fc57d30e4286810823",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:30.627Z"
+      "date": "2026-10-04T21:33:19.502Z"
     },
     {
       "recordId": "S1.E1",
       "textSha256": "d5dfc61b1d2d2a74bb3b9077afa02879e257b90cac645671ee5944a3dd5a7d68",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:23.538Z"
+      "date": "2026-10-04T21:33:08.981Z"
     },
     {
       "recordId": "S1.E2",
@@ -38,195 +38,195 @@
     },
     {
       "recordId": "S1.F1",
-      "textSha256": "b33647dbad51749cbcd36df5519585ac5f3ec9b70ca9bd1945c427c63dea3dd2",
+      "textSha256": "186d813ce8e22e8257723b520141278106009695ba333717c74c79a4e2bf3ab0",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:05.914Z"
+      "date": "2026-10-04T21:32:33.801Z"
     },
     {
       "recordId": "S1.FB1",
-      "textSha256": "90de1ecc0fee66023c372a68cca3c9ed8fda523b9a49de66914bb0c386b5a984",
+      "textSha256": "73c83a6dbbf33c846b5483ae0cc13114409cd18032927a12ad0f7b42d7b8aa00",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:35.421Z"
+      "date": "2026-10-04T21:33:25.442Z"
     },
     {
       "recordId": "S1.H1",
-      "textSha256": "83a63749bbd6c0380c110b350c15664f4c8fdc066a1a8051dcf689fa4c43ee6c",
+      "textSha256": "f735230a0af85c94ee6508f198a36ed5558a6122a1ae82027ef557bc3f0970f1",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:14.950Z"
+      "date": "2026-10-04T21:32:56.559Z"
     },
     {
       "recordId": "S1.H2",
       "textSha256": "acb26d74a3b42c2c6142029f990cdcf19cdd57dee26f94c67f5627ed1aef66fc",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:16.018Z"
+      "date": "2026-10-04T21:32:58.213Z"
     },
     {
       "recordId": "S1.H3",
       "textSha256": "8a4fd7ea05c36d97c2f368c64f4f8c30a84d3e8466484d607de48c244ca41ec6",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:17.147Z"
+      "date": "2026-10-04T21:32:59.997Z"
     },
     {
       "recordId": "S1.H4",
       "textSha256": "e8ead2a0ff297ee05cc5451bbdf4a71b6f693a5be9fb6e04736f866591df4de9",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:18.184Z"
+      "date": "2026-10-04T21:33:01.478Z"
     },
     {
       "recordId": "S1.H5",
-      "textSha256": "73bbf0421616dac90fd6d228a92847878a4b25e6a24c1eba696347f6a76b21dc",
+      "textSha256": "691f05873690d0a02c41b84933d9d69507491f7540619e3ec5bb95b48f5162fd",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:19.445Z"
+      "date": "2026-10-04T21:33:03.912Z"
     },
     {
       "recordId": "S1.L1",
-      "textSha256": "3510ee07fa55d102373f4f4807174f8815caecac5ea1cce73c7ca5f31bb5d362",
+      "textSha256": "8f3539e6b182beb1902ebabc744cece94cc2dd5cb5d93c478e40125178b2f757",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:22.358Z"
+      "date": "2026-10-04T21:33:07.251Z"
     },
     {
       "recordId": "S1.N0",
-      "textSha256": "5aabac82c9eb98199faa2800be628ae8afa20eb3abb0e24bf9661628d3ff62ed",
+      "textSha256": "f6b5995a6013a264a96284eed18f3676fe26825b6316b1066ad869088dc7b274",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:24.561Z"
+      "date": "2026-10-04T21:33:10.803Z"
     },
     {
       "recordId": "S1.N1",
       "textSha256": "05db1ab4df2646a307e3092f6b0f54a5f6f67f452d4c3af68653ffbe4f59c4f0",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:25.565Z"
+      "date": "2026-10-04T21:33:12.044Z"
     },
     {
       "recordId": "S1.N2",
       "textSha256": "5e1e0fd998c0ec61063fe7dc12eee472f62ab0e23372e191d095ea9f2422a740",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:26.483Z"
+      "date": "2026-10-04T21:33:13.250Z"
     },
     {
       "recordId": "S1.N3",
       "textSha256": "62d19fe465ac8ebf501ffd498248eb4a370129ccf7dab1232aa02f4f6282af21",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:27.491Z"
+      "date": "2026-10-04T21:33:14.545Z"
     },
     {
       "recordId": "S1.NP",
       "textSha256": "be9f28e2ddc2852c0e6ab932c2ce490964d6e77cd5e613112d24e7f52bf99036",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:29.562Z"
+      "date": "2026-10-04T21:33:17.763Z"
     },
     {
       "recordId": "S1.NR",
-      "textSha256": "822b5503d989e6ebf58af12eacb4a364f4e12ff8872cd0c919801ffb7e4d85a5",
+      "textSha256": "405cbb7362b2e44bed2029e615eadf34aa4861241b10a3b6f18b7d3d36418fb5",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:28.543Z"
+      "date": "2026-10-04T21:33:16.527Z"
     },
     {
       "recordId": "S1.P1",
       "textSha256": "3658c18252c028fa3585e972a726f12b663fdd4c6cf6fe0dc49af7019d20322d",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:11.320Z"
+      "date": "2026-10-04T21:32:51.261Z"
     },
     {
       "recordId": "S1.Q1",
-      "textSha256": "4f32bd5384be4fc2bee6c28ecc217e0c5192f746f4628696d6989b896ffaaad7",
+      "textSha256": "5334b316726d733bb266e700d852d6f9a15f9b4174f097ce9390ff58f14daa81",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:07.273Z"
+      "date": "2026-10-04T21:32:35.457Z"
     },
     {
       "recordId": "S1.Q1.c1",
       "textSha256": "6df87e0aed49912d54576bce012d6c470b2fcda45f4a0b224a811d247d908a84",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:08.255Z"
+      "date": "2026-10-04T21:32:36.807Z"
     },
     {
       "recordId": "S1.Q1.c2",
       "textSha256": "52966ba4031225b3b3502bb668393a3a2e02fb73a027ee03247a2b923e544161",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:09.193Z"
+      "date": "2026-10-04T21:32:37.758Z"
     },
     {
       "recordId": "S1.Q1.c3",
       "textSha256": "6a9a4094101d5b8792c8ac45eb1777e84e1accc0f35cab3c0280cd46159d5533",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:10.076Z"
+      "date": "2026-10-04T21:32:49.390Z"
     },
     {
       "recordId": "S1.R1",
-      "textSha256": "7ea50dcee195e1e431a3b426578e3026db0f58f2968a47ac2056c63aaf149ac7",
+      "textSha256": "3ed3770b42d66ffda9cb82a1f8b3938eee99a316836dc5b7b87cb61d4ed98cff",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:12.661Z"
+      "date": "2026-10-04T21:32:53.391Z"
     },
     {
       "recordId": "S1.R2",
-      "textSha256": "1b51854b72b46560ea52313f974913bd5617641cce33d66dd5b8479e4e7026a4",
+      "textSha256": "ba927c627f52123599081bce12f2bf76ae82e568005967c562df719062fff0b3",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:13.843Z"
+      "date": "2026-10-04T21:32:55.452Z"
     },
     {
       "recordId": "S1.TITLE",
-      "textSha256": "ac62c6890a53972dbfc3e328793f0b74163067d884c0dbc957a26c0f08cc1e1e",
+      "textSha256": "6674a4f685f55ca786e9a6da7a0890a95134661c39eb0d01b715001111ec4c05",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:04.548Z"
+      "date": "2026-10-04T21:32:31.946Z"
     },
     {
       "recordId": "S1.X1",
       "textSha256": "c41c08da133211e10ee870cca41195818612be55fea475dc271f8f9946336c07",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:31.802Z"
+      "date": "2026-10-04T21:33:21.344Z"
     },
     {
       "recordId": "S1.X2",
       "textSha256": "3ecb3bf2f03d84f0b46b956c92719363673056e462875f72ede0490e66b6766e",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:32.959Z"
+      "date": "2026-10-04T21:33:23.542Z"
     },
     {
       "recordId": "S1.X3",

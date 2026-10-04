@@ -1,5 +1,8 @@
 // Narration generator CLI (pre-build tooling, disclosed; never called at runtime).
-// Usage: npm run assets:narrate -- S1 S2 S3 [--force] [--dry-run]
+// Usage: npm run assets:narrate -- S1 S2 S3 [--force | --stale-only] [--keep-pending] [--limit N] [--dry-run]
+//   --stale-only   regenerate only files whose text, voice or model changed since the manifest
+//   --keep-pending never touch lines whose new text is pending Review 2 (docs/review/q1-scholar-pending.json)
+//   --limit N      generate at most N lines in this run (e.g. a cost probe)
 // Reads ELEVENLABS_API_KEY from the environment or .env.local; never prints it or any record text.
 // Uses the app's own TTS guard and citation validator (app/_lib, TypeScript) via Node's type
 // stripping (scripts/lib/ts-hooks.mjs).
@@ -23,6 +26,11 @@ function envValue(name) {
 const args = process.argv.slice(2);
 const force = args.includes('--force');
 const dryRun = args.includes('--dry-run');
+const staleOnly = args.includes('--stale-only');
+const limitIdx = args.indexOf('--limit');
+const budget = { left: limitIdx >= 0 ? Number(args[limitIdx + 1]) : Infinity };
+const pendingFile = path.join(ROOT, 'docs', 'review', 'q1-scholar-pending.json');
+const keep = new Set(args.includes('--keep-pending') && existsSync(pendingFile) ? JSON.parse(readFileSync(pendingFile, 'utf8')).rows.map((r) => r.id) : []);
 const stationIds = args.filter((a) => /^S\d+$/.test(a));
 if (!stationIds.length) {
   console.error('Usage: npm run assets:narrate -- S1 [S2 ...] [--force] [--dry-run]');
@@ -43,6 +51,7 @@ if (!dryRun && !apiKey) {
 }
 
 let total = 0;
+const credits = [];
 for (const stationId of stationIds) {
   const records = files.get(stationId);
   if (!records) {
@@ -56,9 +65,16 @@ for (const stationId of stationIds) {
     for (const s of skipped) console.log(`  skip ${s.recordId}: ${s.reason}`);
     continue;
   }
-  const out = await narrateStation({ stationId, records, guardLib, audioRoot: path.join(ROOT, 'public', 'audio'), apiKey, force });
+  const out = await narrateStation({ stationId, records, guardLib, audioRoot: path.join(ROOT, 'public', 'audio'), apiKey, force, staleOnly, keep, budget });
   total += out.characters;
+  credits.push(...out.lines);
   console.log(`${stationId}: generated ${out.generated.length}, kept ${out.kept.length}${out.stale.length ? `, STALE ${out.stale.join(' ')}` : ''}, characters ${out.characters}`);
+  for (const l of out.lines) console.log(`  ${l.id}: ${l.characters} chars, ${l.credits ?? '?'} credits`);
   for (const s of out.skipped) console.log(`  skip ${s.recordId}: ${s.reason}`);
 }
-if (!dryRun) console.log(`total characters: ${total}`);
+if (!dryRun) {
+  const billed = credits.filter((l) => l.credits !== null);
+  const cr = billed.reduce((n, l) => n + l.credits, 0);
+  const ch = billed.reduce((n, l) => n + l.characters, 0);
+  console.log(`total characters: ${total}; credits reported for ${billed.length}/${credits.length} lines: ${cr}${ch ? ` (${(cr / ch).toFixed(3)} credits per character)` : ''}`);
+}
