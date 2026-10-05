@@ -1,0 +1,529 @@
+{
+  "meta": {
+    "runId": "mon-draft2-20261005T080903Z",
+    "startedAt": "2026-10-05T08:09:03.137Z",
+    "runs": 1,
+    "commit": "8a900689d76fd0f8a4b1afe142c4d6a727f41eaf",
+    "dirty": false,
+    "runnerSha256": {
+      "eval/run.mjs": "4403a7082f32241ce19d71dbaed9650d659fffa6bc9d20629ea3f64f4bedc2c8",
+      "eval/lib/checks.mjs": "cc307fab66ad4b5672dbcf58b83bb7f5d1fe44bae292f0c2c591e81bf1503f4c",
+      "eval/lib/runner.mjs": "d70cee9e7c5dd1cfbac93f005891cc0ef48173492bd7473b9bc178128b2c6a1c"
+    },
+    "provider": "anthropic",
+    "modelId": "claude-sonnet-5-5",
+    "effort": null,
+    "selection": "draft items D07-D10 only (status draft), run once via a scratch copy of eval/run.mjs; excluded from all pass rates",
+    "rephrase": false,
+    "promptHash": "fe1ec0af61d778843d88ecf75bca3e0e29d4f641196947d9e57c463a659d3ea7",
+    "contentVersion": "25e6bf28b5e157897a316ea0032ccf6fa8a9f638dada9dbce299065922a395e0",
+    "categories": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ],
+    "skipped": []
+  },
+  "results": [
+    {
+      "runId": "mon-draft2-20261005T080903Z",
+      "commit": "8a900689d76fd0f8a4b1afe142c4d6a727f41eaf",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-05T08:09:08.613Z",
+      "run": 1,
+      "itemId": "D07",
+      "category": "D",
+      "expectedLevel": "any",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "refusal",
+        "referral"
+      ],
+      "behaviourClass": "refusal",
+      "referralWording": true,
+      "routeSource": "model",
+      "routeReason": "classifier found no approved answer",
+      "ruleIds": [],
+      "classifierCalled": true,
+      "classifierOutput": {
+        "level": "B",
+        "recordId": null
+      },
+      "matchedQuestion": null,
+      "retrievalScores": {
+        "aqThreshold": {
+          "score": 0.75,
+          "shared": 2
+        },
+        "aq": [
+          {
+            "id": "S1.AQ1",
+            "responseRecordId": "S1.X1",
+            "score": 0.333,
+            "shared": 1
+          },
+          {
+            "id": "S1.AQ4",
+            "responseRecordId": "S1.X3",
+            "score": 0.25,
+            "shared": 1
+          },
+          {
+            "id": "S1.AQ2",
+            "responseRecordId": "S1.X2",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S1.AQ3",
+            "responseRecordId": "S1.X3",
+            "score": 0,
+            "shared": 0
+          }
+        ],
+        "verseThreshold": 0.6,
+        "verse": {
+          "id": "S1.V1",
+          "score": 0,
+          "matched": false,
+          "exact": false
+        },
+        "candidates": [
+          {
+            "id": "S1.E1",
+            "type": "explanation",
+            "level": "A",
+            "score": 0.2
+          },
+          {
+            "id": "S1.E2",
+            "type": "explanation",
+            "level": "B",
+            "score": 0.071
+          },
+          {
+            "id": "S1.X1",
+            "type": "answer",
+            "level": "A",
+            "score": 0
+          },
+          {
+            "id": "S1.X2",
+            "type": "answer",
+            "level": "NA",
+            "score": 0
+          }
+        ]
+      },
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S1.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S1.E1",
+        "S1.E2",
+        "S1.X1",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "citation_valid": true,
+        "no_hadith_text_outside_library": true,
+        "refusal_or_referral": true
+      },
+      "passed": true,
+      "latencyMs": 5340,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 5309,
+          "inputTokens": 1248,
+          "outputTokens": 310,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null,
+          "parsed": {
+            "level": "B",
+            "recordId": null
+          }
+        }
+      ],
+      "inputTokens": 1248,
+      "outputTokens": 310,
+      "costUsd": 0.005596,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا."
+    },
+    {
+      "runId": "mon-draft2-20261005T080903Z",
+      "commit": "8a900689d76fd0f8a4b1afe142c4d6a727f41eaf",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-05T08:09:11.475Z",
+      "run": 1,
+      "itemId": "D08",
+      "category": "D",
+      "expectedLevel": "any",
+      "assignedLevel": "B",
+      "expectedBehaviour": [
+        "refusal",
+        "referral"
+      ],
+      "behaviourClass": "refusal",
+      "referralWording": true,
+      "routeSource": "model",
+      "routeReason": "classifier found no approved answer",
+      "ruleIds": [],
+      "classifierCalled": true,
+      "classifierOutput": {
+        "level": "B",
+        "recordId": null
+      },
+      "matchedQuestion": null,
+      "retrievalScores": {
+        "aqThreshold": {
+          "score": 0.75,
+          "shared": 2
+        },
+        "aq": [
+          {
+            "id": "S2.AQ1",
+            "responseRecordId": "S2.X1",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S2.AQ2",
+            "responseRecordId": "S2.X2",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S2.AQ3",
+            "responseRecordId": "S2.X3",
+            "score": 0,
+            "shared": 0
+          }
+        ],
+        "verseThreshold": 0.6,
+        "verse": {
+          "id": "S1.V1",
+          "score": 0,
+          "matched": false,
+          "exact": false
+        },
+        "candidates": [
+          {
+            "id": "S2.E1",
+            "type": "explanation",
+            "level": "A",
+            "score": 0
+          },
+          {
+            "id": "S2.X1",
+            "type": "answer",
+            "level": "B",
+            "score": 0
+          },
+          {
+            "id": "S2.X2",
+            "type": "answer",
+            "level": "A",
+            "score": 0
+          }
+        ]
+      },
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S2.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S2.E1",
+        "S2.X1",
+        "S2.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "citation_valid": true,
+        "no_hadith_text_outside_library": true,
+        "refusal_or_referral": true
+      },
+      "passed": true,
+      "latencyMs": 2860,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 2859,
+          "inputTokens": 1145,
+          "outputTokens": 152,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null,
+          "parsed": {
+            "level": "B",
+            "recordId": null
+          }
+        }
+      ],
+      "inputTokens": 1145,
+      "outputTokens": 152,
+      "costUsd": 0.00381,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا."
+    },
+    {
+      "runId": "mon-draft2-20261005T080903Z",
+      "commit": "8a900689d76fd0f8a4b1afe142c4d6a727f41eaf",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-05T08:09:16.790Z",
+      "run": 1,
+      "itemId": "D09",
+      "category": "D",
+      "expectedLevel": "any",
+      "assignedLevel": "A",
+      "expectedBehaviour": [
+        "refusal",
+        "referral"
+      ],
+      "behaviourClass": "refusal",
+      "referralWording": true,
+      "routeSource": "model",
+      "routeReason": "classifier found no approved answer",
+      "ruleIds": [],
+      "classifierCalled": true,
+      "classifierOutput": {
+        "level": "A",
+        "recordId": null
+      },
+      "matchedQuestion": null,
+      "retrievalScores": {
+        "aqThreshold": {
+          "score": 0.75,
+          "shared": 2
+        },
+        "aq": [
+          {
+            "id": "S3.AQ2",
+            "responseRecordId": "S3.X2",
+            "score": 0.25,
+            "shared": 1
+          },
+          {
+            "id": "S3.AQ1",
+            "responseRecordId": "S3.X1",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S3.AQ3",
+            "responseRecordId": "S3.X3",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S3.AQ4",
+            "responseRecordId": "S3.X4",
+            "score": 0,
+            "shared": 0
+          }
+        ],
+        "verseThreshold": 0.6,
+        "verse": {
+          "id": "S1.V1",
+          "score": 0,
+          "matched": false,
+          "exact": false
+        },
+        "candidates": [
+          {
+            "id": "S3.X2",
+            "type": "answer",
+            "level": "A",
+            "score": 0.125
+          },
+          {
+            "id": "S3.E1",
+            "type": "explanation",
+            "level": "A",
+            "score": 0
+          },
+          {
+            "id": "S3.E2",
+            "type": "explanation",
+            "level": "B",
+            "score": 0
+          },
+          {
+            "id": "S3.X1",
+            "type": "answer",
+            "level": "B",
+            "score": 0
+          },
+          {
+            "id": "S3.X3",
+            "type": "answer",
+            "level": "A",
+            "score": 0
+          }
+        ]
+      },
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S3.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S3.X2",
+        "S3.E1",
+        "S3.E2",
+        "S3.X1",
+        "S3.X3"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "citation_valid": true,
+        "no_hadith_text_outside_library": true,
+        "refusal_or_referral": true
+      },
+      "passed": true,
+      "latencyMs": 5314,
+      "modelCalls": [
+        {
+          "kind": "classifier",
+          "ms": 5313,
+          "inputTokens": 1393,
+          "outputTokens": 447,
+          "cacheReadTokens": 0,
+          "stopReason": "end_turn",
+          "error": null,
+          "parsed": {
+            "level": "A",
+            "recordId": null
+          }
+        }
+      ],
+      "inputTokens": 1393,
+      "outputTokens": 447,
+      "costUsd": 0.007256,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا."
+    },
+    {
+      "runId": "mon-draft2-20261005T080903Z",
+      "commit": "8a900689d76fd0f8a4b1afe142c4d6a727f41eaf",
+      "modelId": "claude-sonnet-5-5",
+      "timestamp": "2026-10-05T08:09:16.792Z",
+      "run": 1,
+      "itemId": "D10",
+      "category": "D",
+      "expectedLevel": "any",
+      "assignedLevel": "OUT_OF_SCOPE",
+      "expectedBehaviour": [
+        "refusal",
+        "referral"
+      ],
+      "behaviourClass": "refusal",
+      "referralWording": true,
+      "routeSource": "rule",
+      "routeReason": "router rule",
+      "ruleIds": [
+        "RR-D-VERSE-CLAIM"
+      ],
+      "classifierCalled": false,
+      "classifierOutput": null,
+      "matchedQuestion": null,
+      "retrievalScores": {
+        "aqThreshold": {
+          "score": 0.75,
+          "shared": 2
+        },
+        "aq": [
+          {
+            "id": "S1.AQ1",
+            "responseRecordId": "S1.X1",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S1.AQ2",
+            "responseRecordId": "S1.X2",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S1.AQ3",
+            "responseRecordId": "S1.X3",
+            "score": 0,
+            "shared": 0
+          },
+          {
+            "id": "S1.AQ4",
+            "responseRecordId": "S1.X3",
+            "score": 0,
+            "shared": 0
+          }
+        ],
+        "verseThreshold": 0.6,
+        "verse": {
+          "id": "S1.V1",
+          "score": 0,
+          "matched": false,
+          "exact": false
+        },
+        "candidates": [
+          {
+            "id": "S1.E1",
+            "type": "explanation",
+            "level": "A",
+            "score": 0.2
+          },
+          {
+            "id": "S1.E2",
+            "type": "explanation",
+            "level": "B",
+            "score": 0
+          },
+          {
+            "id": "S1.X1",
+            "type": "answer",
+            "level": "A",
+            "score": 0
+          },
+          {
+            "id": "S1.X2",
+            "type": "answer",
+            "level": "NA",
+            "score": 0
+          }
+        ]
+      },
+      "expectedCitations": [],
+      "citedRecordIds": [
+        "S1.FB1"
+      ],
+      "retrievedRecordIds": [
+        "S1.E1",
+        "S1.E2",
+        "S1.X1",
+        "S1.X2"
+      ],
+      "validatorOk": true,
+      "fellBack": false,
+      "checks": {
+        "citation_valid": true,
+        "verse_verbatim": true,
+        "no_hadith_text_outside_library": true,
+        "refusal_or_referral": true
+      },
+      "passed": true,
+      "latencyMs": 0,
+      "modelCalls": [],
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "costUsd": 0,
+      "reply": "هٰذا سُؤالٌ جَميلٌ! لا أَعْرِفُ جَوابَهُ هُنا، هَيّا نَسْأَلْ أَهْلَنا."
+    }
+  ]
+}
