@@ -10,6 +10,7 @@ import { buildStationView } from '@/app/_lib/station-view';
 import { MAX_CHARS } from '@/app/_lib/try-limits';
 import { T as EVAL } from '@/app/evaluation/text';
 import ParentAsk from './ParentAsk';
+import SessionSummary from './SessionSummary';
 import { PILOT } from './text';
 
 // Parent summary: the approved parent lines (PS records) of each station. No child data is shown
@@ -22,6 +23,13 @@ export default function ParentPage() {
   // Parent Ask (D54): every station's record sources, for the source chips under a reply.
   const sources = Object.assign({}, ...views.map((v) => v.sources));
   const stations = views.map((v) => ({ id: v.stationId, title: v.title?.text ?? v.stationId }));
+  // Parent summary card (D54): each station's hint ladder (then the "together" rung) and PS lines.
+  const summaryStations = views.map((v) => ({
+    id: v.stationId,
+    title: v.title?.text ?? v.stationId,
+    hintIds: [...(v.observe?.hints.map((h) => h.id) ?? []), ...(v.observe?.together ? [v.observe.together.id] : [])],
+    parent: v.parent,
+  }));
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-8" data-screen="parent">
       {labels.parents && <h1 className="font-display text-4xl text-ink">{labels.parents}</h1>}
@@ -34,6 +42,7 @@ export default function ParentPage() {
           <ParentAsk stations={stations} sources={sources} labels={labels} maxChars={MAX_CHARS} />
         </div>
       </ParentGate>
+      <SessionSummary stations={summaryStations} />
       <ResetJourney text={PILOT} />
       {views.map((v) => (
         <section key={v.stationId} id={v.stationId} className="card flex flex-col gap-3 p-6">

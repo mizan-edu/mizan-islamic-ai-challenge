@@ -36,6 +36,12 @@ export function addEvents(inputs: (EventInput | Record<string, unknown>)[]): voi
 
 export const completedStations = (): string[] => read<string[]>(PROGRESS_KEY, []);
 
+// The concept-level events of this session (parent summary, D54 Phase 4): read on the device only.
+export const sessionEvents = (): SessionEvent[] => read<SessionEvent[]>(EVENTS_KEY, []);
+
+// Fired on window after the session is cleared, so an open parent summary can refresh.
+export const SESSION_CLEARED = 'mizan:session-cleared';
+
 export function markCompleted(stationId: string): void {
   const done = completedStations();
   if (!done.includes(stationId)) write(PROGRESS_KEY, [...done, stationId]);
@@ -43,4 +49,5 @@ export function markCompleted(stationId: string): void {
 
 export function clearSession(): void {
   try { window.sessionStorage.removeItem(EVENTS_KEY); window.sessionStorage.removeItem(PROGRESS_KEY); } catch { /* ignore */ }
+  try { window.dispatchEvent(new Event(SESSION_CLEARED)); } catch { /* no window */ }
 }

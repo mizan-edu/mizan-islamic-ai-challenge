@@ -47,3 +47,41 @@ test('Parent Ask: behind the gate, sends only station and text, shows the approv
   });
   expect(violations).toEqual([]);
 });
+
+test('Parent summary card (D54 Phase 4): after Station 1 with one hint, the card shows it; reset clears it', async ({ page }) => {
+  const s1 = JSON.parse(readFileSync('content/stations/S1.json', 'utf8')) as { script: { step: string; correctChoiceId?: string; expectedOrder?: string[]; parentSummaryIds?: string[] }[] };
+  const ob = s1.script.find((s) => s.step === 'observe')!;
+  const order = s1.script.find((s) => s.step === 'narrate')!.expectedOrder!;
+  const ps = s1.script.find((s) => s.step === 'close')!.parentSummaryIds!;
+
+  await page.goto('/parent');
+  await expect(page.locator('[data-summary-empty]')).toBeVisible();
+
+  await page.goto('/stations/S1');
+  await page.locator('[data-action="start"]').click();
+  await page.locator('[data-action="hint"]').click();
+  await page.locator(`[data-record="${ob.correctChoiceId}"]`).click();
+  const moment = page.locator('[data-moment="S1"]');
+  await expect(moment).toBeVisible();
+  await moment.click();
+  await expect(page.locator('[data-strip="praise"]')).toBeVisible();
+  await page.locator('[data-action="next"]').click(); // connect
+  await page.locator('[data-action="next"]').click(); // ask
+  if (await page.locator('[data-screen="ask"]').count()) await page.locator('[data-action="next"]').click();
+  for (const card of order) await page.locator(`[data-record="${card}"]`).click();
+  await expect(page.locator('[data-screen="narrate"] [data-strip="praise"]')).toBeVisible();
+  await page.locator('[data-action="next"]').click();
+  await expect(page.locator('[data-screen="close"]')).toBeVisible();
+
+  await page.goto('/parent');
+  const card = page.locator('[data-summary-station="S1"]');
+  await expect(card).toBeVisible();
+  await expect(card).toHaveAttribute('data-hints', '1');
+  for (const id of ps) await expect(card.locator(`[data-summary-line="${id}"]`)).toBeVisible();
+  await expect(page.locator('[data-summary-station="S2"]')).toHaveCount(0);
+
+  await page.locator('[data-reset-start]').click();
+  await page.locator('[data-reset-confirm]').click();
+  await expect(page.locator('[data-summary-empty]')).toBeVisible();
+  await expect(card).toHaveCount(0);
+});
