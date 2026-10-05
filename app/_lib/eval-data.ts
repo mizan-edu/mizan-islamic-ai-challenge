@@ -41,7 +41,7 @@ export interface EvalPageData {
     tafsir: { platform: string; edition: string; count: number }; quran: { platform: string; count: number };
     font: string; recitation: { platform: string; reciter: string; rewaya: string; snapshot: string };
     verseText: { platform: string; file: string; version: string; snapshot: string }; // as recorded in the snapshot
-    scholar: { date: string; count: number; byKind: Record<string, number>; source: string };
+    scholar: { count: number; byDate: { date: string; count: number }[]; byKind: Record<string, number>; source: string };
   };
   limits: { a04: { passed: number; runs: number }; d09Levels: string[]; d09Sources: string[]; stationsBuilt: number; stationsPlanned: number };
   links: { testingMd: boolean };
@@ -162,7 +162,7 @@ export function loadEvalPageData(paths: EvalDataPaths = {}): EvalPageData {
         platform: String(quran[0]?.sourcePlatform ?? ''), file: snap.sources?.kfc?.file ?? '', version: snap.sources?.kfc?.sourceVersion ?? '',
         snapshot: rel(root, path.join(snapDir, snapFile)),
       },
-      scholar: { date: r2Dates.at(-1) ?? '', count: r2.length, byKind: r2.reduce<Record<string, number>>((m, e) => ({ ...m, [e.kind]: (m[e.kind] ?? 0) + 1 }), {}), source: rel(root, logPath) },
+      scholar: { count: r2.length, byDate: r2Dates.map((date) => ({ date, count: r2.filter((e) => e.timestamp.slice(0, 10) === date).length })), byKind: r2.reduce<Record<string, number>>((m, e) => ({ ...m, [e.kind]: (m[e.kind] ?? 0) + 1 }), {}), source: rel(root, logPath) },
     },
     limits: {
       a04: { passed: a04.filter((r) => r.passed).length, runs: a04.length },

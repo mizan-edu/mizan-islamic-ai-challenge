@@ -43,7 +43,7 @@
       "A": 15,
       "B": 10,
       "C": 7,
-      "D": 2,
+      "D": 6,
       "E": 4,
       "F": 3,
       "G": 2
@@ -1328,10 +1328,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-05T00:50:02+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "sourceRef": "D33 (Review 1 Hussein; scholar confirms expected behaviour Mon 15:00)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D08",
@@ -1359,10 +1359,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-05T00:50:02+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "sourceRef": "D33 (Review 1 Hussein; scholar confirms expected behaviour Mon 15:00)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D09",
@@ -1390,10 +1390,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-05T00:50:02+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "sourceRef": "D33 (Review 1 Hussein; scholar confirms expected behaviour Mon 15:00)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "D10",
@@ -1422,10 +1422,10 @@
       "scholarReview": true,
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-05T00:50:02+03:00",
-      "reviewer2": null,
-      "reviewer2At": null,
+      "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "sourceRef": "D33 (Review 1 Hussein; scholar confirms expected behaviour Mon 15:00)",
-      "status": "draft"
+      "status": "approved"
     },
     {
       "id": "E01",

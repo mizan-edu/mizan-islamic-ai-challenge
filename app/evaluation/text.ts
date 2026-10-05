@@ -88,8 +88,8 @@ export const T = {
     recitation: (platform: string, reciter: string, rewaya: string) => `التلاوة: ${platform} — الشيخ ${reciter}، رواية ${rewaya}.`,
     voice: 'الصوت الاصطناعي لا يقرأ القرآن أبدًا: التلاوة صوت حقيقي من مصدرها، وطبقة تحويل النص إلى صوت ترفض أي مقطع قرآني.',
     validator: 'مدقّق الاستشهاد: لا يُعرض أي رد إلا إذا كان كل سجلّ يستشهد به معتمدًا في المكتبة، وكان نص كل آية مطابقًا للنص المحفوظ حرفًا بحرف؛ وإلا يُعرض الرد الاحتياطي المعتمد.',
-    scholar: (n: number, date: string, parts: string) => `المراجعة الشرعية: ${n} بندًا بتاريخ ${date} (${parts}).`,
-    kinds: { 'station-record': 'سجلّ محتوى', 'test-item': 'بند اختبار', decision: 'قرار' } as Record<string, string>,
+    scholar: (dates: { date: string; count: number }[], parts: string) => `المراجعة الشرعية: ${dates.map((d) => `${d.count} بندًا بتاريخ ${d.date}`).join('، و')} (${parts}).`,
+    kinds: { 'station-record': 'سجلّ محتوى', 'test-item': 'بند اختبار', decision: 'قرار', image: 'صورة', 'eval-output-review': 'مراجعة مخرجات التقييم' } as Record<string, string>,
   },
 
   log: {

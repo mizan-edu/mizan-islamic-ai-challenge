@@ -439,7 +439,7 @@
       "station": "S3",
       "type": "ui",
       "role": "bridge",
-      "text": "اللهُ يُنبتُ البذرةَ ويُخرجُ منها النبتةَ.",
+      "text": "اللهُ يُنْبِتُ الْبِذْرَةَ وَيُخْرِجُ مِنْها النَّبْتَةَ.",
       "level": "A",
       "tts": true,
       "sourcePlatform": null,
@@ -449,7 +449,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
@@ -566,7 +566,7 @@
       "id": "S3.E1",
       "station": "S3",
       "type": "explanation",
-      "text": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ يُنزلُ المطرَ فيُخرجُ به النباتَ الأخضرَ؛ فاللهُ هو الذي يُنبتُ البذرةَ.",
+      "text": "تُعَلِّمُنا هٰذِهِ الْآيَةُ: اللهُ يُنْزِلُ الْمَطَرَ فَيُخْرِجُ بِهِ النَّباتَ الْأَخْضَرَ. فَاللهُ هُوَ الَّذي يُنْبِتُ الْبِذْرَةَ.",
       "basedOn": [
         "S3.V1-ALT",
         "S3.T1-ALT"
@@ -580,14 +580,14 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
       "id": "S3.E2",
       "station": "S3",
       "type": "explanation",
-      "text": "السَّماءُ في لُغتِنا العربيّةِ هي كلُّ ما ارتفعَ فوقَنا؛ فالطائرةُ العاليةُ نقولُ إنّها في السَّماءِ، والغيومُ التي ينزلُ منها المطرُ في السَّماءِ أيضًا.",
+      "text": "السَّماءُ في لُغَتِنا الْعَرَبِيَّةِ هِيَ كُلُّ ما ارْتَفَعَ فَوْقَنا. الطّائِرَةُ الْعالِيَةُ في السَّماءِ. وَالْغُيومُ الَّتي يَنْزِلُ مِنْها الْمَطَرُ في السَّماءِ أَيْضًا.",
       "basedOn": [
         "S3.V1-ALT",
         "S3.T1-ALT"
@@ -602,7 +602,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T16:25:19+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
@@ -647,7 +647,7 @@
       "station": "S3",
       "type": "ui",
       "role": "narration_card",
-      "text": "اللهُ يُنبتُ البذرةَ",
+      "text": "اللهُ يُنْبِتُ الْبِذْرَةَ",
       "imageBrief": "A row of three pictures: a seed, a sprout, and a tall leafy tree under a clear sky.",
       "level": "A",
       "tts": true,
@@ -658,7 +658,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
@@ -800,7 +800,7 @@
       "id": "S3.X4",
       "station": "S3",
       "type": "referral",
-      "text": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "text": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
       "level": "C",
       "tts": true,
       "sourcePlatform": null,
@@ -810,7 +810,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {

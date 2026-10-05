@@ -429,7 +429,7 @@
       "station": "S2",
       "type": "ui",
       "role": "bridge",
-      "text": "الماءُ نعمةٌ من اللهِ.",
+      "text": "الْماءُ نِعْمَةٌ مِنَ اللهِ.",
       "level": "A",
       "tts": true,
       "sourcePlatform": null,
@@ -439,7 +439,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
@@ -509,7 +509,7 @@
       "id": "S2.E1",
       "station": "S2",
       "type": "explanation",
-      "text": "تُعلِّمُنا هذه الآيةُ أنّ اللهَ جعلَ الماءَ لحياةِ كلِّ شيءٍ حيٍّ: النباتِ والحيوانِ والإنسانِ.",
+      "text": "تُعَلِّمُنا هٰذِهِ الْآيَةُ أَنَّ اللهَ جَعَلَ الْماءَ لِحَياةِ كُلِّ حَيٍّ. فَالنَّباتُ وَالْحَيَوانُ وَالْإِنْسانُ يَحْتاجونَ إِلى الْماءِ.",
       "basedOn": [
         "S2.V1",
         "S2.T1"
@@ -523,7 +523,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
@@ -568,7 +568,7 @@
       "station": "S2",
       "type": "ui",
       "role": "narration_card",
-      "text": "اللهُ جعلَ الماءَ لكلِّ حيٍّ",
+      "text": "اللهُ جَعَلَ الْماءَ لِكُلِّ حَيٍّ",
       "imageBrief": "A flower, a small bird and a camel each beside the same small pond under a clear sky.",
       "level": "A",
       "tts": true,
@@ -579,7 +579,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {
@@ -701,7 +701,7 @@
       "id": "S2.X3",
       "station": "S2",
       "type": "referral",
-      "text": "سؤالٌ جميلٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.",
+      "text": "سُؤالٌ جَميلٌ! هَيّا نَسْأَلْ أَهْلَنا عَنْهُ مَعًا.",
       "level": "C",
       "tts": true,
       "sourcePlatform": null,
@@ -711,7 +711,7 @@
       "reviewer1": "Hussein",
       "reviewer1At": "2026-10-04T10:59:16+03:00",
       "reviewer2": "Scholar reviewer (مراجع شرعي; name on file)",
-      "reviewer2At": "2026-10-04",
+      "reviewer2At": "2026-10-05T15:05:00+03:00",
       "status": "approved"
     },
     {

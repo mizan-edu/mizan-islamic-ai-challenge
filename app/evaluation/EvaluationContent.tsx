@@ -110,7 +110,7 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
         <p className="text-lg text-ink">{T.safety.voice}</p>
         <p className="text-lg text-ink">{T.safety.validator}</p>
         <p className="text-lg text-ink" data-scholar>
-          {T.safety.scholar(sc.count, sc.date, Object.entries(sc.byKind).map(([k, v]) => `${v} ${T.safety.kinds[k] ?? k}`).join('، '))} {T.scholarLabel}. <Src path={sc.source} />
+          {T.safety.scholar(sc.byDate, Object.entries(sc.byKind).map(([k, v]) => `${v} ${T.safety.kinds[k] ?? k}`).join('، '))} {T.scholarLabel}. <Src path={sc.source} />
         </p>
         <Src path={data.content.approved.source} />
       </Section>
