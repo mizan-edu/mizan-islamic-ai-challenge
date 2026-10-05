@@ -3,6 +3,8 @@
 // sentences are drafted for this page and describe the system only: no verse, tafsir or hadith text.
 // Numbers are never written here: they come from eval-data.ts at build time.
 
+import { TRY } from './try-text';
+
 export const REPO_URL = 'https://github.com/mizan-edu/mizan-islamic-ai-challenge';
 export const LIVE_URL = 'https://mizan-islamic-ai-challenge-three.vercel.app';
 export const sourceUrl = (path: string) => `${REPO_URL}/blob/main/${path}`;
@@ -34,22 +36,7 @@ export const T = {
   fontName: 'خط مجمع الملك فهد لطباعة المصحف الشريف',
   about: (verseSource: string) => `ميزان رحلة تعليمية للأطفال من 4 إلى 6 سنوات بعنوان «آيات الله في الماء والنبات»: يلاحظ الطفل صورة ويختار بالنقر، ثم يرى آية بنصّها من ${verseSource} بخط مجمع الملك فهد لطباعة المصحف الشريف، ويسمع تلاوتها الحقيقية، ويسأل أسئلة جاهزة يجيب عنها النظام من مكتبة محتوى معتمدة فقط. هذه الصفحة موجّهة للمحكّمين والكبار، وكل ما فيها بُني خلال 4–6 أكتوبر. كل رقم فيها يُقرأ عند البناء من ملفات النتائج المحفوظة في المستودع، وبجانبه رابط إلى الملف المصدر. نسبة النجاح هي نسبة الأسئلة التي اجتازت جميع الفحوص الآلية المحدّدة لها في كل تشغيل؛ أمّا التقييم البشري للفئات من B إلى G فمنفصل.`,
 
-  try: {
-    intro: 'اختر محطة، ثم اختر سؤالًا من مجموعة الاختبار المعتمدة أو اكتب سؤالك. يظهر الرد كما يراه الطفل تمامًا، وتحته مسار القرار كما في وضع المحكّم. لا يُخزَّن النص المكتوب ولا يُسجَّل، ولا يُنشأ أي حدث.',
-    station: 'المحطة',
-    item: 'سؤال من مجموعة الاختبار',
-    general: 'أسئلة عامة (بلا محطة)',
-    showItem: 'اعرض الرد',
-    typed: 'أو اكتب سؤالًا',
-    typedHint: (max: number) => `${max} حرفًا على الأكثر`,
-    sendTyped: 'أرسل السؤال',
-    excluded: (ids: string) => `لا تُعرض هنا البنود التي يُبنى سؤالها من نص آية معدَّل عمدًا (${ids})؛ نتائجها في جدول نتائج الاختبار.`,
-    busy: 'جارٍ إعداد الرد…',
-    capReached: 'تمّ بلوغ الحدّ اليومي للتجربة',
-    rateLimited: 'بلغتَ حدّ 10 أسئلة في الدقيقة؛ حاول بعد قليل.',
-    error: 'تعذّر الحصول على الرد؛ حاول مرة أخرى.',
-    replyLabel: 'الرد كما يراه الطفل',
-  },
+  try: TRY,
 
   results: {
     intro: (items: number, executions: number, model: string) => `مجموعة الاختبار يوم الاثنين: ${items} بندًا نشطًا، شُغِّل كل منها 3 مرات (${executions} تنفيذًا)، بالنموذج ${model}.`,

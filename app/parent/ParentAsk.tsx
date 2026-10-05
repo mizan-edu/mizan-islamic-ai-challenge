@@ -19,7 +19,7 @@ import { sourcesOf, traceDecision, type LensSource } from '@/app/_lib/lens';
 import type { ReplyView } from '@/app/_lib/reply-view';
 import type { RecordSource } from '@/app/_lib/station-view';
 import type { Trace } from '@/app/_lib/trace';
-import { T } from '@/app/evaluation/text';
+import { TRY } from '@/app/evaluation/try-text';
 import { PARENT_ASK } from './text';
 
 export type ParentAskResult = ReplyView & { trace: Trace | null };
@@ -81,7 +81,7 @@ export default function ParentAsk({ stations, sources, labels, maxChars, initial
       <h2 className="font-display text-2xl text-ink">{PARENT_ASK.heading}</h2>
       <p className="text-lg leading-relaxed text-ink-2">{PARENT_ASK.intro}</p>
       <label className="flex flex-col gap-2">
-        <span className="font-display text-lg text-ink">{T.try.station}</span>
+        <span className="font-display text-lg text-ink">{TRY.station}</span>
         <select className={field} value={station} onChange={(e) => setStation(e.target.value)} data-ask-station>
           {stations.map((s) => <option key={s.id} value={s.id}>{`${s.id} · ${s.title}`}</option>)}
         </select>
@@ -90,20 +90,20 @@ export default function ParentAsk({ stations, sources, labels, maxChars, initial
         <span className="font-display text-lg text-ink">{PARENT_ASK.question}</span>
         <textarea className={`${field} min-h-24`} value={typed} maxLength={maxChars} rows={2} disabled={capReached}
           onChange={(e) => setTyped(e.target.value)} autoComplete="off" spellCheck={false} data-ask-text aria-describedby="ask-hint" />
-        <span id="ask-hint" className="text-sm text-ink-2">{T.try.typedHint(maxChars)} · <span dir="ltr">{[...typed].length}/{maxChars}</span></span>
+        <span id="ask-hint" className="text-sm text-ink-2">{TRY.typedHint(maxChars)} · <span dir="ltr">{[...typed].length}/{maxChars}</span></span>
       </label>
-      <button type="button" className={button} disabled={capReached || status === 'busy' || !typed.trim()} onClick={() => void send()} data-ask-send>{T.try.sendTyped}</button>
+      <button type="button" className={button} disabled={capReached || status === 'busy' || !typed.trim()} onClick={() => void send()} data-ask-send>{TRY.sendTyped}</button>
 
       <div aria-live="polite" className="flex flex-col gap-2">
-        {capReached && <p className="rounded-xl bg-sun-soft px-4 py-3 text-lg text-ink" data-ask-cap>{T.try.capReached}</p>}
-        {status === 'busy' && <p className="text-ink-2">{T.try.busy}</p>}
-        {status === 'rate_limited' && <p className="rounded-xl bg-sun-soft px-4 py-3 text-ink" data-ask-rate>{T.try.rateLimited}</p>}
-        {status === 'error' && <p className="rounded-xl bg-sun-soft px-4 py-3 text-ink" data-ask-error>{T.try.error}</p>}
+        {capReached && <p className="rounded-xl bg-sun-soft px-4 py-3 text-lg text-ink" data-ask-cap>{TRY.capReached}</p>}
+        {status === 'busy' && <p className="text-ink-2">{TRY.busy}</p>}
+        {status === 'rate_limited' && <p className="rounded-xl bg-sun-soft px-4 py-3 text-ink" data-ask-rate>{TRY.rateLimited}</p>}
+        {status === 'error' && <p className="rounded-xl bg-sun-soft px-4 py-3 text-ink" data-ask-error>{TRY.error}</p>}
       </div>
 
       {result && (
         <div className="flex flex-col gap-3" data-ask-result={result.behaviour}>
-          <div className="card flex flex-col gap-4 p-5" aria-label={T.try.replyLabel} data-ask-reply>
+          <div className="card flex flex-col gap-4 p-5" aria-label={TRY.replyLabel} data-ask-reply>
             {result.segments.filter((s) => s.kind === 'text').map((s) => <p key={s.recordId} className="font-display text-2xl leading-relaxed text-ink" data-line={s.recordId}>{s.text}</p>)}
             {result.verses.map((v) => <VerseCard key={v.id} verse={v} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />)}
           </div>
