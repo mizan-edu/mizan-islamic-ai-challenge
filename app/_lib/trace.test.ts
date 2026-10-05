@@ -11,11 +11,11 @@ import { item, libraryWithoutRules, runtimeLibrary } from './test-helpers';
 
 const lib = runtimeLibrary();
 const ARABIC = /[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]/;
-const KEYS = ['route', 'behaviour', 'level', 'classifierLevel', 'model', 'retrieved', 'thresholds', 'cited', 'validator', 'latencyMs'];
+const KEYS = ['route', 'behaviour', 'level', 'classifierLevel', 'provider', 'model', 'retrieved', 'thresholds', 'cited', 'validator', 'latencyMs'];
 
 function expectComplete(trace: Trace, input: string) {
   expect(Object.keys(trace).sort()).toEqual([...KEYS].sort());
-  expect(Object.keys(trace.route).sort()).toEqual(['code', 'questionId', 'ruleIds', 'type', 'verseId']);
+  expect(Object.keys(trace.route).sort()).toEqual(['code', 'fallbackReason', 'questionId', 'ruleIds', 'type', 'verseId']);
   expect(trace.route.code).toMatch(/^[A-Z_]+(\+LEVEL_FLOOR)?$/);
   expect(['A', 'B', 'C', 'D', 'OUT_OF_SCOPE', 'NA']).toContain(trace.level);
   expect(trace.model.length).toBeGreaterThan(0);
@@ -35,7 +35,7 @@ function expectComplete(trace: Trace, input: string) {
 describe('every route type produces a complete trace of IDs and codes', () => {
   it('router rule', async () => {
     const text = item('D06').input.text;
-    const { trace } = await answerWithTrace(lib, { stationId: 'S3', text }, { classifier: vi.fn(), modelId: 'FIXTURE-MODEL' });
+    const { trace } = await answerWithTrace(lib, { stationId: 'S3', text }, { classifier: vi.fn(async () => null), modelId: 'FIXTURE-MODEL' });
     expectComplete(trace, text);
     expect(trace.route).toMatchObject({ type: 'rule', code: 'ROUTER_RULE' });
     expect(trace.route.ruleIds).toContain('RR-D-VERSE-CLAIM');

@@ -18,6 +18,7 @@ import { MOMENT, MomentOverlay, prefersReducedMotion, type MomentPicture } from 
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
+export const ASK_TIMEOUT_MS = 15000;
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" className="size-9 -scale-x-100" aria-hidden="true"><path d="M5 12h12m-5-6 6 6-6 6" stroke="currentColor" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -88,6 +89,7 @@ export interface AskReply {
   segments: { kind: 'text' | 'verse'; recordId: string; text: string }[];
   verses: VerseView[];
   event: Record<string, unknown> | null;
+  llmEvent?: Record<string, unknown> | null; // A4: secondary provider or static tier answered
   trace?: Trace | null; // judge mode only (A1)
 }
 export interface AskState { id: string; reply: AskReply | null; busy: boolean }
@@ -131,9 +133,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   const askQuestion = async (questionId: string) => {
     setAsk({ id: questionId, reply: null, busy: true });
     try {
-      const res = await fetch(judge ? '/api/ask?judge=1' : '/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ stationId: view.stationId, questionId }) });
+      // The server's provider chain answers within 14 s; the child never waits more than ASK_TIMEOUT_MS.
+      const res = await fetch(judge ? '/api/ask?judge=1' : '/api/ask', { signal: AbortSignal.timeout(ASK_TIMEOUT_MS), method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ stationId: view.stationId, questionId }) });
       const reply = (await res.json()) as AskReply;
-      if (reply.event) addEvents([reply.event]);
+      addEvents([reply.event, reply.llmEvent].filter((e): e is Record<string, unknown> => Boolean(e)));
       setAsk({ id: questionId, reply, busy: false });
     } catch {
       setAsk({ id: questionId, reply: null, busy: false });

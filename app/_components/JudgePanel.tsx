@@ -24,7 +24,7 @@ function Row({ label, children, field }: { label?: string; children: React.React
 export default function JudgePanel({ trace, labels }: { trace: Trace; labels: Labels }) {
   if (!labels.judgeMode) return null;
   const r = trace.route;
-  const routeParts = [r.type, r.code, r.questionId, r.verseId, ...r.ruleIds].filter(Boolean);
+  const routeParts = [r.type, r.code, r.fallbackReason, r.questionId, r.verseId, ...r.ruleIds].filter(Boolean);
   const v = trace.validator;
   return (
     <details open className="mt-6 self-stretch rounded-xl border border-stone bg-card px-4 text-sm" data-judge-panel>
@@ -34,7 +34,7 @@ export default function JudgePanel({ trace, labels }: { trace: Trace; labels: La
         <Row label={labels.judgeLevel} field="level"><Code>{trace.level}</Code></Row>
         <Row label={labels.judgeClassifierLevel} field="classifierLevel"><Code>{trace.classifierLevel ?? '—'}</Code></Row>
         <Row label={labels.judgeModel} field="model">
-          {trace.model === NO_MODEL_CALL ? <span>{labels.judgeNoModelCall ?? NO_MODEL_CALL}</span> : <Code>{trace.model}</Code>}
+          {trace.model === NO_MODEL_CALL ? <span>{labels.judgeNoModelCall ?? NO_MODEL_CALL}</span> : <Code>{[trace.provider, trace.model].filter(Boolean).join(' · ')}</Code>}
         </Row>
         <Row label={labels.judgeRetrieved} field="retrieved">
           <Code>{trace.retrieved.map((x) => `${x.questionId ? `${x.questionId}→` : ''}${x.id} ${x.score ?? '–'}`).join(' · ') || '—'}</Code>

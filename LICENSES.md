@@ -52,3 +52,10 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Processing:** ffmpeg (silence trimmed, length capped, 30 ms fade-in, 150 ms fade-out, normalised to -20 LUFS, mono 64 kbps MP3).
 - **Never with Qur'an:** no effect plays while a recitation is playing; a running effect stops when one starts (D38). Parents can turn all effects off.
 - **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]
+
+## OpenAI API (classifier fallback only)
+
+- **Use:** secondary provider for the model classifier only (A4, D42), called when the primary (Anthropic) times out after 8 s, returns an HTTP error or returns invalid output. It never writes text for the child: it returns a level and a record ID from the approved candidates, validated exactly as the primary's output.
+- **Model:** `gpt-5.4-mini-2026-03-17`, set by the environment variable `LLM_FALLBACK_MODEL` (never hard-coded); key in `OPENAI_API_KEY`.
+- **What is sent:** the classifier prompt, the anonymous question text and the candidate record IDs with their approved non-Qur'anic text (verses and tafsir by reference only). Never names, ages, voice, device IDs or any other personal data.
+- **Terms:** OpenAI API terms of the project account. [Terms to be confirmed and linked by Hussein before submission.]

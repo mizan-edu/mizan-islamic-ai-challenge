@@ -12,10 +12,12 @@ import { toVerseView, type VerseView } from '@/app/_lib/station-view';
 import { answerWithTrace, isSafeTrace, NO_MODEL_CALL, type Trace } from '@/app/_lib/trace';
 
 export const dynamic = 'force-dynamic';
+// The provider chain takes at most 8 s + 6 s (A4, D42); leave room above it.
+export const maxDuration = 20;
 
 const ID = /^S\d+(\.[A-Za-z0-9-]+)*$/;
 
-function respond(lib: ReturnType<typeof loadLibrary>, reply: ReturnType<typeof fallbackReply>, event: unknown, trace?: Trace | null) {
+function respond(lib: ReturnType<typeof loadLibrary>, reply: ReturnType<typeof fallbackReply>, event: unknown, trace?: Trace | null, llmEvent?: unknown) {
   const verses: VerseView[] = reply.segments
     .filter((s) => s.kind === 'verse')
     .map((s) => lib.byId.get(s.recordId))
@@ -27,6 +29,7 @@ function respond(lib: ReturnType<typeof loadLibrary>, reply: ReturnType<typeof f
     segments: reply.segments.map((s) => ({ kind: s.kind, recordId: s.recordId, text: s.text })),
     verses,
     event,
+    ...(llmEvent ? { llmEvent } : {}), // A4: only when the secondary provider or the static tier answered
     ...(trace !== undefined ? { trace: trace && isSafeTrace(trace) ? trace : null } : {}),
   });
 }
@@ -34,8 +37,8 @@ function respond(lib: ReturnType<typeof loadLibrary>, reply: ReturnType<typeof f
 // Trace for a turn the pipeline could not complete: the safe fallback was shown.
 function errorTrace(reply: ReturnType<typeof fallbackReply>): Trace {
   return {
-    route: { type: 'fallback', code: 'PIPELINE_ERROR', ruleIds: [], questionId: null, verseId: null },
-    behaviour: reply.behaviour, level: reply.level, classifierLevel: null, model: NO_MODEL_CALL, retrieved: [],
+    route: { type: 'fallback', code: 'PIPELINE_ERROR', fallbackReason: null, ruleIds: [], questionId: null, verseId: null },
+    behaviour: reply.behaviour, level: reply.level, classifierLevel: null, provider: null, model: NO_MODEL_CALL, retrieved: [],
     thresholds: { question: AQ_MIN_SCORE, questionSharedWords: AQ_MIN_SHARED, verse: VERSE_MIN_SCORE }, cited: reply.citations, validator: { result: 'pass' }, latencyMs: 0,
   };
 }
@@ -54,7 +57,7 @@ export async function POST(request: Request): Promise<Response> {
     const aq = station?.anticipatedQuestions.find((q) => q.id === body.questionId);
     if (!station || !aq) return Response.json({ error: 'not found' }, { status: 404 });
     const res = await answerWithTrace(lib, { stationId, text: aq.childQuestion }, { classifier: classifierFromEnv(), modelId: process.env.LLM_MODEL ?? null });
-    return respond(lib, res.reply, res.event, judge ? res.trace : undefined);
+    return respond(lib, res.reply, res.event, judge ? res.trace : undefined, res.llmEvent);
   } catch (e) {
     console.error('api/ask', e instanceof Error ? e.name : 'error');
     const reply = fallbackReply(lib, stationId);

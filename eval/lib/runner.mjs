@@ -10,10 +10,16 @@ import { behaviourClass, buildMutatedInput, citedIds, mean, p95, redactReply, re
 // USD per million tokens (list price). Unknown models get cost null rather than a guess.
 export const PRICES = { 'claude-sonnet-5-5': { input: 2, output: 10, cacheRead: 0.2 } };
 
+// Each call is priced by its own model (call.model; the run's model otherwise). Any unpriced call
+// makes the cost null.
 export function costUsd(model, calls) {
-  const p = PRICES[model];
-  if (!p) return null;
-  return calls.reduce((n, c) => n + ((c.inputTokens ?? 0) * p.input + (c.outputTokens ?? 0) * p.output + (c.cacheReadTokens ?? 0) * p.cacheRead) / 1e6, 0);
+  let total = 0;
+  for (const c of calls) {
+    const p = PRICES[c.model ?? model];
+    if (!p) return null;
+    total += ((c.inputTokens ?? 0) * p.input + (c.outputTokens ?? 0) * p.output + (c.cacheReadTokens ?? 0) * (p.cacheRead ?? 0)) / 1e6;
+  }
+  return total;
 }
 
 // The model's parsed classifier output, kept only if it is a level plus an ID-shaped record ID (or
@@ -48,11 +54,11 @@ export function retrievalScores(lib, stationId, text, retrieval) {
 export function instrumentClient(client, kind, current) {
   return {
     messages: {
-      parse: async (params) => {
+      parse: async (params, options) => {
         const t0 = performance.now();
-        const call = { kind, ms: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, stopReason: null, error: null };
+        const call = { kind, model: params?.model ?? null, ms: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0, stopReason: null, error: null };
         try {
-          const res = await client.messages.parse(params);
+          const res = await client.messages.parse(params, options);
           call.inputTokens = res.usage?.input_tokens ?? 0;
           call.outputTokens = res.usage?.output_tokens ?? 0;
           call.cacheReadTokens = res.usage?.cache_read_input_tokens ?? 0;
@@ -90,8 +96,12 @@ export async function runItems({ items, runs, lib, guardLib, surahs, deps, meta,
       calls.length = 0;
       // The classifier's validated return for this execution (null = invalid or unavailable).
       let classifierOutput;
-      const classifier = deps.classifier
-        ? async (ci) => { const out = await deps.classifier(ci); classifierOutput = out ? { level: out.level, recordId: out.recordId } : null; return out; }
+      const keep = (out) => { classifierOutput = out ? { level: out.level, recordId: out.recordId } : null; };
+      const inner = deps.classifier;
+      // A provider chain (A4) keeps withOutcome so the pipeline still learns the tier and provider.
+      const classifier = inner
+        ? Object.assign(async (ci) => { const out = await inner(ci); keep(out); return out; },
+          inner.withOutcome ? { withOutcome: async (ci) => { const r = await inner.withOutcome(ci); keep(r.output); return r; } } : {})
         : null;
       const t0 = performance.now();
       const res = await answerQuestion(lib, input, { ...deps, classifier });
@@ -109,6 +119,7 @@ export async function runItems({ items, runs, lib, guardLib, surahs, deps, meta,
         referralWording: refersToParents(res.reply, lib), // D41
         routeSource: res.route.source, routeReason: res.route.reason, ruleIds: res.route.ruleIds,
         classifierCalled: classifierOutput !== undefined, classifierOutput: classifierOutput ?? null,
+        llmTier: res.llm?.tier ?? null, llmReason: res.llm?.reason ?? null, llmProvider: res.llm?.provider ?? null, llmModel: res.llm?.model ?? null, // A4
         matchedQuestion: retrieval.aq ? { id: retrieval.aq.question.id, responseRecordId: retrieval.aq.record.id, score: Number(retrieval.aq.score.toFixed(3)), used: res.route.source === 'aq' } : null,
         retrievalScores: retrievalScores(lib, input.stationId, input.text, retrieval),
         expectedCitations: item.expectedCitations ?? [], citedRecordIds: citedIds(res.reply),
@@ -190,6 +201,8 @@ export function summarize({ meta, results, skipped, categories }) {
   const lat = results.map((r) => r.latencyMs);
   const errors = calls.filter((c) => c.error);
   L.push('## Cost and latency', '');
+  const tiers = ['primary', 'secondary', 'static'].map((t) => `${t} ${results.filter((r) => r.llmTier === t).length}`).join(', ');
+  L.push(`- Classifier turns by provider tier (A4): ${tiers}${meta.fallbackModelId ? `; secondary model \`${meta.fallbackModelId}\`` : ''}${meta.forcePrimaryFail ? '; primary forced to fail (FORCE_PRIMARY_FAIL=1, local only)' : ''}`);
   L.push(`- Model calls: ${calls.length} (${results.filter((r) => r.modelCalls.length).length} of ${results.length} executions reached the model; the rest were answered by rules, anticipated questions or verse matching)`);
   L.push(`- API errors: ${errors.length}${errors.length ? ` (${[...new Set(errors.map((e) => e.error))].join(', ')})` : ''}`);
   L.push(`- Tokens: ${calls.reduce((n, c) => n + c.inputTokens, 0)} input, ${calls.reduce((n, c) => n + c.outputTokens, 0)} output`);

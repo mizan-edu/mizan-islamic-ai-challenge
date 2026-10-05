@@ -14,10 +14,10 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const { loadLibrary } = await import('../app/_lib/library.ts');
 const { loadSurahNames } = await import('../app/_lib/placeholders.ts');
 const { createAnthropicClient } = await import('../app/_lib/anthropic.ts');
-const { createAnthropicClassifier, SYSTEM_PROMPT } = await import('../app/_lib/classifier.ts');
+const { anthropicProvider, createChainClassifier, failingProvider, forcePrimaryFail, openaiProviderFromEnv, SYSTEM_PROMPT } = await import('../app/_lib/classifier.ts');
 const { createAnthropicRephraser } = await import('../app/_lib/rephraser.ts');
 const { guardLibrary } = await import('../scripts/assets/narrate-lib.mjs');
-const { instrumentClient, runItems, selectItems, summarize } = await import('./lib/runner.mjs');
+const { instrumentClient, runItems, sanitizeClassifierOutput, selectItems, summarize } = await import('./lib/runner.mjs');
 
 // ---- arguments -------------------------------------------------------------------------------
 const args = process.argv.slice(2);
@@ -33,7 +33,8 @@ const fromFile = (name) => {
   const l = fileLines.find((x) => x.replace(/^\s*export\s+/, '').trimStart().startsWith(`${name}=`));
   return l ? l.slice(l.indexOf('=') + 1).trim().replace(/^["']|["']$/g, '') : undefined;
 };
-const NAMES = ['ANTHROPIC_API_KEY', 'ANTHROPIC_WORKSPACE_ID', 'LLM_PROVIDER', 'LLM_MODEL', 'LLM_EFFORT', 'LLM_REPHRASE'];
+const NAMES = ['ANTHROPIC_API_KEY', 'ANTHROPIC_WORKSPACE_ID', 'LLM_PROVIDER', 'LLM_MODEL', 'LLM_EFFORT', 'LLM_REPHRASE',
+  'OPENAI_API_KEY', 'LLM_FALLBACK_MODEL', 'LLM_FALLBACK_EFFORT', 'FORCE_PRIMARY_FAIL', 'VERCEL'];
 const env = Object.fromEntries(NAMES.map((n) => [n, process.env[n]?.trim() || fromFile(n)]).filter(([, v]) => v));
 
 // ---- model, built as classifierFromEnv / rephraserFromEnv do, with a recording client --------
@@ -42,8 +43,13 @@ const current = () => calls;
 let classifier = null;
 let rephraser = null;
 const effort = ['low', 'medium', 'high'].includes(env.LLM_EFFORT) ? env.LLM_EFFORT : undefined;
+// Provider chain exactly as classifierFromEnv builds it (A4, D42), with recording on both providers.
+// FORCE_PRIMARY_FAIL=1 (local evidence runs only; ignored on Vercel) makes the primary fail every call.
+const forced = forcePrimaryFail(env);
+const secondary = openaiProviderFromEnv(env, (c) => current().push({ kind: 'classifier-secondary', ...c, parsed: sanitizeClassifierOutput(c.parsed) }));
 if (env.LLM_PROVIDER === 'anthropic' && env.LLM_MODEL) {
-  classifier = createAnthropicClassifier({ model: env.LLM_MODEL, effort, client: instrumentClient(createAnthropicClient(env), 'classifier', current) });
+  const primary = forced ? failingProvider(env.LLM_MODEL) : anthropicProvider({ model: env.LLM_MODEL, effort, client: instrumentClient(createAnthropicClient(env), 'classifier', current) });
+  classifier = createChainClassifier({ primary, secondary });
   if (env.LLM_REPHRASE === 'on') rephraser = createAnthropicRephraser({ model: env.LLM_MODEL, client: instrumentClient(createAnthropicClient(env), 'rephraser', current) });
 }
 
@@ -61,6 +67,7 @@ const meta = {
   commit: git('rev-parse', 'HEAD'), dirty: git('status', '--porcelain').length > 0,
   runnerSha256: Object.fromEntries(runnerFiles.map((f) => [f, sha256(readFileSync(path.join(ROOT, f)))])),
   provider: classifier ? 'anthropic' : 'none (classifier off)', modelId: classifier ? env.LLM_MODEL : null,
+  fallbackModelId: secondary?.model ?? null, forcePrimaryFail: forced,
   effort: effort ?? null, rephrase: Boolean(rephraser), promptHash: sha256(SYSTEM_PROMPT), contentVersion,
 };
 
@@ -72,9 +79,9 @@ const lib = loadLibrary(contentDir);
 const allRecords = ['S1', 'S2', 'S3'].flatMap((s) => JSON.parse(readFileSync(path.join(contentDir, 'stations', `${s}.json`), 'utf8')).records);
 const guardLib = guardLibrary(lib, allRecords);
 
-console.log(`${runId}: ${active.length} active items x ${runs} run(s); model ${meta.modelId ?? 'none'}; skipped ${skipped.map((s) => s.id).join(' ') || 'none'}`);
+console.log(`${runId}: ${active.length} active items x ${runs} run(s); model ${meta.modelId ?? 'none'}; fallback ${meta.fallbackModelId ?? 'none'}${forced ? ' (primary forced to fail)' : ''}; skipped ${skipped.map((s) => s.id).join(' ') || 'none'}`);
 const results = await runItems({ items: active, runs, lib, guardLib, surahs: loadSurahNames(contentDir), deps: { classifier, rephraser }, meta, calls });
-for (const r of results) console.log(`  ${r.itemId} r${r.run}: ${r.passed ? 'PASS' : 'FAIL'} level ${r.assignedLevel} ${r.behaviourClass} ${r.latencyMs} ms${r.modelCalls.length ? ` (${r.modelCalls.length} model call)` : ''}`);
+for (const r of results) console.log(`  ${r.itemId} r${r.run}: ${r.passed ? 'PASS' : 'FAIL'} level ${r.assignedLevel} ${r.behaviourClass} ${r.latencyMs} ms${r.modelCalls.length ? ` (${r.modelCalls.length} model call)` : ''}${r.llmTier && r.llmTier !== 'primary' ? ` tier ${r.llmTier} (${r.llmReason})` : ''}`);
 
 const outDir = path.join(ROOT, 'eval', 'results');
 mkdirSync(outDir, { recursive: true });

@@ -1,13 +1,16 @@
 // Concept-level events, on the device only (CLAUDE.md §6, R8). The schema is fixed:
 // { stationId, conceptId?, event, choiceId?, level?, sourceIds, t } — IDs, a level and a timestamp.
 // No free text, no names, no audio: unknown keys and non-ID values are rejected.
+// llm_fallback (A4, D42) has its own fixed shape: { stationId, event, tier, reason, t } — nothing else.
 
 import type { Reply } from './reply';
 
 export type EventName = 'answered' | 'hint_used' | 'verse_shown' | 'narrated' | 'referred' | 'safety_referral';
+export type LlmFallbackTier = 'secondary' | 'static';
+export type LlmFallbackReason = 'timeout' | 'http_error' | 'invalid_output';
 export type EventLevel = 'A' | 'B' | 'C' | 'D' | 'OUT_OF_SCOPE';
 
-export interface SessionEvent {
+export interface ConceptEvent {
   stationId: string;
   conceptId?: string;
   event: EventName;
@@ -16,6 +19,8 @@ export interface SessionEvent {
   sourceIds: string[];
   t: number;
 }
+export interface LlmFallbackEvent { stationId: string; event: 'llm_fallback'; tier: LlmFallbackTier; reason: LlmFallbackReason; t: number }
+export type SessionEvent = ConceptEvent | LlmFallbackEvent;
 
 const EVENTS = new Set<EventName>(['answered', 'hint_used', 'verse_shown', 'narrated', 'referred', 'safety_referral']);
 const LEVELS = new Set<EventLevel>(['A', 'B', 'C', 'D', 'OUT_OF_SCOPE']);
@@ -24,7 +29,27 @@ const ID = /^[A-Z][A-Z0-9]*(\.[A-Za-z0-9-]+)*$/; // e.g. S1, S1.C2, S1.Q2.c3, S3
 
 export class EventError extends Error {}
 
+const TIERS = new Set(['secondary', 'static']);
+const REASONS = new Set(['timeout', 'http_error', 'invalid_output']);
+const LLM_ALLOWED = new Set(['stationId', 'event', 'tier', 'reason', 't']);
+
+function makeLlmFallbackEvent(input: Record<string, unknown>): LlmFallbackEvent {
+  for (const k of Object.keys(input)) if (!LLM_ALLOWED.has(k)) throw new EventError(`field not allowed: ${k}`);
+  const { stationId, tier, reason, t } = input;
+  if (typeof stationId !== 'string' || !/^S\d+$/.test(stationId)) throw new EventError('stationId');
+  if (typeof tier !== 'string' || !TIERS.has(tier)) throw new EventError('tier');
+  if (typeof reason !== 'string' || !REASONS.has(reason)) throw new EventError('reason');
+  if (typeof t !== 'number' || !Number.isInteger(t) || t < 0) throw new EventError('t');
+  return { stationId, event: 'llm_fallback', tier: tier as LlmFallbackTier, reason: reason as LlmFallbackReason, t };
+}
+
+// The llm_fallback event for a turn answered by the secondary provider or the static tier.
+export function llmFallbackEvent(stationId: string, tier: LlmFallbackTier, reason: LlmFallbackReason, nowSeconds: number): LlmFallbackEvent {
+  return makeLlmFallbackEvent({ stationId, event: 'llm_fallback', tier, reason, t: nowSeconds });
+}
+
 export function makeEvent(input: Record<string, unknown>): SessionEvent {
+  if (input.event === 'llm_fallback') return makeLlmFallbackEvent(input);
   for (const k of Object.keys(input)) if (!ALLOWED.has(k)) throw new EventError(`field not allowed: ${k}`);
   const { stationId, conceptId, event, choiceId, level, sourceIds, t } = input;
   if (typeof stationId !== 'string' || !/^S\d+$/.test(stationId)) throw new EventError('stationId');
@@ -47,14 +72,14 @@ const EVENT_FOR: Record<Reply['behaviour'], EventName> = {
 };
 
 // The event for a reply: IDs and level only — never the question text.
-export function eventForReply(reply: Reply, stationId: string, nowSeconds: number): SessionEvent {
+export function eventForReply(reply: Reply, stationId: string, nowSeconds: number): ConceptEvent {
   return makeEvent({
     stationId,
     event: EVENT_FOR[reply.behaviour],
     ...(reply.level !== 'NA' ? { level: reply.level } : {}),
     sourceIds: reply.citations,
     t: nowSeconds,
-  });
+  }) as ConceptEvent;
 }
 
 // In-memory session log (the client mirrors it to sessionStorage; cleared by the parent button).

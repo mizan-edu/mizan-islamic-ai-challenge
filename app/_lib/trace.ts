@@ -2,7 +2,7 @@
 // system. IDs, codes and numbers only: never record text and never the child's input text
 // (CLAUDE.md §6). Built on the server and sent only when judge mode asks for it; nothing is stored.
 
-import type { Classifier } from './classifier';
+import type { Classifier, LlmOutcome } from './classifier';
 import { NO_MODEL_CALL } from './judge';
 import type { RouteLevel } from './levels';
 import type { Library } from './library';
@@ -13,7 +13,9 @@ import type { Behaviour, RouteInput, RouteResult } from './router';
 
 export { NO_MODEL_CALL };
 
-export type RouteType = 'rule' | 'anticipated_question' | 'verse_match' | 'model_classifier' | 'fallback';
+// fallback:secondary / fallback:static (A4, D42): the classifier turn was answered by the secondary
+// provider, or by the static tier after both providers failed.
+export type RouteType = 'rule' | 'anticipated_question' | 'verse_match' | 'model_classifier' | 'fallback' | 'fallback:secondary' | 'fallback:static';
 
 export interface RetrievedRecord {
   id: string;
@@ -23,11 +25,12 @@ export interface RetrievedRecord {
 }
 
 export interface Trace {
-  route: { type: RouteType; code: string; ruleIds: string[]; questionId: string | null; verseId: string | null };
+  route: { type: RouteType; code: string; fallbackReason: string | null; ruleIds: string[]; questionId: string | null; verseId: string | null };
   behaviour: Behaviour;
   level: RouteLevel; // final level of the reply shown
   classifierLevel: RouteLevel | null; // the model's own level, when it was called and answered validly
-  model: string; // model ID, or NO_MODEL_CALL
+  provider: string | null; // provider whose output was used: anthropic | openai | static (null: no model call)
+  model: string; // model ID actually used, 'none' for the static tier, or NO_MODEL_CALL
   retrieved: RetrievedRecord[];
   thresholds: { question: number; questionSharedWords: number; verse: number };
   cited: string[];
@@ -68,16 +71,19 @@ export interface TraceParts {
   retrieval: Retrieval;
   retrieved: RetrievedRecord[];
   classifier: { called: boolean; level: RouteLevel | null };
+  llm?: LlmOutcome | null;
   modelId: string | null;
   latencyMs: number;
 }
 
 export function buildTrace({ result, retrieval, retrieved, classifier, modelId, latencyMs }: TraceParts): Trace {
-  const { route, reply, validation } = result;
+  const { route, reply, validation, llm } = result;
+  const type: RouteType = llm?.tier === 'secondary' ? 'fallback:secondary' : llm?.tier === 'static' ? 'fallback:static' : ROUTE_TYPE[route.source];
   return {
     route: {
-      type: ROUTE_TYPE[route.source],
+      type,
       code: route.code,
+      fallbackReason: llm && llm.tier !== 'primary' ? llm.reason : null,
       ruleIds: route.ruleIds,
       questionId: route.source === 'aq' ? retrieval.aq?.question.id ?? null : null,
       verseId: route.source === 'verse' ? route.recordId : null,
@@ -85,7 +91,8 @@ export function buildTrace({ result, retrieval, retrieved, classifier, modelId, 
     behaviour: reply.behaviour,
     level: reply.level,
     classifierLevel: classifier.called ? classifier.level : null,
-    model: classifier.called ? modelId ?? 'unknown' : NO_MODEL_CALL,
+    provider: llm ? llm.provider ?? 'static' : classifier.called ? 'unknown' : null,
+    model: llm ? llm.model ?? 'none' : classifier.called ? modelId ?? 'unknown' : NO_MODEL_CALL,
     retrieved,
     thresholds: { question: AQ_MIN_SCORE, questionSharedWords: AQ_MIN_SHARED, verse: VERSE_MIN_SCORE },
     cited: reply.citations,
@@ -112,8 +119,12 @@ export interface TracedResult extends PipelineResult { trace: Trace }
 export async function answerWithTrace(lib: Library, input: RouteInput, deps: PipelineDeps & { modelId?: string | null } = {}): Promise<TracedResult> {
   const seen = { called: false, level: null as RouteLevel | null };
   const inner = deps.classifier ?? null;
+  // A chain classifier keeps its withOutcome, so the pipeline still learns the tier, provider and model.
   const classifier: Classifier | null = inner
-    ? async (ci) => { seen.called = true; const out = await inner(ci); seen.level = out?.level ?? null; return out; }
+    ? Object.assign(
+      (async (ci) => { seen.called = true; const out = await inner(ci); seen.level = out?.level ?? null; return out; }) as Classifier,
+      inner.withOutcome ? { withOutcome: async (ci: Parameters<NonNullable<Classifier['withOutcome']>>[0]) => { seen.called = true; const r = await inner.withOutcome!(ci); seen.level = r.output?.level ?? null; return r; } } : {},
+    )
     : null;
   const t0 = performance.now();
   const result = await answerQuestion(lib, input, { ...deps, classifier });
