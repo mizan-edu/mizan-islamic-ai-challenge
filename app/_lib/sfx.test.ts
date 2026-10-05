@@ -1,10 +1,13 @@
 // Sound engine (D65) with a fake Web Audio context: nothing before the first tap; levels and ducking;
 // hard mute during recitation and on the verse step (running sounds stop); the session mute switch;
 // missing or failing files fail silently; the scene sound fades over 0.5 s; the ambience loop
-// crossfades. No audio is played.
+// crossfades; each untouched file gets its measured playback gain (D66), and the shipped files are the
+// ElevenLabs originals listed in SFX.json, with their C2PA credential. No audio is played.
 
+import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { dbToGain, LEVEL_DB, SCENE_CUE, SFX_CUES, sfxPath, SoundEngine, type ContextLike, type StorageLike } from './sfx';
+import { dbToGain, LEVEL_DB, SCENE_CUE, SFX_CUES, SFX_GAIN_DB, sfxPath, SoundEngine, type ContextLike, type StorageLike } from './sfx';
 
 class FakeParam {
   value = 1;
@@ -63,6 +66,42 @@ describe('sound files and levels', () => {
     expect(amb.gain.value).toBeCloseTo(dbToGain(-34), 5);
     engine.narrationStopped();
     expect(fx.gain.value).toBeCloseTo(dbToGain(-18), 5);
+  });
+});
+
+describe('shipped files and playback gain (D66)', () => {
+  const manifest = JSON.parse(readFileSync('public/sfx/SFX.json', 'utf8')) as { sounds: { name: string; path: string; bytes: number; sha256: string; playbackGainDb: number; peakDbfsAtGain: number; c2pa: { manifest: string } }[] };
+
+  it('the files are the untouched originals in SFX.json and still carry their C2PA manifest', () => {
+    expect(manifest.sounds.map((s) => s.name).sort()).toEqual([...SFX_CUES].sort());
+    for (const s of manifest.sounds) {
+      const f = readFileSync(`public${s.path}`);
+      expect(f.length, s.name).toBe(s.bytes);
+      expect(createHash('sha256').update(f).digest('hex'), s.name).toBe(s.sha256);
+      expect(f.subarray(0, 3).toString('latin1'), s.name).toBe('ID3'); // the tag that holds the credential
+      expect(f.includes(Buffer.from(s.c2pa.manifest)), s.name).toBe(true);
+      expect(s.c2pa.manifest, s.name).toMatch(/^urn:c2pa:[0-9a-f-]{36}$/);
+    }
+  });
+
+  it('the engine applies the gain in SFX.json, bringing each peak to about -3 dBFS', () => {
+    for (const s of manifest.sounds) {
+      expect(SFX_GAIN_DB[s.name as keyof typeof SFX_GAIN_DB], s.name).toBe(s.playbackGainDb);
+      expect(s.peakDbfsAtGain, s.name).toBeGreaterThan(-4);
+      expect(s.peakDbfsAtGain, s.name).toBeLessThan(-2);
+    }
+  });
+
+  it('each voice plays at its own gain, under the bus level', async () => {
+    const { ctx, engine } = setup();
+    engine.unlock();
+    engine.play('tap');
+    engine.startScene('rain');
+    await flush();
+    const [, , tapGain, rainGain] = ctx.gains;
+    expect(tapGain.gain.value).toBeCloseTo(dbToGain(22.5), 5);
+    expect(rainGain.gain.value).toBeCloseTo(dbToGain(-3), 5);
+    expect(ctx.gains[0].gain.value).toBeCloseTo(dbToGain(-18), 5);
   });
 });
 

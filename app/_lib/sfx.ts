@@ -1,5 +1,6 @@
 // Sound design (D65; replaces the D38/D40 player). Seven natural sounds from ElevenLabs Sound Effects,
-// normalised to a peak of about -3 dBFS (scripts/assets/mp3-gain.mjs): tap (a card press), aside (a
+// shipped untouched so their C2PA content credentials stay intact; each is brought to a peak of about
+// -3 dBFS at playback by its measured gain (SFX_GAIN_DB, also in public/sfx/SFX.json): tap (a card press), aside (a
 // card set aside), correct (a correct pick, at the start of the hero moment), rain / pour / grow (the
 // S1 / S2 / S3 moments, with the clip, fading out over 0.5 s at its end) and ambience (a quiet loop on
 // the map only, crossfaded at the loop point). Files: public/sfx/<cue>.mp3; a cue plays only if its
@@ -19,6 +20,9 @@ export type SfxCue = (typeof SFX_CUES)[number];
 export type SceneCue = 'rain' | 'pour' | 'grow';
 export const SCENE_CUE: Record<string, SceneCue> = { S1: 'rain', S2: 'pour', S3: 'grow' };
 export const sfxPath = (cue: SfxCue): string => `/sfx/${cue}.mp3`;
+
+// Playback gain per file, measured from the decoded originals (peak to about -3 dBFS).
+export const SFX_GAIN_DB: Record<SfxCue, number> = { tap: 22.5, aside: 7.5, correct: 19.5, rain: -3, pour: 13.5, grow: 13.5, ambience: 34.5 };
 
 export const SFX_KEY = 'mizan.sfx';
 export const dbToGain = (db: number): number => Math.pow(10, db / 20);
@@ -133,9 +137,10 @@ export class SoundEngine {
     try {
       const src = ctx.createBufferSource();
       const gain = ctx.createGain();
+      const level = dbToGain(SFX_GAIN_DB[cue]);
       src.buffer = buffer;
-      gain.gain.setValueAtTime(fadeInS > 0 ? 0 : 1, at);
-      if (fadeInS > 0) gain.gain.linearRampToValueAtTime(1, at + fadeInS);
+      gain.gain.setValueAtTime(fadeInS > 0 ? 0 : level, at);
+      if (fadeInS > 0) gain.gain.linearRampToValueAtTime(level, at + fadeInS);
       src.connect(gain);
       gain.connect(out);
       const voice: Voice = { src, gain, bus, cue };
@@ -213,7 +218,7 @@ export class SoundEngine {
       const v = this.startVoice('ambience', buf, 'ambience', at, xf);
       if (!v) return;
       // Fade out over the last crossfade, while the next pass fades in.
-      v.gain.gain.setValueAtTime(1, at + buf.duration - xf);
+      v.gain.gain.setValueAtTime(dbToGain(SFX_GAIN_DB.ambience), at + buf.duration - xf);
       v.gain.gain.linearRampToValueAtTime(0, at + buf.duration);
       v.src.stop(at + buf.duration + 0.02);
       const next = at + buf.duration - xf;

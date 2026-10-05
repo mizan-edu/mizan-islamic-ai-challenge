@@ -5220,6 +5220,21 @@
       "decisionRef": "D65",
       "after": "المؤثرات الصوتية مولَّدة بالذكاء الاصطناعي (ElevenLabs Sound Effects)، وهي أصوات طبيعية فقط: مطر وماء وأوراق ونسيم، دون موسيقى أو آلات أو أجراس، ولا يُشغَّل أيٌّ منها أثناء التلاوة أو في خطوة بطاقة الآية.",
       "source": "chat decision D65 (2026-10-06): DISCLOSURE sound line worded and approved by Hussein"
+    },
+    {
+      "id": "DOC.DISCLOSURE.md",
+      "kind": "doc-text",
+      "file": "DISCLOSURE.md",
+      "lines": "section 2, ElevenLabs row (narration)",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T01:20:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D66",
+      "before": "**السرد:** صوت Hams بنموذج eleven_v3، لـ93 سطرًا معتمدًا، من نصوص مشكولة بالكامل (2026-10-05، ومنها 11 سطرًا بعد المراجعة الشرعية الثالثة D46). **المؤثّرات:** سبعة مؤثّرات صوتية من الطبيعة بنموذج eleven_text_to_sound_v2 (2026-10-04، D40)، لا تُشغَّل أثناء التلاوة ويستطيع الوالدان إيقافها. لا يُرسَل أي نص قرآني أو تفسير أو حديث إلى الصوت الاصطناعي أبدًا.",
+      "after": "**السرد:** صوت Hams بنموذج eleven_v3، لـ93 سطرًا معتمدًا، من نصوص مشكولة بالكامل (2026-10-05، ومنها 11 سطرًا بعد المراجعة الشرعية الثالثة D46). لا يُرسَل أي نص قرآني أو تفسير أو حديث إلى الصوت الاصطناعي أبدًا.",
+      "source": "chat decision D66 (2026-10-06): the D40 sound-effects sentence removed from the old ElevenLabs row, because the D65 ElevenLabs Sound Effects row covers the sounds; narration wording unchanged"
     }
   ]
 }
