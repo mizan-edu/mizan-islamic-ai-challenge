@@ -167,3 +167,6 @@ eval/.a2-raw/
 
 # Local preview server config for Claude Code (not part of the app).
 .claude/launch.json
+
+# Video inputs for Higgsfield image-to-video (D60): local working copies of approved pictures, not shipped.
+docs/video-input/
