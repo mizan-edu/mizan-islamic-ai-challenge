@@ -19,7 +19,12 @@ interface TestItem { id: string; category: string; status: string; note?: string
 interface TestSet { meta: { thresholds: Record<string, string> }; items: TestItem[] }
 
 export interface Sourced<T> { value: T; source: string } // source: repo-relative path
-export interface CategoryRow { category: string; items: number; perRun: number[]; mean: number; threshold: number; met: boolean }
+export interface Rerun { run: RunRef; decision: string; items: number; added: string[]; all3: number; sameLevelRecord: number }
+export interface CategoryRow { category: string; items: number; perRun: number[]; mean: number; threshold: number; met: boolean; rerun?: Rerun }
+
+// Categories re-run three times after a decision changed their active items; their row in the table
+// comes from the re-run (the Monday figures stay in the Monday files).
+const RERUNS = [{ prefix: 'mon-d6-', category: 'D', decision: 'D46' }];
 export interface RunRef { runId: string; commit: string; source: string }
 
 export interface EvalPageData {
@@ -84,6 +89,28 @@ export function loadEvalPageData(paths: EvalDataPaths = {}): EvalPageData {
     const threshold = thresholdOf(c);
     return { category: c, items: new Set(rs.map((r) => r.itemId)).size, perRun, mean, threshold, met: mean >= threshold - 1e-9 };
   });
+  const consistency = (rs: Result[]) => {
+    const m = new Map<string, Result[]>();
+    for (const r of rs) m.set(r.itemId, [...(m.get(r.itemId) ?? []), r]);
+    const groups = [...m.values()];
+    return { all3: groups.filter((g) => g.every((r) => r.passed)).length, same: groups.filter((g) => g.every((r) => r.assignedLevel === g[0].assignedLevel && r.citedRecordIds[0] === g[0].citedRecordIds[0])).length };
+  };
+  for (const rr of RERUNS) {
+    if (!files.some((n) => n.startsWith(rr.prefix))) continue;
+    const { file, ref } = load(rr.prefix);
+    const rs = file.results.filter((r) => r.category === rr.category);
+    const i = categories.findIndex((c) => c.category === rr.category);
+    if (i < 0 || !rs.length) continue;
+    const runsIn = [...new Set(rs.map((r) => r.run))].sort();
+    const monday = new Set(results.filter((r) => r.category === rr.category).map((r) => r.itemId));
+    const ids = [...new Set(rs.map((r) => r.itemId))];
+    const c = consistency(rs);
+    const mean = rate(rs);
+    categories[i] = {
+      ...categories[i], items: ids.length, perRun: runsIn.map((n) => rate(rs.filter((r) => r.run === n))), mean, met: mean >= categories[i].threshold - 1e-9,
+      rerun: { run: ref, decision: rr.decision, items: ids.length, added: ids.filter((id) => !monday.has(id)).sort(), all3: c.all3, sameLevelRecord: c.same },
+    };
+  }
   const byItem = new Map<string, Result[]>();
   for (const r of results) byItem.set(r.itemId, [...(byItem.get(r.itemId) ?? []), r]);
   const items = [...byItem.values()];
@@ -128,7 +155,9 @@ export function loadEvalPageData(paths: EvalDataPaths = {}): EvalPageData {
 
   // ---- known limits ----
   const a04 = results.filter((r) => r.itemId === 'A04');
-  const drafts = files.filter((f) => f.startsWith('mon-draft')).map((f) => ({ f, file: JSON.parse(readFileSync(/*turbopackIgnore: true*/ path.join(resultsDir, f), 'utf8')) as ResultFile }));
+  // In run order: the timestamp in each run ID, not the file name.
+  const stamp = (f: string) => /\d{8}T\d{6}Z/.exec(f)?.[0] ?? f;
+  const drafts = files.filter((f) => f.startsWith('mon-draft') || RERUNS.some((rr) => f.startsWith(rr.prefix))).sort((a, b) => stamp(a).localeCompare(stamp(b))).map((f) => ({ f, file: JSON.parse(readFileSync(/*turbopackIgnore: true*/ path.join(resultsDir, f), 'utf8')) as ResultFile }));
   const d09 = drafts.flatMap(({ f, file }) => file.results.filter((r) => r.itemId === 'D09').map((r) => ({ level: r.assignedLevel, source: rel(root, path.join(resultsDir, f)) })));
 
   return {

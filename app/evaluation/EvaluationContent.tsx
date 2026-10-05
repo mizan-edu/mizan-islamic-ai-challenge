@@ -76,6 +76,11 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
           </table>
         </div>
         <p className="text-base text-ink-2">{T.results.bExplain} <Src path={data.d41.run.source} /></p>
+        {s.categories.filter((c) => c.rerun).map((c) => (
+          <p key={c.category} className="text-base text-ink-2" data-rerun={c.category}>
+            {T.results.rerun(c.category, c.rerun!.added.join(' و'), c.rerun!.decision, c.rerun!.items, c.rerun!.all3, c.rerun!.sameLevelRecord)} <Src path={c.rerun!.run.source} />
+          </p>
+        ))}
         <p className="flex flex-wrap gap-x-4">{s.runs.map((r) => <Src key={r.runId} path={r.source} />)}</p>
 
         <h3 className="font-display text-2xl text-ink">{T.results.consistencyTitle}</h3>

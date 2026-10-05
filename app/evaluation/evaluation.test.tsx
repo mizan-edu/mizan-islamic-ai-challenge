@@ -88,6 +88,23 @@ describe('figures are read from the committed result files', () => {
     for (const c of ['B', 'C', 'D', 'E', 'F', 'G']) { expect(row(html, c)).toContain('>100%<'); expect(row(html, c)).not.toContain('≥'); }
   });
 
+  it('D46: D07–D10 active — out of the not-active list, in the picker, and the D row from the re-run', () => {
+    const data = loadEvalPageData();
+    const ids = ['D07', 'D08', 'D09', 'D10'];
+    expect(data.notActive.map((n) => n.id)).not.toEqual(expect.arrayContaining([ids[0]]));
+    for (const id of ids) expect(pickableItems().some((i) => i.id === id), id).toBe(true);
+    const d = data.suite.categories.find((c) => c.category === 'D')!;
+    const rerunFile = readdirSync(RESULTS).filter((f) => f.startsWith('mon-d6-') && f.endsWith('.json')).sort().at(-1)!;
+    const rs = (JSON.parse(readFileSync(path.join(RESULTS, rerunFile), 'utf8')) as { results: { itemId: string; passed: boolean }[] }).results;
+    expect(d.rerun?.run.source).toBe(`eval/results/${rerunFile}`);
+    expect(d.items).toBe(new Set(rs.map((r) => r.itemId)).size);
+    expect(d.mean).toBeCloseTo(rs.filter((r) => r.passed).length / rs.length, 10);
+    expect(d.rerun?.added).toEqual(ids);
+    const html = page(data);
+    expect(html).toContain('data-rerun="D"');
+    expect(data.content.scholar.byDate.map((x) => x.date)).toEqual(['2026-10-04', '2026-10-05']);
+  });
+
   it('every button, link and form control is named (accessibility)', () => {
     const html = page();
     for (const m of html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g)) {
