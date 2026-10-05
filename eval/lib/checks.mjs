@@ -100,7 +100,7 @@ export function redactReply(lib, guardLib, reply) {
   }).join(' ');
 }
 
-// ---- Category E inputs, built at runtime from the stored (snapshot) verse text --------------
+// ---- Category E (and B11) inputs, built at runtime from the stored (snapshot) verse text ------
 // The built string is returned to the caller only; descriptors never contain any text.
 
 const TEMPLATE = /^\[GENERATED AT RUNTIME: ([\s\S]*)\]$/;
@@ -123,6 +123,15 @@ export function buildMutatedInput(item, lib, surahs) {
     values.mutated = words.join(' ');
     if (values.mutated === base.text) throw new Error(`${item.id}: mutation produced the original`);
     descriptor = { type: 'word_swap', baseRecordId: base.id, swappedWordIndices: [i, i + 1], wordCount: words.length };
+  } else if (m.type === 'word_drop') {
+    // One interior word removed (never the first word or an ayah-end marker), as in a misremembered quote.
+    const words = base.text.split(' ');
+    let i = 1;
+    while (i < words.length - 1 && AYAH_END.test(words[i])) i++;
+    if (words.length < 4 || i >= words.length - 1) throw new Error(`${item.id}: no droppable word`);
+    values.mutated = [...words.slice(0, i), ...words.slice(i + 1)].join(' ');
+    if (values.mutated === base.text) throw new Error(`${item.id}: mutation produced the original`);
+    descriptor = { type: 'word_drop', baseRecordId: base.id, droppedWordIndex: i, wordCount: words.length };
   } else if (m.type === 'wrong_reference') {
     const actual = Number(String(base.reference).split(':')[0]);
     const wrong = (actual % 114) + 1;

@@ -130,6 +130,14 @@ describe('category E inputs', () => {
     expect(JSON.stringify(descriptor)).not.toMatch(/كلمة/);
   });
 
+  it('word_drop (B11): one interior word removed in memory; the descriptor holds no text', () => {
+    const item = { id: 'EX5', input: { text: '[GENERATED AT RUNTIME: سؤال؟ {mutated}]', mutation: { baseRecordId: 'S9.V1', type: 'word_drop' } } };
+    const { text, descriptor } = buildMutatedInput(item, lib, surahs);
+    expect(text).toBe('سؤال؟ كلمة1 كلمة3 كلمة4 كلمة5 كلمة6');
+    expect(descriptor).toEqual({ type: 'word_drop', baseRecordId: 'S9.V1', droppedWordIndex: 1, wordCount: 6 });
+    expect(JSON.stringify(descriptor)).not.toMatch(/كلمة/);
+  });
+
   it('wrong_reference: verbatim verse with a different surah name', () => {
     const item = { id: 'EX2', input: { text: '[GENERATED AT RUNTIME: من سورة {wrongSurahName}: {verbatim} — صح؟]', mutation: { baseRecordId: 'S9.V1', type: 'wrong_reference' } } };
     const { text, descriptor } = buildMutatedInput(item, lib, surahs);
