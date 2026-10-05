@@ -6,11 +6,11 @@
   "entries": [
     {
       "recordId": "S3.B1",
-      "textSha256": "50ba0255a817a26e2b3eeb3e196c0197cc29f8e503a899e8d241a1b3122f53a5",
+      "textSha256": "b3ba0f722bf243d130d83427bc1937a77c5b7bb118aa01d9e16e830d13b5d136",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:09:28.955Z"
+      "date": "2026-10-05T12:10:01.977Z"
     },
     {
       "recordId": "S3.CL1",
@@ -22,19 +22,19 @@
     },
     {
       "recordId": "S3.E1",
-      "textSha256": "58c58b5b8822c69e9d8d45ee6db1933ad2331e2b9454ee05be7f6d7685d4b936",
+      "textSha256": "5ad5cecb96d3aeea205354d90c904e3e23ce2edb533f1090bc75cfbc9df1fe83",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:09:31.450Z"
+      "date": "2026-10-05T12:10:07.705Z"
     },
     {
       "recordId": "S3.E2",
-      "textSha256": "9625fca7282c2f3e156eefdd0fd86f96f5be104c6c89bd69adb69d8cea8df699",
+      "textSha256": "29a2f24509d9cce650d7c905547773145cc0c096f72ae4525201cd2f7e5270de",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T14:16:16.846Z"
+      "date": "2026-10-05T12:10:12.318Z"
     },
     {
       "recordId": "S3.F1",
@@ -118,11 +118,11 @@
     },
     {
       "recordId": "S3.N2",
-      "textSha256": "16654dc4d026a36e5eb9abbd3a8c614705d8190bdf4b263fa327bc917fb576dc",
+      "textSha256": "081dfc6d6d81a48906ee76875a9069c5def5db3ff3d3bfe75f3724d7467a34e2",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:09:34.557Z"
+      "date": "2026-10-05T12:10:13.559Z"
     },
     {
       "recordId": "S3.N3",
@@ -262,11 +262,11 @@
     },
     {
       "recordId": "S3.X4",
-      "textSha256": "5a8fd769ec5c6089187607f5774b4d52174796969ff8ce7d52653e368a797d7c",
+      "textSha256": "069d7393e52ae3d7bf2343fbe99c36209f0e2fc814a48606324dafd0ea56b620",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:09:44.039Z"
+      "date": "2026-10-05T12:10:16.768Z"
     }
   ]
 }

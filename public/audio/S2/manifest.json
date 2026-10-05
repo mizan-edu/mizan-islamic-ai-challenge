@@ -6,11 +6,11 @@
   "entries": [
     {
       "recordId": "S2.B1",
-      "textSha256": "56c52270d1c89242c83e73e689e46ccfeeb2f796f770dd4e2dd281320737af4e",
+      "textSha256": "4e864bfe3ddee31bc7077fb525e21f2b03a1eaab6c77d9f46a7f4ea001c28dae",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:53.770Z"
+      "date": "2026-10-05T12:09:48.569Z"
     },
     {
       "recordId": "S2.CL1",
@@ -22,11 +22,11 @@
     },
     {
       "recordId": "S2.E1",
-      "textSha256": "8c0d44841dcb48d4ac46884cf8db0fc795a27a48ef326472fb8dbf680b0757f4",
+      "textSha256": "f36928de5c4076ed2d49a757c9028ecf646631d1607c96c3e3eccebb91e03a37",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:56.270Z"
+      "date": "2026-10-05T12:09:56.137Z"
     },
     {
       "recordId": "S2.F1",
@@ -110,11 +110,11 @@
     },
     {
       "recordId": "S2.N2",
-      "textSha256": "de5116951d2d2685f404fdd686a468fa24771e0e07ef5b7998dede962900c689",
+      "textSha256": "4064da6815600c5b9eb9392dd5f8d6077906eef108a4fcc366ea422bce933f1d",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:59.352Z"
+      "date": "2026-10-05T12:09:57.860Z"
     },
     {
       "recordId": "S2.N3",
@@ -246,11 +246,11 @@
     },
     {
       "recordId": "S2.X3",
-      "textSha256": "5a8fd769ec5c6089187607f5774b4d52174796969ff8ce7d52653e368a797d7c",
+      "textSha256": "069d7393e52ae3d7bf2343fbe99c36209f0e2fc814a48606324dafd0ea56b620",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:09:07.721Z"
+      "date": "2026-10-05T12:10:00.356Z"
     }
   ]
 }

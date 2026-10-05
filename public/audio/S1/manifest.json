@@ -30,11 +30,11 @@
     },
     {
       "recordId": "S1.E2",
-      "textSha256": "9625fca7282c2f3e156eefdd0fd86f96f5be104c6c89bd69adb69d8cea8df699",
+      "textSha256": "29a2f24509d9cce650d7c905547773145cc0c096f72ae4525201cd2f7e5270de",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T14:16:14.643Z"
+      "date": "2026-10-05T12:09:44.204Z"
     },
     {
       "recordId": "S1.F1",
@@ -230,11 +230,11 @@
     },
     {
       "recordId": "S1.X3",
-      "textSha256": "d16e2e0c7ab995889b048f7453dbaaa00d0a9717ba598b3d9e9afdc95e8c1d7e",
+      "textSha256": "069d7393e52ae3d7bf2343fbe99c36209f0e2fc814a48606324dafd0ea56b620",
       "voiceId": "29hj550woDeJpvjtiu26",
-      "model": "eleven_multilingual_v2",
+      "model": "eleven_v3",
       "outputFormat": "mp3_44100_128",
-      "date": "2026-10-04T13:08:34.122Z"
+      "date": "2026-10-05T12:09:47.088Z"
     }
   ]
 }
