@@ -2,6 +2,8 @@
 
 Third-party items used by MIZAN, one section each, with owners and terms (D53). MIZAN's own code is MIT (`LICENSE`); its original content (Arabic UI and narration texts, narration audio, AI-generated pictures and sound effects) is CC BY-NC-SA 4.0 (`CONTENT-LICENSE.md`). Third-party items keep their own terms below.
 
+**Experience upgrade (D54–D57, 5 Oct 2026):** no third-party item was added. The motion, moment scenes, AI lens, parental gate, Parent Ask and summary card use only MIZAN's own code (MIT) and the packages already listed here. The moment scenes draw abstract shapes in CSS and SVG over the approved pictures already listed in `public/images/IMAGES.json`; no picture, sound or font was added or changed. The new Arabic labels and parent-page wording (D55–D57) are MIZAN original content under CC BY-NC-SA 4.0.
+
 ## KFGQPC Uthmanic Script HAFS font
 
 Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.gov.sa), unchanged. Obtained 2026-10-03 from the Internet Archive snapshot (2025-04-17) of the official URL https://download.qurancomplex.gov.sa/resources_dev/UthmanicHafs_v2-0.zip because the official hosts did not respond. Licence: KFGQPC Electronic End-User License Agreement (embedded; full text in public/fonts/KFGQPC-LICENSE.txt): free of cost; use, copy and distribute permitted; no selling, modification, reverse-engineering or reproduction without the Complex's written approval. Compliance: byte-identical, licence shipped alongside, no WOFF2, no subsetting, plain @font-face, used only to display Qur'an text pulled from KFC by ID.
