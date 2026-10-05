@@ -6,7 +6,7 @@
 
 import type { ModelCall } from './classifier';
 import type { FlowState } from './flow';
-import type { StationView } from './station-view';
+import type { RecordSource, StationView } from './station-view';
 import type { Trace } from './trace';
 
 export interface LensSource { id: string; platform: string | null; platformId: string | null }
@@ -27,13 +27,14 @@ export function strictestLevel(levels: string[]): string {
   return levels.reduce((hi, l) => (LEVEL_ORDER.indexOf(l) > LEVEL_ORDER.indexOf(hi) ? l : hi), 'NA');
 }
 
-function sourcesOf(view: StationView, ids: string[]): LensSource[] {
+// Each record's platform and platform ID, followed by the records it is based on (depth first).
+export function sourcesOf(sources: Record<string, RecordSource>, ids: string[]): LensSource[] {
   const out: LensSource[] = [];
   const seen = new Set<string>();
   const visit = (id: string) => {
     if (seen.has(id)) return;
     seen.add(id);
-    const s = view.sources[id];
+    const s = sources[id];
     out.push({ id, platform: s?.platform ?? null, platformId: s?.platformId ?? null });
     s?.basedOn.forEach(visit);
   };
@@ -43,17 +44,18 @@ function sourcesOf(view: StationView, ids: string[]): LensSource[] {
 
 function rule(view: StationView, code: string, recordIds: (string | null | undefined)[], input: string | null = null): LensDecision {
   const ids = recordIds.filter((x): x is string => typeof x === 'string');
-  const sources = sourcesOf(view, ids);
+  const sources = sourcesOf(view.sources, ids);
   return { kind: 'rule', code, input, recordIds: ids, level: strictestLevel(sources.map((s) => view.sources[s.id]?.level ?? 'NA')), sources, model: null };
 }
 
-// The decision behind one ask reply, from its judge trace.
-export function traceDecision(view: StationView, trace: Trace, questionId: string): LensDecision {
+// The decision behind one ask reply, from its judge trace (the parent page passes the merged sources
+// of all stations).
+export function traceDecision(view: Pick<StationView, 'sources'>, trace: Trace, questionId: string | null): LensDecision {
   const r = trace.route;
   const calls = trace.modelCalls ?? [];
   const modelUsed = calls.length > 0;
   const code = [r.type, r.code, r.fallbackReason, ...r.ruleIds].filter(Boolean).join(' · ');
-  const sources = sourcesOf(view, trace.cited);
+  const sources = sourcesOf(view.sources, trace.cited);
   return {
     kind: modelUsed ? 'model' : 'rule',
     code,

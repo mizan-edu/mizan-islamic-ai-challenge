@@ -7,7 +7,9 @@ import { loadLabels } from '@/app/_lib/labels';
 import { loadLibrary } from '@/app/_lib/library';
 import { assertNoPlaceholderProblems } from '@/app/_lib/placeholders';
 import { buildStationView } from '@/app/_lib/station-view';
+import { MAX_CHARS } from '@/app/_lib/try-limits';
 import { T as EVAL } from '@/app/evaluation/text';
+import ParentAsk from './ParentAsk';
 import { PILOT } from './text';
 
 // Parent summary: the approved parent lines (PS records) of each station. No child data is shown
@@ -17,12 +19,21 @@ export default function ParentPage() {
   assertNoPlaceholderProblems(lib); // fails the build, never a request: this page is static
   const labels = loadLabels();
   const views = ['S1', 'S2', 'S3'].map((id) => buildStationView(lib, id)).filter((v) => v !== null);
+  // Parent Ask (D54): every station's record sources, for the source chips under a reply.
+  const sources = Object.assign({}, ...views.map((v) => v.sources));
+  const stations = views.map((v) => ({ id: v.stationId, title: v.title?.text ?? v.stationId }));
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-8" data-screen="parent">
       {labels.parents && <h1 className="font-display text-4xl text-ink">{labels.parents}</h1>}
       {labels.sfx && <SfxSwitch label={labels.sfx} />}
-      {/* AI lens switch behind the parental gate (D54); ?judge=1 on any page stays the judges' entry. */}
-      {labels.judgeMode && <ParentGate prompt={labels.gatePrompt}><JudgeSwitch label={labels.judgeMode} /></ParentGate>}
+      {/* Behind the parental gate (D54): the AI-lens switch (?judge=1 on any page stays the judges'
+          entry) and Parent Ask. */}
+      <ParentGate prompt={labels.gatePrompt}>
+        <div className="flex flex-col gap-6" data-gated>
+          {labels.judgeMode && <JudgeSwitch label={labels.judgeMode} />}
+          <ParentAsk stations={stations} sources={sources} labels={labels} maxChars={MAX_CHARS} />
+        </div>
+      </ParentGate>
       <ResetJourney text={PILOT} />
       {views.map((v) => (
         <section key={v.stationId} id={v.stationId} className="card flex flex-col gap-3 p-6">
