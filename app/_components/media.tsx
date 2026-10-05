@@ -74,19 +74,24 @@ function Burst() {
 // Pictures are never cropped (object-contain): choices share one square frame and narration cards
 // one 4:3 frame (a wider picture such as the S3.N2 strip is letterboxed inside it), so no card's
 // frame or size hints at the answer; question pictures keep their own aspect ratio.
-export function PictureCard({ record, state, onTap, order, celebrate = false }: {
+// Motion (D54): `index` makes the card rise in turn (DOM order = right to left in the RTL grid, so
+// the rightmost card comes first); a card set aside dips and settles back, then greys; an order
+// number lands with a small pop. No motion is a negative signal.
+export function PictureCard({ record, state, onTap, order, celebrate = false, index }: {
   record: RecordView;
   state: 'idle' | 'greyed' | 'highlight' | 'picked';
   onTap?: () => void;
   order?: number;
   celebrate?: boolean;
+  index?: number;
 }) {
   const size = record.imageSize;
   const frame = record.role === 'choice' ? 'square' : record.role === 'narration_card' ? 'card' : 'natural';
   const look = state === 'highlight'
     ? (celebrate ? 'ring-8 ring-leaf anim-correct' : 'ring-4 ring-sun anim-glow')
     : state === 'picked' ? 'ring-8 ring-water-light'
-      : state === 'greyed' ? 'opacity-45 grayscale shadow-none' : '';
+      : state === 'greyed' ? 'opacity-45 grayscale shadow-none anim-settle'
+        : index !== undefined ? 'anim-card-in' : '';
   return (
     <button
       type="button"
@@ -95,6 +100,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false }: 
       disabled={state === 'greyed' || !onTap}
       onClick={onTap}
       className={`press relative flex min-h-56 flex-col items-center justify-center gap-3 rounded-[28px] bg-card p-4 text-center ${look}`}
+      style={index !== undefined ? ({ '--i': index } as React.CSSProperties) : undefined}
     >
       {record.image ? (
         <span className={`flex w-full items-center justify-center overflow-hidden rounded-[20px] bg-sky-soft ${frame === 'square' ? 'mx-auto aspect-square max-w-[min(18rem,34dvh)]' : frame === 'card' ? 'aspect-[4/3]' : ''}`}
@@ -106,7 +112,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false }: 
         <span data-placeholder="picture" className="font-display flex h-40 w-full items-center justify-center rounded-[20px] bg-sky-soft px-3 text-2xl leading-relaxed text-ink">{record.text}</span>
       )}
       {record.image && <span aria-hidden="true" className="font-display text-xl leading-relaxed text-ink">{record.text}</span>}
-      {order !== undefined && <span className="font-display absolute start-3 top-3 flex size-11 items-center justify-center rounded-full bg-sun text-xl text-ink">{order}</span>}
+      {order !== undefined && <span key={order} className="anim-badge font-display absolute start-3 top-3 flex size-11 items-center justify-center rounded-full bg-sun text-xl text-ink" data-order={order}>{order}</span>}
       {state === 'highlight' && celebrate && <Burst />}
     </button>
   );

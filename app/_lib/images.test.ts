@@ -92,7 +92,8 @@ describe('pictures on the station screens', () => {
       const img = /<img[^>]*>/.exec(m![1])![0];
       expect(img.includes(`alt="${c.text}"`), `${c.id} alt`).toBe(true);
       expect(img, c.id).toContain('object-contain');
-      return m![0].replace(/data-record="[^"]*"/, '').replace(/src="[^"]*"/, '').replace(/alt="[^"]*"/, '')
+      // The entrance index (style --i, D54) follows DOM order, not the answer, so it is not compared.
+      return m![0].replace(/data-record="[^"]*"/, '').replace(/ style="--i:\d+"/, '').replace(/src="[^"]*"/, '').replace(/alt="[^"]*"/, '')
         .replace(/ width="\d+"/, '').replace(/ height="\d+"/, '').replace(/>[^<]+</g, '><');
     });
   }

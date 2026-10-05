@@ -1,6 +1,8 @@
 // Q3 station screens: verse reference line, nothing moving on or near the verse, step dots, and the
 // full-screen moments (decorative, no text). Never prints record text.
 
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { initialState, reducer, type FlowAction, type FlowState } from '@/app/_lib/flow';
@@ -41,6 +43,44 @@ describe('nothing moves on or near the verse', () => {
     const html = render(s, at(s, toConnect(s)));
     const section = /<section[^>]*data-screen="connect"[\s\S]*<\/section>/.exec(html)![0];
     expect(section).not.toMatch(/anim-|transition/);
+  });
+});
+
+describe('card motion (D54)', () => {
+  const cards = (html: string, screen: string) => {
+    const section = new RegExp(`<section[^>]*data-screen="${screen}"[\\s\\S]*?</section>`).exec(html)![0];
+    return [...section.matchAll(/<button[^>]*data-record="([^"]+)"[^>]*data-state="([^"]+)"[^>]*class="([^"]*)"[^>]*?(?:style="--i:(\d+)")?>/g)]
+      .map(([, id, state, cls, i]) => ({ id, state, cls, i: i === undefined ? null : Number(i) }));
+  };
+
+  it.each(['S1', 'S2', 'S3'])('%s observe: choices rise in DOM order, which is right to left in the RTL page', (s) => {
+    const got = cards(render(s, at(s, [{ type: 'start' }])), 'observe');
+    expect(got.map((c) => c.id)).toEqual(view(s).observe!.choices.map((c) => c.id));
+    expect(got.map((c) => c.i)).toEqual([0, 1, 2]);
+    for (const c of got) expect(c.cls).toContain('anim-card-in');
+  });
+
+  it('the page is right to left, so the first card in the DOM is the rightmost', () => {
+    expect(readFileSync(path.resolve(import.meta.dirname, '..', 'layout.tsx'), 'utf8')).toMatch(/<html lang="ar" dir="rtl"/);
+  });
+
+  it('a set-aside choice settles back (no entrance replay); the others keep their place', () => {
+    const v = view('S1');
+    const other = v.observe!.choices.find((c) => c.id !== v.observe!.correctChoiceId)!.id;
+    const got = cards(render('S1', at('S1', [{ type: 'start' }, { type: 'choose', choiceId: other, t }])), 'observe');
+    const greyed = got.find((c) => c.id === other)!;
+    expect(greyed.state).toBe('greyed');
+    expect(greyed.cls).toContain('anim-settle');
+    expect(greyed.cls).not.toContain('anim-card-in');
+    for (const c of got.filter((x) => x.id !== other)) expect(c.cls).toContain('anim-card-in');
+  });
+
+  it('a placed narration card gets its order number with the badge pop', () => {
+    const v = view('S1');
+    const first = v.narrate!.cards[0].id;
+    const toNarrate: FlowAction[] = [...toConnect('S1'), { type: 'next', t }, ...(v.ask.length ? [{ type: 'next', t } as FlowAction] : [])];
+    const html = render('S1', at('S1', [...toNarrate, { type: 'pick', cardId: first, t }]));
+    expect(html).toMatch(/class="anim-badge[^"]*"[^>]*data-order="1"/);
   });
 });
 

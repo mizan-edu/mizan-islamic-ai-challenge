@@ -221,8 +221,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {o.choices.map((c) => (
-              <PictureCard key={c.id} record={c}
+            {o.choices.map((c, i) => (
+              <PictureCard key={c.id} record={c} index={i}
                 state={state.observe.highlightId === c.id ? 'highlight' : state.observe.greyed.includes(c.id) ? 'greyed' : 'idle'}
                 celebrate={state.observe.solved}
                 onTap={state.observe.solved ? undefined : () => choose(c.id)} />
@@ -284,11 +284,11 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
         <section className="anim-step flex flex-col gap-5" data-screen="narrate" data-mode={view.narrate.mode}>
           <div className="card p-5"><Line record={view.narrate.intro} labels={labels} size="text-3xl" big /></div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
-            {view.narrate.cards.map((c) => {
+            {view.narrate.cards.map((c, i) => {
               const pos = state.narrate.picked.indexOf(c.id);
               const highlight = state.narrate.done && (view.narrate!.mode === 'order' || c.id === view.narrate!.bestCardId);
               return (
-                <PictureCard key={c.id} record={c}
+                <PictureCard key={c.id} record={c} index={i}
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}

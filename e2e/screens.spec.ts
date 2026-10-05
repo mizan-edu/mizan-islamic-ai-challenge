@@ -1,6 +1,6 @@
 // «حديقة الآيات» screens: one screenshot per screen (docs/screenshots), plus checks that hold on every
 // screen: no request leaves the app's origin (no font CDN), no horizontal scroll at tablet or phone
-// width, and prefers-reduced-motion leaves no running animation. Reads IDs from /content; never
+// width, and under prefers-reduced-motion nothing moves (only opacity cross-fades, D54). Reads IDs from /content; never
 // prints record text.
 
 import { readFileSync } from 'node:fs';
@@ -159,16 +159,25 @@ test('phone width: map, question and verse card', async ({ page }) => {
   await shot(page, 'phone-s1-verse-card', 400);
 });
 
-test('prefers-reduced-motion: nothing animates', async ({ page }) => {
+test('prefers-reduced-motion: nothing moves, only opacity cross-fades', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  const running = () => page.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length);
+  // Running animations that change anything other than opacity (position, size, rotation, shadow...).
+  const moving = () => page.evaluate(() => document.getAnimations()
+    .filter((a) => a.playState === 'running')
+    .filter((a) => (a.effect as KeyframeEffect | null)?.getKeyframes().some((k) => Object.keys(k).some((p) => !['offset', 'easing', 'composite', 'computedOffset', 'opacity'].includes(p))) ?? true)
+    .length);
   await page.goto('/');
   await page.waitForLoadState('networkidle');
-  expect(await running()).toBe(0);
+  expect(await moving()).toBe(0);
   await page.goto('/stations/S1');
+  expect(await moving()).toBe(0);
   await page.locator('[data-action="start"]').click();
+  expect(await moving()).toBe(0);
+  const other = observe('S1').choiceIds!.find((c) => c !== observe('S1').correctChoiceId)!;
+  await page.locator(`[data-record="${other}"]`).click();
+  expect(await moving()).toBe(0);
   await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
-  expect(await running()).toBe(0);
+  expect(await moving()).toBe(0);
   // No moment at all under reduced motion; the praise shows straight away.
   await expect(page.locator('[data-strip="praise"]')).toBeVisible();
   expect(await page.locator('[data-moment]').count()).toBe(0);

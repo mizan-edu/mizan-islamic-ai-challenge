@@ -77,20 +77,26 @@
   box-shadow: var(--shadow-card);
 }
 
-/* Pill buttons with a chunky press shadow. */
+/* Pill buttons with a chunky press shadow. Touch feedback (D54): the press shows on pointer-down
+   (:active) and settles within 100 ms, scaling to 0.96. */
 .pill {
   border-radius: 9999px;
   box-shadow: var(--shadow-card);
-  transition: transform 120ms ease, box-shadow 120ms ease;
+  transition: transform 100ms ease-out, box-shadow 100ms ease-out;
 }
 .pill:active:not(:disabled),
 .press:active:not(:disabled) {
-  transform: translateY(4px);
+  transform: translateY(3px) scale(0.96);
   box-shadow: var(--shadow-press);
 }
+/* Verse card: its play button keeps the earlier plain press; nothing new moves on or near the verse (D26). */
+[data-verse] .pill:active:not(:disabled) {
+  transform: translateY(4px);
+}
+/* A choice the child set aside fades and greys over 300 ms (reason: the card settles back, D54). */
 .press {
   box-shadow: var(--shadow-card);
-  transition: transform 120ms ease, box-shadow 120ms ease, filter 200ms ease, opacity 200ms ease;
+  transition: transform 100ms ease-out, box-shadow 100ms ease-out, filter 300ms ease-out, opacity 300ms ease-out;
 }
 }
 
@@ -110,6 +116,15 @@
 @keyframes fade-in-late { 0%, 30% { opacity: 0; } 70%, 100% { opacity: 1; } }
 @keyframes stage-in { from { opacity: 0; transform: scale(0.94); } to { opacity: 1; transform: scale(1); } }
 @keyframes step-in { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
+/* D54 motion polish. Each one has a single purpose:
+   card-in  attention — picture cards rise one by one in reading order (RTL: rightmost first);
+   settle   cause and effect — a set-aside card dips and settles back softly (never a shake);
+   badge-in reward — the order number lands on a narration card the child placed;
+   fade-in  the reduced-motion replacement for every entrance (opacity only). */
+@keyframes card-in { from { opacity: 0; transform: translateY(16px) scale(0.97); } to { opacity: 1; transform: none; } }
+@keyframes settle { 0% { transform: none; } 45% { transform: translateY(4px) scale(0.98); } 100% { transform: none; } }
+@keyframes badge-in { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 .anim-pulse::before {
   content: "";
@@ -131,8 +146,13 @@
 .anim-fade-out-late { animation: fade-out-late 3200ms ease-in-out both; }
 .anim-fade-in-late { animation: fade-in-late 3200ms ease-in-out both; }
 .anim-stage-in { animation: stage-in 500ms ease-out both; }
-.anim-step { animation: step-in 250ms ease-out both; }
+/* Scene transition between steps: 500 ms, entering from the left — forward in a right-to-left journey. */
+.anim-step { animation: step-in 500ms ease-out both; }
 .anim-spin { animation: spin 8s linear infinite; }
+/* Entrances use fill-mode backwards so that, once done, the press transform is not overridden. */
+.anim-card-in { animation: card-in 380ms ease-out backwards; animation-delay: calc(120ms + var(--i, 0) * 90ms); }
+.anim-settle { animation: settle 320ms ease-out; }
+.anim-badge { animation: badge-in 200ms cubic-bezier(0.34, 1.2, 0.64, 1) backwards; }
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -141,5 +161,20 @@
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+  /* Reduced-motion path (D54): nothing changes position or size. Entrances become a 200 ms opacity
+     cross-fade, and the press shows as a darker tint instead of a scale. */
+  .anim-step,
+  .anim-rise,
+  .anim-card-in,
+  .anim-badge,
+  .anim-grow-in,
+  .anim-stage-in {
+    animation: fade-in 200ms ease-out backwards !important;
+  }
+  .pill:active:not(:disabled),
+  .press:active:not(:disabled) {
+    transform: none !important;
+    filter: brightness(0.92);
   }
 }

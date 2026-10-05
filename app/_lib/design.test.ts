@@ -55,6 +55,50 @@ describe('motion', () => {
     expect(block).toMatch(/\*,\s*\*::before,\s*\*::after/);
   });
 
+  const keyframes = (name: string): string => new RegExp(`@keyframes ${name} \\{(.*)\\}`).exec(css)?.[1] ?? '';
+  const rule = (selector: string): string => new RegExp(`(?:^|\\n)${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\{([^}]*)\\}`).exec(css)?.[1] ?? '';
+  const ms = (decl: string): number[] => [...decl.matchAll(/(\d+)ms/g)].map((m) => Number(m[1]));
+
+  it('reduced-motion path: entrances become opacity-only cross-fades and the press does not move (D54)', () => {
+    const block = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(css)?.[1] ?? '';
+    const overrides = [...block.matchAll(/animation:\s*([a-z-]+)\s/g)].map((m) => m[1]).filter((n) => n !== 'none');
+    expect(overrides).toEqual(['fade-in']);
+    expect(keyframes('fade-in')).not.toMatch(/transform|scale|translate/);
+    expect(block).toMatch(/\.press:active:not\(:disabled\) \{\s*transform: none !important;/);
+  });
+
+  it('touch feedback settles within 100 ms and scales to 0.96 (D54)', () => {
+    expect(Math.max(...ms(rule('.pill').match(/transition:[^;]*/)![0]))).toBeLessThanOrEqual(100);
+    expect(css).toMatch(/\.press:active:not\(:disabled\) \{\s*transform: translateY\(3px\) scale\(0\.96\);/);
+  });
+
+  it('the verse card play button keeps the plain press (nothing new moves near the verse, D26)', () => {
+    expect(css).toMatch(/\[data-verse\] \.pill:active:not\(:disabled\) \{\s*transform: translateY\(4px\);\s*\}/);
+  });
+
+  it('durations stay in the D54 ranges: entrances 300-450 ms, scene transitions 500-700 ms', () => {
+    expect(ms(rule('.anim-step'))[0]).toBeGreaterThanOrEqual(500);
+    expect(ms(rule('.anim-step'))[0]).toBeLessThanOrEqual(700);
+    for (const r of ['.anim-card-in', '.anim-settle', '.anim-rise']) {
+      const [d] = ms(rule(r));
+      expect(d, r).toBeGreaterThanOrEqual(300);
+      expect(d, r).toBeLessThanOrEqual(450);
+    }
+    expect(ms(rule('.anim-badge'))[0]).toBeLessThanOrEqual(250);
+  });
+
+  it('no negative signal: no shake or wobble, and a set-aside card only dips (no sideways motion)', () => {
+    expect(css).not.toMatch(/@keyframes (shake|wiggle|wobble|jiggle)/);
+    expect(keyframes('settle')).not.toMatch(/translateX|rotate/);
+  });
+
+  it('nothing repeats faster than three times a second', () => {
+    for (const m of css.matchAll(/animation: ([a-z-]+) ([\d.]+)(ms|s)[^;]*infinite/g)) {
+      const period = Number(m[2]) * (m[3] === 's' ? 1000 : 1);
+      if (m[1] !== 'rainfall') expect(period, m[1]).toBeGreaterThanOrEqual(1000); // rain drops fall; they do not flash
+    }
+  });
+
   it('uses no animation library', () => {
     const pkg = JSON.parse(readFileSync(path.join(ROOT, 'package.json'), 'utf8')) as Record<string, Record<string, string>>;
     const deps = Object.keys({ ...pkg.dependencies, ...pkg.devDependencies });
