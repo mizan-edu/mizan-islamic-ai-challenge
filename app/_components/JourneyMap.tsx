@@ -5,6 +5,7 @@
 // on this device (session storage only). S4-S5 are roadmap (C1): greyed, a «قريبًا» badge, not
 // tappable, no title. Tapping an open stone selects it; the bottom card starts it. No text input.
 
+import { ROADMAP_STATIONS } from '@/app/_lib/roadmap';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { PlantMarker, plantSrc } from './media';
@@ -15,7 +16,7 @@ export interface MapStation { id: string; number: number; title: string | null; 
 // Stone centres on public/images/map/background.webp, in % of its width and height (S1 upstream,
 // right; S5 downstream, left — the journey reads right to left).
 const STONES = [{ x: 86, y: 36 }, { x: 66, y: 51 }, { x: 83, y: 63 }, { x: 45, y: 75 }, { x: 21, y: 78 }];
-const ROADMAP = ['S4', 'S5'];
+const ROADMAP: readonly string[] = ROADMAP_STATIONS;
 
 const TickIcon = () => <svg viewBox="0 0 24 24" className="size-5 md:size-6" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 const LockIcon = () => <svg viewBox="0 0 24 24" className="size-3" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2.5" fill="currentColor" /><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="2.5" fill="none" /></svg>;

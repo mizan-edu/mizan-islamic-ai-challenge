@@ -5,6 +5,7 @@ import { loadLabels } from '@/app/_lib/labels';
 import { loadLibrary } from '@/app/_lib/library';
 import { assertNoPlaceholderProblems } from '@/app/_lib/placeholders';
 import { buildStationView } from '@/app/_lib/station-view';
+import { T as EVAL } from '@/app/evaluation/text';
 
 // Parent summary: the approved parent lines (PS records) of each station. No child data is shown
 // or collected here; the device-only session log stays on the device.
@@ -24,7 +25,10 @@ export default function ParentPage() {
           {v.parent.map((r) => <p key={r.id} data-line={r.id} className="text-xl leading-relaxed text-ink-2">{r.text}</p>)}
         </section>
       ))}
-      <Link href="/" className="self-start py-4 text-ink-2 underline">MIZAN</Link>
+      <div className="flex flex-wrap gap-x-6">
+        <Link href="/evaluation" className="py-4 font-display text-xl text-water underline" data-evaluation-link>{EVAL.judgeLink}</Link>
+        <Link href="/" className="py-4 text-ink-2 underline">MIZAN</Link>
+      </div>
     </main>
   );
 }

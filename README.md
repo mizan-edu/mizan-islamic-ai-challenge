@@ -3,6 +3,8 @@ MIZAN — AI-guided Islamic learning journey for children aged 4–6. Islamic AI
 
 ## Live demo
 
+**للمحكّمين: صفحة التقييم** — https://mizan-islamic-ai-challenge-three.vercel.app/evaluation (results, content safety, try a question; Built 4–6 Oct)
+
 https://mizan-islamic-ai-challenge-three.vercel.app — Built 4–6 Oct: journey map and Stations 1–3 end to end (observe, verse card with real recitation, questions, narration, close). Narration audio files and pictures are not yet added; the screens show placeholders until they are.
 
 ## Technical setup (English)

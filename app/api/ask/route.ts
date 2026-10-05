@@ -8,7 +8,7 @@ import { classifierFromEnv } from '@/app/_lib/classifier';
 import { loadLibrary } from '@/app/_lib/library';
 import { fallbackReply } from '@/app/_lib/reply';
 import { AQ_MIN_SCORE, AQ_MIN_SHARED, VERSE_MIN_SCORE } from '@/app/_lib/retrieval';
-import { toVerseView, type VerseView } from '@/app/_lib/station-view';
+import { replyView } from '@/app/_lib/reply-view';
 import { answerWithTrace, isSafeTrace, NO_MODEL_CALL, type Trace } from '@/app/_lib/trace';
 
 export const dynamic = 'force-dynamic';
@@ -18,16 +18,8 @@ export const maxDuration = 20;
 const ID = /^S\d+(\.[A-Za-z0-9-]+)*$/;
 
 function respond(lib: ReturnType<typeof loadLibrary>, reply: ReturnType<typeof fallbackReply>, event: unknown, trace?: Trace | null, llmEvent?: unknown) {
-  const verses: VerseView[] = reply.segments
-    .filter((s) => s.kind === 'verse')
-    .map((s) => lib.byId.get(s.recordId))
-    .filter((r) => r?.type === 'quran')
-    .map((r) => toVerseView(r!, lib.surahs));
   return Response.json({
-    behaviour: reply.behaviour,
-    level: reply.level,
-    segments: reply.segments.map((s) => ({ kind: s.kind, recordId: s.recordId, text: s.text })),
-    verses,
+    ...replyView(lib, reply),
     event,
     ...(llmEvent ? { llmEvent } : {}), // A4: only when the secondary provider or the static tier answered
     ...(trace !== undefined ? { trace: trace && isSafeTrace(trace) ? trace : null } : {}),
