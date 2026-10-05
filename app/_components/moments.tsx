@@ -9,8 +9,13 @@
 // S2 glints along the watering-can stream, ripples where it lands and a slow shimmer band; S3
 // sunbeams from the top corner and light motes rising around the plant. At most 40 animated
 // elements per scene; no figures, faces or text. At the end the scene settles (tilt back to rest,
-// a slight scale-down) and fades into the praise line. The D38 total is unchanged: 700 ms in, 3 s
-// hold, 600 ms out. Tap anywhere or press Escape to skip.
+// a slight scale-down) and fades into the praise line. Tap anywhere or press Escape to skip.
+// Video (D60, D62): when the station has a clip, it plays muted and inline once the expansion has
+// finished, with its approved still as the poster, and the moment lasts as long as the clip (at most
+// 6 s; a longer clip stops at 6 s); its last frame holds while the scene fades. The CSS layer is
+// dropped where the clip shows that motion (S1 rain, S2 water) and kept for S3's light. Without a
+// playable clip (reduced motion, data saver, missing file, load error or no start within 2.5 s) the
+// moment keeps the D38 timing (700 ms in, 3 s hold, 600 ms out) with the still and the CSS layer.
 // Framing (D38): the picture is always shown whole. The frame ([data-moment-box]) fits the screen
 // with the picture's aspect ratio; the picture rests at 90 % of it, so even at the full push-in and
 // tilt it is never cropped, and the same picture, blurred, fills everything behind.
@@ -18,11 +23,21 @@
 // tilt or live layer. Transform and opacity are the only animated properties.
 
 import { useEffect, useRef, useState } from 'react';
+import type { VideoSources } from '@/app/_lib/media';
 import { sfx, type SfxCue } from '@/app/_lib/sfx';
 import { plantSrc } from './media';
 
 export const MOMENT = { delayMs: 700, fadeInMs: 700, holdMs: 3000, fadeOutMs: 600 } as const;
 export const MAX_LIVE_ELEMENTS = 40;
+export const FLIP_MS = 560; // the card-to-scene expansion (globals.css .moment-flip)
+export const STALL_MS = 2500; // a clip that has not started this long after the expansion is dropped
+export const MAX_CLIP_MS = 6000; // D62: a moment lasts as long as its clip, at most 6 s
+export const clipHoldMs = (durationS: number): number => Math.min(Math.round(durationS * 1000), MAX_CLIP_MS);
+
+// Data saver (Save-Data / navigator.connection.saveData): no video.
+export const saveData = (): boolean =>
+  typeof navigator !== 'undefined' && Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData);
+export const videoAllowed = (): boolean => !prefersReducedMotion() && !saveData();
 
 export const prefersReducedMotion = (): boolean =>
   typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -88,23 +103,66 @@ export const liveElementCount = (stationId: string): number =>
 // eslint-disable-next-line @next/next/no-img-element
 const Fill = ({ src, className = '' }: { src: string; className?: string }) => <img src={src} alt="" className={`absolute inset-0 size-full object-contain ${className}`} />;
 
-export function MomentOverlay({ stationId, pictures, onDone, fromRect = null }: {
-  stationId: string; pictures: MomentPictures; onDone: () => void; fromRect?: MomentRect | null;
+export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, video = null }: {
+  stationId: string; pictures: MomentPictures; onDone: () => void; fromRect?: MomentRect | null; video?: VideoSources | null;
 }) {
   const [leaving, setLeaving] = useState(false);
+  // Video (D60, D62): only with motion allowed and no data saver; 'error' falls back to the still + CSS layer.
+  const [videoState, setVideoState] = useState<'off' | 'ready' | 'playing' | 'ended' | 'error'>(() => (video && videoAllowed() ? 'ready' : 'off'));
   const tilt = useRef<HTMLDivElement>(null);
+  const clip = useRef<HTMLVideoElement>(null);
+  const done = useRef(onDone);
+  useEffect(() => { done.current = onDone; }, [onDone]);
+  const left = useRef(false);
+  const started = useRef(false);
+  const mountedAt = useRef(0);
+  const timers = useRef<number[]>([]);
+  const later = (fn: () => void, ms: number) => { timers.current.push(window.setTimeout(fn, ms)); };
+
+  // The moment ends: settle and fade (600 ms), then the praise line.
+  const leave = () => {
+    if (left.current) return;
+    left.current = true;
+    setLeaving(true);
+    later(() => done.current(), MOMENT.fadeOutMs);
+  };
+  // No playable clip: the still and the CSS layer, on the D38 timing from the moment's start.
+  const fail = () => {
+    if (left.current) return;
+    setVideoState('error');
+    later(leave, Math.max(0, MOMENT.fadeInMs + MOMENT.holdMs - (performance.now() - mountedAt.current)));
+  };
+
   useEffect(() => {
+    mountedAt.current = performance.now();
     sfx.play(`moment${stationId}` as SfxCue);
-    const out = window.setTimeout(() => setLeaving(true), MOMENT.fadeInMs + MOMENT.holdMs);
-    const done = window.setTimeout(onDone, MOMENT.fadeInMs + MOMENT.holdMs + MOMENT.fadeOutMs);
-    const key = (e: KeyboardEvent) => { if (e.key === 'Escape') onDone(); };
+    if (videoState === 'off') {
+      later(leave, MOMENT.fadeInMs + MOMENT.holdMs);
+    } else {
+      // Play once the card-to-scene expansion has finished; give up if it has not started 2.5 s later.
+      later(() => { void clip.current?.play().catch(fail); }, FLIP_MS);
+      later(() => { if (!started.current) fail(); }, FLIP_MS + STALL_MS);
+    }
+    const key = (e: KeyboardEvent) => { if (e.key === 'Escape') done.current(); };
     window.addEventListener('keydown', key);
     // Lock page scrolling while the scene is up: no scrollbar gutter beside it, no scrolling beneath.
     const root = document.documentElement;
     const overflow = root.style.overflow;
     root.style.overflow = 'hidden';
-    return () => { window.clearTimeout(out); window.clearTimeout(done); window.removeEventListener('keydown', key); root.style.overflow = overflow; };
-  }, [onDone, stationId]);
+    const pending = timers.current;
+    return () => { pending.forEach((t) => window.clearTimeout(t)); window.removeEventListener('keydown', key); root.style.overflow = overflow; };
+    // Mount only: the moment's timeline starts once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onPlaying = () => {
+    if (started.current) return;
+    started.current = true;
+    setVideoState('playing');
+    // D62: the moment lasts as long as the clip, at most 6 s; a longer clip stops (holding its frame).
+    later(() => { clip.current?.pause(); leave(); }, MAX_CLIP_MS);
+  };
+  const onEnded = () => { setVideoState('ended'); leave(); }; // the video holds its last frame while the scene fades
 
   // Pointer tilt: up to 3 degrees toward the pointer; back to rest when the scene settles.
   const setTilt = (rx: number, ry: number) => {
@@ -130,9 +188,14 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null }: 
   const main = stationId === 'S1' ? pictures.scene : stationId === 'S2' ? pictures.from : null;
   const w = main?.width ?? 1;
   const h = main?.height ?? 1;
+  const playing = videoState === 'ready' || videoState === 'playing' || videoState === 'ended';
+  // The clip's start frame is its approved still: S1.N1, S2.N1 (D60 Task 1 decision), plant stage 1.
+  const poster = stationId === 'S1' ? pictures.scene?.src : stationId === 'S2' ? pictures.to?.src : stationId === 'S3' ? plantSrc(1) : undefined;
+  // The CSS layer stays where the clip does not show that motion: S3's sunbeams and motes.
+  const live = !playing || stationId === 'S3';
   return (
     <div className={`moment-root fixed inset-0 z-50 overflow-hidden ${leaving ? 'moment-leaving' : ''}`}
-      onClick={onDone} onPointerMove={onPointerMove} aria-hidden="true" data-moment={stationId}>
+      onClick={() => done.current()} onPointerMove={onPointerMove} aria-hidden="true" data-moment={stationId} data-moment-video={videoState}>
       <div className={`moment-panel absolute inset-0 overflow-hidden ${flip ? 'moment-flip' : 'moment-grow'} ${stationId === 'S3' ? 'bg-[#FDF6E8]' : 'bg-sky-soft'}`} style={flip} data-moment-flip={flip ? 'card' : 'center'}>
         <div className="moment-scene absolute inset-0">
           {main && (
@@ -144,20 +207,30 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null }: 
             <div ref={tilt} className="moment-tilt absolute inset-0">
               <div className="moment-camera absolute inset-0">
                 <div className="absolute inset-[5%]" data-moment-picture>
-                  {stationId === 'S1' && pictures.scene && <Fill src={pictures.scene.src} />}
-                  {stationId === 'S2' && (
+                  {playing && video ? (
+                    <video ref={clip} className="absolute inset-0 size-full object-contain" muted playsInline preload="auto" poster={poster}
+                      onPlaying={onPlaying} onEnded={onEnded} onError={fail} data-moment-clip={stationId}>
+                      {video.webm && <source src={video.webm} type="video/webm" />}
+                      {video.mp4 && <source src={video.mp4} type="video/mp4" onError={fail} />}
+                    </video>
+                  ) : (
                     <>
-                      {pictures.from && <Fill src={pictures.from.src} className="anim-fade-out-late" />}
-                      {pictures.to && <Fill src={pictures.to.src} className="anim-fade-in-late" />}
+                      {stationId === 'S1' && pictures.scene && <Fill src={pictures.scene.src} />}
+                      {stationId === 'S2' && (
+                        <>
+                          {pictures.from && <Fill src={pictures.from.src} className="anim-fade-out-late" />}
+                          {pictures.to && <Fill src={pictures.to.src} className="anim-fade-in-late" />}
+                        </>
+                      )}
+                      {stationId === 'S3' && [1, 2, 3].map((stage) => (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img key={stage} src={plantSrc(stage)} alt="" width={800} height={800}
+                          className="anim-stage-in absolute inset-0 size-full object-contain"
+                          style={{ animationDelay: `${(stage - 1) * 1100}ms` }} />
+                      ))}
                     </>
                   )}
-                  {stationId === 'S3' && [1, 2, 3].map((stage) => (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img key={stage} src={plantSrc(stage)} alt="" width={800} height={800}
-                      className="anim-stage-in absolute inset-0 size-full object-contain"
-                      style={{ animationDelay: `${(stage - 1) * 1100}ms` }} />
-                  ))}
-                  <LiveLayer stationId={stationId} />
+                  {live && <LiveLayer stationId={stationId} />}
                 </div>
               </div>
             </div>

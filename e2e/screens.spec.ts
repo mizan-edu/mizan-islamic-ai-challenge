@@ -67,7 +67,7 @@ async function playStation(page: Page, id: string, prefix: string) {
   const moment = page.locator(`[data-moment="${id}"]`);
   await expect(moment).toBeVisible(); // appears ~700 ms after the green ring
   await shot(page, `${prefix}-5-moment`, 1500);
-  if (id === 'S1') await expect(moment).toBeHidden({ timeout: 6000 }); // 700 + 3000 + 600 ms
+  if (id === 'S1') await expect(moment).toBeHidden({ timeout: 8000 }); // D62: expansion + the clip (at most 6 s) + 600 ms
   else { await moment.click(); await expect(moment).toBeHidden(); }
   await expect(page.locator('[data-strip="praise"]')).toBeVisible();
   await shot(page, `${prefix}-5-correct`, 600);
@@ -206,9 +206,11 @@ test('moment scene opens from the chosen card, with at most 40 live elements', a
     expect(vars.every((n) => Number.isFinite(n))).toBe(true);
     expect(vars[2]).toBeGreaterThan(0.05);
     expect(vars[2]).toBeLessThan(1);
-    const live = await page.evaluate((s) => document.querySelector(`[data-moment-live="${s}"]`)!.getAnimations({ subtree: true }).filter((a) => a.playState === 'running' || a.playState === 'paused').length, id);
-    expect(live, `${id} live animations`).toBeGreaterThan(0);
-    expect(live, `${id} live animations`).toBeLessThanOrEqual(40);
+    // D60: where the clip shows the motion (S1, S2) the CSS layer is dropped; otherwise it runs, at most 40 elements.
+    const live = await page.evaluate((s) => document.querySelector(`[data-moment-live="${s}"]`)?.getAnimations({ subtree: true }).filter((a) => a.playState === 'running' || a.playState === 'paused').length ?? null, id);
+    const clip = await page.locator(`[data-moment-clip="${id}"]`).count();
+    expect(live !== null || clip === 1, `${id}: a clip or the CSS layer`).toBe(true);
+    if (live !== null) { expect(live, `${id} live animations`).toBeGreaterThan(0); expect(live, `${id} live animations`).toBeLessThanOrEqual(40); }
     await page.locator(`[data-moment="${id}"]`).click();
     await expect(page.locator('[data-strip="praise"]')).toBeVisible();
   }

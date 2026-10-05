@@ -78,7 +78,14 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 ## Pictures (GPT Image 2.5 via Higgsfield)
 
 - **What:** the station pictures, journey map, station icons and plant-marker stages in `public/images/`, all AI-generated with GPT Image 2.5 through Higgsfield (2026-10-04) and approved by Hussein (D32). The S2.N2 picture was also approved by the scholar reviewer (D46). `public/images/IMAGES.json` lists each file with its source, original file name and SHA-256.
-- **Licence:** generated under the project's existing Higgsfield subscription, under Higgsfield's terms of service. They are also CC BY-NC-SA 4.0 as MIZAN content (CONTENT-LICENSE.md).
+- **Licence:** generated under the project's existing Higgsfield subscription, under Higgsfield's terms of service. Plan tier and its commercial-use terms: [VERIFY: plan tier]. They are also CC BY-NC-SA 4.0 as MIZAN content (CONTENT-LICENSE.md).
+
+## Video clips (Higgsfield image-to-video)
+
+- **What:** four clips in `public/video/` (D60, D62): `map.mp4` (5 s loop behind the journey-map stones), `S1.mp4`, `S2.mp4` and `S3.mp4` (4.33 s moment scenes). Each was made with Higgsfield image-to-video from an approved picture listed above (start frames: `map/background`, `S1.N1`, `S2.N1`, `plant/stage-1`) on 2026-10-05, then trimmed and encoded by Hussein. H.264 MP4, no audio track. `public/video/VIDEOS.json` lists each file with its size, SHA-256, duration and start frame.
+- **Model:** [VERIFY: the Higgsfield image-to-video model used for each clip].
+- **Licence:** generated under the project's Higgsfield subscription, under Higgsfield's terms of service. Plan tier and its commercial-use terms: [VERIFY: plan tier]. As MIZAN content the clips are also CC BY-NC-SA 4.0 (CONTENT-LICENSE.md), as far as those terms allow.
+- **Content check:** every clip was checked at 0.5 s intervals for figures, hands, faces, text or added objects; none found. Each clip needs Hussein's review before release (D60). The originals are kept outside the build (`docs/video-input/originals/`, git-ignored); the shipped files are byte-identical copies.
 
 ## OpenAI API (classifier fallback: built, disabled, not used in this submission)
 

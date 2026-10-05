@@ -15,7 +15,8 @@ import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view
 import JudgePanel from './JudgePanel';
 import { NarrationButton, PictureCard, PlantMarker, VerseCard, type ParticleKind } from './media';
 import { sfx } from '@/app/_lib/sfx';
-import { MOMENT, MomentOverlay, type MomentPicture, type MomentRect } from './moments';
+import type { VideoSources } from '@/app/_lib/media';
+import { MOMENT, MomentOverlay, videoAllowed, type MomentPicture, type MomentRect } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -97,8 +98,9 @@ export interface AskReply {
 }
 export interface AskState { id: string; reply: AskReply | null; busy: boolean }
 
-export default function StationFlow({ view, labels, initial, initialAsk = null, initialJudge = false, sfxCues = [] }: {
+export default function StationFlow({ view, labels, initial, initialAsk = null, initialJudge = false, sfxCues = [], video = null }: {
   view: StationView; labels: Labels; initial?: FlowState; initialAsk?: AskState | null; initialJudge?: boolean; sfxCues?: readonly string[];
+  video?: VideoSources | null; // the station's moment clip (D60), null when its files are missing
 }) {
   const [state, dispatch] = useReducer((s: FlowState, a: Parameters<typeof reducer>[2]) => reducer(view, s, a), initial ?? initialState());
   const [ask, setAsk] = useState<AskState | null>(initialAsk);
@@ -110,6 +112,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   // then the praise line with its narration. momentPending holds the praise back meanwhile.
   const [momentPending, setMomentPending] = useState(false);
   const [moment, setMoment] = useState(false);
+  // The moment clip is preloaded while the child observes, unless reduced motion or data saver (D60).
+  const [preload, setPreload] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setPreload(Boolean(video) && videoAllowed()); }, [video]);
   // The chosen card's on-screen rect when the moment opens: the scene expands from it (Phase 1c).
   const [momentRect, setMomentRect] = useState<MomentRect | null>(null);
   const [praiseAuto, setPraiseAuto] = useState(false);
@@ -200,7 +206,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
 
       <StepDots step={state.step} />
 
-      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(o?.question), to: picture(firstCard) }} onDone={endMoment} fromRect={momentRect} />}
+      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(o?.question), to: picture(firstCard) }} onDone={endMoment} fromRect={momentRect} video={video} />}
 
       {state.step === 'frame' && (
         <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="frame">
@@ -215,6 +221,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
 
       {state.step === 'observe' && o && (
         <section className="anim-step flex flex-col gap-4" data-screen="observe">
+          {preload && video && (
+            // Hidden: warms the cache for the moment clip; never shown or played here.
+            <video src={video.mp4 ?? video.webm ?? undefined} preload="auto" muted playsInline className="hidden" aria-hidden="true" data-video-preload={view.stationId} />
+          )}
           <div className="flex items-stretch gap-3">
             <div className="card flex flex-1 items-center gap-4 p-4">
               <NarrationButton src={o.question.audio} label={labels.play} big />

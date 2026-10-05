@@ -13,6 +13,7 @@ import { sfx } from '@/app/_lib/sfx';
 import type { RecordView, StationView } from '@/app/_lib/station-view';
 import { stepKey, type StoryStep } from '@/app/_lib/story';
 import { VerseCard } from './media';
+import type { VideoSources } from '@/app/_lib/media';
 import { MOMENT, MomentOverlay, type MomentPicture } from './moments';
 import { addEvents } from './session';
 
@@ -36,8 +37,8 @@ function Picture({ record, ring = false }: { record: RecordView; ring?: boolean 
 const Line = ({ record }: { record: RecordView | null }) =>
   record ? <p className="font-display text-center text-3xl leading-relaxed text-ink" data-line={record.id}>{record.text}</p> : null;
 
-export default function StoryPlayer({ view, steps, labels, sfxCues = [], initialIndex = -1 }: {
-  view: StationView; steps: StoryStep[]; labels: Labels; sfxCues?: readonly string[]; initialIndex?: number;
+export default function StoryPlayer({ view, steps, labels, sfxCues = [], initialIndex = -1, video = null }: {
+  view: StationView; steps: StoryStep[]; labels: Labels; sfxCues?: readonly string[]; initialIndex?: number; video?: VideoSources | null;
 }) {
   const [index, setIndex] = useState(initialIndex);
   const [phase, setPhase] = useState<'ring' | 'moment' | 'praise'>('ring'); // answer step only
@@ -108,7 +109,7 @@ export default function StoryPlayer({ view, steps, labels, sfxCues = [], initial
           <Picture record={step.choice} ring />
           {phase === 'praise' && <Line record={step.praise} />}
           {phase === 'moment' && (
-            <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(view.observe?.question), to: picture(firstCard) }} onDone={() => setPhase('praise')} />
+            <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(view.observe?.question), to: picture(firstCard) }} onDone={() => setPhase('praise')} video={video} />
           )}
         </section>
       )}

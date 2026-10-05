@@ -1,0 +1,57 @@
+{
+  "note": "Moment and map clips (D60, D62). Each clip was checked frame by frame (every 0.5 s) for figures, hands, faces, text or added objects: none. Each clip needs Hussein's review before release (D60). WebM versions not produced yet (no ffmpeg on the build machine).",
+  "videos": [
+    {
+      "name": "map",
+      "path": "/video/map.mp4",
+      "bytes": 918271,
+      "sha256": "a5592515afbd4ca165fc80d7d1a536be91824801cda6819de0db66f76e2339c2",
+      "width": 1920,
+      "height": 1080,
+      "durationS": 5,
+      "codec": "H.264 (avc1), 24 fps, no audio, faststart",
+      "startFrame": "/images/map/background.webp",
+      "use": "journey map, looping behind the station stones",
+      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+    },
+    {
+      "name": "S1",
+      "path": "/video/S1.mp4",
+      "bytes": 699647,
+      "sha256": "5a88c434489338ad9b0e0a7428a7a77ddb84bf27977bb67510b2ea09479ca5f3",
+      "width": 1440,
+      "height": 1080,
+      "durationS": 4.333,
+      "codec": "H.264 (avc1), 24 fps, no audio, faststart",
+      "startFrame": "/images/S1/S1.N1.webp",
+      "use": "S1 moment scene",
+      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+    },
+    {
+      "name": "S2",
+      "path": "/video/S2.mp4",
+      "bytes": 556827,
+      "sha256": "5b77ab23fcf7c813ecd3a496728604c01902e6418770661bae14429748df00b3",
+      "width": 1440,
+      "height": 1080,
+      "durationS": 4.333,
+      "codec": "H.264 (avc1), 24 fps, no audio, faststart",
+      "startFrame": "/images/S2/S2.N1.webp",
+      "use": "S2 moment scene (start frame S2.N1 only)",
+      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+    },
+    {
+      "name": "S3",
+      "path": "/video/S3.mp4",
+      "bytes": 266890,
+      "sha256": "ee55f14b2195c21f6304a2a238b36d0be2898dc0a454e930d716462b2c278988",
+      "width": 1080,
+      "height": 1080,
+      "durationS": 4.333,
+      "codec": "H.264 (avc1), 24 fps, no audio, faststart",
+      "startFrame": "/images/plant/stage-1.webp",
+      "use": "S3 moment scene",
+      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+    }
+  ]
+}

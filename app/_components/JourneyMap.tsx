@@ -8,7 +8,9 @@
 import { ROADMAP_STATIONS } from '@/app/_lib/roadmap';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import type { VideoSources } from '@/app/_lib/media';
 import { PlantMarker, plantSrc } from './media';
+import { videoAllowed } from './moments';
 import { completedStations } from './session';
 
 export interface MapStation { id: string; number: number; title: string | null; stage: number }
@@ -27,14 +29,20 @@ const Icon = ({ id, dim }: { id: string; dim: boolean }) => (
   <img src={`/images/icons/${id}.webp`} alt="" width={800} height={800} className={`size-full scale-[1.12] rounded-full object-cover ${dim ? 'opacity-60 grayscale' : ''}`} />
 );
 
-export default function JourneyMap({ title, stations, parentsLabel, startLabel, comingSoonLabel }: {
+export default function JourneyMap({ title, stations, parentsLabel, startLabel, comingSoonLabel, video = null }: {
   title: string | null; stations: MapStation[]; parentsLabel?: string; startLabel?: string; comingSoonLabel?: string;
+  video?: VideoSources | null; // the looping map clip (D60), null when its files are missing
 }) {
   const [done, setDone] = useState<string[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
   // Device-only progress (sessionStorage) is read after mount so server and client markup match.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setDone(completedStations()); }, []);
+  // Map clip (D60): loops behind the stones, muted, after mount; never with reduced motion or data
+  // saver, and dropped on a load error (the approved still stays underneath).
+  const [mapVideo, setMapVideo] = useState(false);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMapVideo(Boolean(video) && videoAllowed()); }, [video]);
 
   const open = (i: number) => i === 0 || done.includes(stations[i - 1].id);
   const current = stations.find((s, i) => open(i) && !done.includes(s.id))?.id ?? null;
@@ -61,6 +69,13 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
       <div className="card relative w-full overflow-hidden" style={{ aspectRatio: '1344 / 752' }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/map/background.webp" alt="" aria-hidden="true" width={1344} height={752} className="absolute inset-0 size-full object-cover" data-map />
+        {mapVideo && video && (
+          <video autoPlay muted loop playsInline preload="auto" poster="/images/map/background.webp" aria-hidden="true" onError={() => setMapVideo(false)}
+            className="pointer-events-none absolute inset-0 size-full object-cover" data-map-video>
+            {video.webm && <source src={video.webm} type="video/webm" />}
+            {video.mp4 && <source src={video.mp4} type="video/mp4" onError={() => setMapVideo(false)} />}
+          </video>
+        )}
         <ol className="absolute inset-0">
           {stations.map((s, i) => {
             const isOpen = open(i);
