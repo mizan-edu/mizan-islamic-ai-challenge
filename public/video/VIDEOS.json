@@ -1,5 +1,5 @@
 {
-  "note": "Moment and map clips (D60, D62). Each clip was checked frame by frame (every 0.5 s) for figures, hands, faces, text or added objects: none. Each clip needs Hussein's review before release (D60). WebM versions not produced yet (no ffmpeg on the build machine).",
+  "note": "Moment and map clips (D60, D62). Each clip was checked frame by frame (every 0.5 s) for figures, hands, faces, text or added objects: none. Reviewed and approved by Hussein, clip by clip (D60, D63). MP4 (H.264) only (D63).",
   "videos": [
     {
       "name": "map",

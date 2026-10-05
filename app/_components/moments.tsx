@@ -210,8 +210,7 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, vi
                   {playing && video ? (
                     <video ref={clip} className="absolute inset-0 size-full object-contain" muted playsInline preload="auto" poster={poster}
                       onPlaying={onPlaying} onEnded={onEnded} onError={fail} data-moment-clip={stationId}>
-                      {video.webm && <source src={video.webm} type="video/webm" />}
-                      {video.mp4 && <source src={video.mp4} type="video/mp4" onError={fail} />}
+                      <source src={video.mp4} type="video/mp4" onError={fail} />
                     </video>
                   ) : (
                     <>

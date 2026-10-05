@@ -223,7 +223,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
         <section className="anim-step flex flex-col gap-4" data-screen="observe">
           {preload && video && (
             // Hidden: warms the cache for the moment clip; never shown or played here.
-            <video src={video.mp4 ?? video.webm ?? undefined} preload="auto" muted playsInline className="hidden" aria-hidden="true" data-video-preload={view.stationId} />
+            <video src={video.mp4} preload="auto" muted playsInline className="hidden" aria-hidden="true" data-video-preload={view.stationId} />
           )}
           <div className="flex items-stretch gap-3">
             <div className="card flex flex-1 items-center gap-4 p-4">

@@ -4912,6 +4912,72 @@
       "before": "- **نبتة ثلاثية الأبعاد:** ستحلّ محلّ صور النبتة المعتمدة إن ثبت أداؤها على الأجهزة اللوحية.",
       "after": "- **نبتة ثلاثية الأبعاد:** ستحلّ محلّ صور النبتة المعتمدة إن ثبت أداؤها على الأجهزة اللوحية، وبعد مراجعتها.",
       "source": "chat decision D59 (2026-10-05): Arabic doc lines added in 16b1c63 approved by Hussein"
+    },
+    {
+      "id": "VIDEO.map",
+      "kind": "media",
+      "file": "public/video/map.mp4",
+      "sha256": "a5592515afbd4ca165fc80d7d1a536be91824801cda6819de0db66f76e2339c2",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T00:18:16+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D63",
+      "source": "chat decision D63 (2026-10-06): video clip reviewed and approved by Hussein (D60 review)"
+    },
+    {
+      "id": "VIDEO.S1",
+      "kind": "media",
+      "file": "public/video/S1.mp4",
+      "sha256": "5a88c434489338ad9b0e0a7428a7a77ddb84bf27977bb67510b2ea09479ca5f3",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T00:18:16+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D63",
+      "source": "chat decision D63 (2026-10-06): video clip reviewed and approved by Hussein (D60 review)"
+    },
+    {
+      "id": "VIDEO.S2",
+      "kind": "media",
+      "file": "public/video/S2.mp4",
+      "sha256": "5b77ab23fcf7c813ecd3a496728604c01902e6418770661bae14429748df00b3",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T00:18:16+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D63",
+      "source": "chat decision D63 (2026-10-06): video clip reviewed and approved by Hussein (D60 review)"
+    },
+    {
+      "id": "VIDEO.S3",
+      "kind": "media",
+      "file": "public/video/S3.mp4",
+      "sha256": "ee55f14b2195c21f6304a2a238b36d0be2898dc0a454e930d716462b2c278988",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T00:18:16+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D63",
+      "source": "chat decision D63 (2026-10-06): video clip reviewed and approved by Hussein (D60 review)"
+    },
+    {
+      "id": "DOC.DISCLOSURE.md",
+      "kind": "doc-text",
+      "file": "DISCLOSURE.md",
+      "lines": "section 2, Higgsfield video row",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T00:18:16+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D63",
+      "after": "مقاطع الفيديو في لحظات المحطات وفي الخريطة مولَّدة بالذكاء الاصطناعي (Higgsfield، تحويل صورة إلى فيديو) من الرسوم المعتمدة نفسها، وقد راجعها حسين مقطعًا مقطعًا. لا يظهر فيها أي نص أو آية أو شخص.",
+      "source": "chat decision D63 (2026-10-06): DISCLOSURE line worded by Hussein"
     }
   ]
 }

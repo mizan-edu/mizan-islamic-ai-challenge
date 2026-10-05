@@ -46,7 +46,8 @@ describe('moment clip', () => {
 
   it('a missing file gives no sources at all', () => {
     expect(videoSources('S1', () => false)).toBeNull();
-    expect(videoSources('S1', (p) => p.endsWith('.mp4'))).toEqual({ mp4: '/video/S1.mp4', webm: null });
+    expect(videoSources('S1', (p) => p.endsWith('.mp4'))).toEqual({ mp4: '/video/S1.mp4' }); // MP4 (H.264) only (D63)
+    expect(videoSources('S1', (p) => p.endsWith('.webm'))).toBeNull();
   });
 });
 

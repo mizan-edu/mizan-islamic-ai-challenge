@@ -31,15 +31,13 @@ export function availableSfx(exists: FileExists = publicFileExists): SfxCue[] {
   return SFX_CUES.filter((cue) => exists(sfxPath(cue)));
 }
 
-// Video clips (D60, D62): /video/<name>.mp4 (H.264) and, when present, /video/<name>.webm. A clip whose
-// files are missing is simply absent, and the screen keeps the approved still and its CSS layer.
+// Video clips (D60, D62, D63): /video/<name>.mp4, H.264 only (it plays on every target browser). A clip
+// whose file is missing is simply absent, and the screen keeps the approved still and its CSS layer.
 export type VideoName = 'map' | 'S1' | 'S2' | 'S3';
-export interface VideoSources { mp4: string | null; webm: string | null }
-export const videoPath = (name: VideoName, ext: 'mp4' | 'webm'): string => `/video/${name}.${ext}`;
+export interface VideoSources { mp4: string }
+export const videoPath = (name: VideoName): string => `/video/${name}.mp4`;
 export function videoSources(name: VideoName, exists: FileExists = publicFileExists): VideoSources | null {
-  const mp4 = exists(videoPath(name, 'mp4')) ? videoPath(name, 'mp4') : null;
-  const webm = exists(videoPath(name, 'webm')) ? videoPath(name, 'webm') : null;
-  return mp4 || webm ? { mp4, webm } : null;
+  return exists(videoPath(name)) ? { mp4: videoPath(name) } : null;
 }
 
 export interface PictureSize { width: number; height: number }

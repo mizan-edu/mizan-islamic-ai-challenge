@@ -72,8 +72,7 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
         {mapVideo && video && (
           <video autoPlay muted loop playsInline preload="auto" poster="/images/map/background.webp" aria-hidden="true" onError={() => setMapVideo(false)}
             className="pointer-events-none absolute inset-0 size-full object-cover" data-map-video>
-            {video.webm && <source src={video.webm} type="video/webm" />}
-            {video.mp4 && <source src={video.mp4} type="video/mp4" onError={() => setMapVideo(false)} />}
+            <source src={video.mp4} type="video/mp4" onError={() => setMapVideo(false)} />
           </video>
         )}
         <ol className="absolute inset-0">
