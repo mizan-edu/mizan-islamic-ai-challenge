@@ -102,6 +102,23 @@ describe('pipeline, events and trace with the chain', () => {
     expect(res.trace).toMatchObject({ provider: 'openai', model: 'FIXTURE-SECONDARY', classifierLevel: 'A' });
   });
 
+  it('as shipped (D44: primary only, no secondary): a primary error or timeout shows fallback:static in the judge trace', async () => {
+    const env = { LLM_PROVIDER: 'anthropic', LLM_MODEL: 'FIXTURE-PRIMARY', ANTHROPIC_API_KEY: 'FIXTURE', OPENAI_API_KEY: 'FIXTURE' } as unknown as NodeJS.ProcessEnv;
+    expect(classifierFromEnv(env)).not.toBeNull(); // no LLM_FALLBACK_MODEL: the OpenAI secondary stays off
+    const res = await answerWithTrace(lib, { stationId: 'S1', text: QUESTION }, { classifier: createChainClassifier({ primary: primary(fail) }), now });
+    expect(res.llm).toEqual({ tier: 'static', reason: 'http_error', provider: null, model: null });
+    expect(res.trace.route).toMatchObject({ type: 'fallback:static', fallbackReason: 'http_error' });
+    expect(res.trace).toMatchObject({ provider: 'static', model: 'none' });
+    expect(res.reply.citations).toEqual(['S1.FB1']);
+    expect(res.llmEvent).toEqual({ stationId: 'S1', event: 'llm_fallback', tier: 'static', reason: 'http_error', t: 1700000000 });
+
+    vi.useFakeTimers();
+    const p = answerWithTrace(lib, { stationId: 'S1', text: QUESTION }, { classifier: createChainClassifier({ primary: primary(hang) }), now });
+    await vi.advanceTimersByTimeAsync(PRIMARY_TIMEOUT_MS);
+    const timed = await p;
+    expect(timed.trace.route).toMatchObject({ type: 'fallback:static', fallbackReason: 'timeout' });
+  });
+
   it('primary tier: no llm_fallback event; trace keeps model_classifier with the primary provider', async () => {
     const res = await answerWithTrace(lib, { stationId: 'S1', text: QUESTION }, { classifier: createChainClassifier({ primary: primary(ok({ level: 'C', recordId: null })) }), now });
     expect(res.llmEvent).toBeNull();

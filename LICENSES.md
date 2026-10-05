@@ -53,9 +53,7 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Never with Qur'an:** no effect plays while a recitation is playing; a running effect stops when one starts (D38). Parents can turn all effects off.
 - **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]
 
-## OpenAI API (classifier fallback only)
+## OpenAI API (classifier fallback: built, disabled, not used in this submission)
 
-- **Use:** secondary provider for the model classifier only (A4, D42), called when the primary (Anthropic) times out after 8 s, returns an HTTP error or returns invalid output. It never writes text for the child: it returns a level and a record ID from the approved candidates, validated exactly as the primary's output.
-- **Model:** `gpt-5.4-mini-2026-03-17`, set by the environment variable `LLM_FALLBACK_MODEL` (never hard-coded); key in `OPENAI_API_KEY`.
-- **What is sent:** the classifier prompt, the anonymous question text and the candidate record IDs with their approved non-Qur'anic text (verses and tafsir by reference only). Never names, ages, voice, device IDs or any other personal data.
-- **Terms:** OpenAI API terms of the project account. [Terms to be confirmed and linked by Hussein before submission.]
+- **Status (D44):** a secondary classifier provider via the OpenAI API is built in the code (A4, D42) but disabled: `LLM_FALLBACK_MODEL` is not set in any environment, so no request is ever sent to OpenAI. It was not tested against the live API and is not used in this submission. When the primary (Anthropic) fails, the app goes straight to the static tier (the station's approved fallback).
+- **If enabled later:** the model would come from `LLM_FALLBACK_MODEL` (never hard-coded) with the key in `OPENAI_API_KEY`; it would receive only the classifier prompt, the anonymous question text and the candidate record IDs with their approved non-Qur'anic text (verses and tafsir by reference only), never personal data, and would return a level and a record ID validated exactly as the primary's output.
