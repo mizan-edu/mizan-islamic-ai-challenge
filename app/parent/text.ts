@@ -1,6 +1,6 @@
 // Parent-page wording for the pilot (D47). Adult-facing Arabic (MSA). «للتجربة: نسخة القصة» and
-// «إعادة البدء» are as briefed by Hussein; the confirm question and its two buttons are drafted for
-// his review.
+// «إعادة البدء» as briefed by Hussein; the confirm question, its two buttons and the result line
+// approved by Hussein as drafted (D49).
 export const PILOT = {
   storyHeading: 'للتجربة: نسخة القصة',
   reset: 'إعادة البدء',

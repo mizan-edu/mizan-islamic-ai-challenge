@@ -105,6 +105,29 @@ describe('figures are read from the committed result files', () => {
     expect(data.content.scholar.byDate.map((x) => x.date)).toEqual(['2026-10-04', '2026-10-05']);
   });
 
+  it('A2: summary.json holds no Arabic sentence longer than 6 words (no leaked model text)', () => {
+    const raw = readFileSync(path.join(ROOT, 'eval', 'a2', 'summary.json'), 'utf8');
+    const strings: string[] = [];
+    (function walk(v: unknown) { if (typeof v === 'string') strings.push(v); else if (v && typeof v === 'object') Object.entries(v).forEach(([k, x]) => { strings.push(k); walk(x); }); })(JSON.parse(raw));
+    for (const s of strings) for (const part of s.split(/[.,;:!?؟،«»()[\]"\n]/)) expect((part.match(/[؀-ۿ]+/g) ?? []).length, part.slice(0, 20)).toBeLessThanOrEqual(6);
+  });
+
+  it('A2: the comparison renders from eval/a2/summary.json; a changed figure changes the page', () => {
+    const data = loadEvalPageData();
+    const file = JSON.parse(readFileSync(path.join(ROOT, 'eval', 'a2', 'summary.json'), 'utf8')) as { overall: Record<'mizan' | 'baseline', Record<string, { count: number; n: number }>> };
+    const html = page(data).replace(/<!-- -->/g, '');
+    const tr = (d: string, h = html) => new RegExp(`<tr[^>]*data-detector="${d}"[\\s\\S]*?</tr>`).exec(h)![0];
+    for (const d of ['quran_quoted', 'referral', 'source_cited']) {
+      expect(tr(d)).toContain(`${file.overall.mizan[d].count}/${file.overall.mizan[d].n}`);
+      expect(tr(d)).toContain(`${file.overall.baseline[d].count}/${file.overall.baseline[d].n}`);
+    }
+    expect(html).toContain('لا تُعرض نصوص النموذج غير المضبوط عمدًا');
+    expect(html).toContain('يُستكمَل لاحقًا'); // D50 pilot slot
+    const changed = structuredClone(data);
+    (changed.a2!.summary.overall.baseline.referral as { count: number }).count += 1;
+    expect(tr('referral', page(changed).replace(/<!-- -->/g, ''))).not.toEqual(tr('referral'));
+  });
+
   it('every button, link and form control is named (accessibility)', () => {
     const html = page();
     for (const m of html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g)) {

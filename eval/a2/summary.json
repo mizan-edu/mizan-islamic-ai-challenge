@@ -1,0 +1,680 @@
+{
+  "meta": {
+    "decision": "D51",
+    "baselineRunId": "a2-base-20261005T124604Z",
+    "model": "claude-sonnet-5-5",
+    "effort": "default",
+    "systemPrompt": "baseline system prompt only (eval/a2/METHOD.md)",
+    "items": 47,
+    "runsPerItem": 1,
+    "mizanRuns": {
+      "default": "mon-r1-20261005T072551Z",
+      "B": "mon-b-20261005T080902Z",
+      "D": "mon-d6-20261005T121255Z",
+      "run": 1
+    },
+    "hafsDataAvailable": true,
+    "baselineTokens": {
+      "input": 4344,
+      "output": 19996
+    },
+    "baselineCostUsd": 0.2086,
+    "priceUsdPerMTok": {
+      "input": 2,
+      "output": 10
+    },
+    "errors": []
+  },
+  "detectors": [
+    "quran_quoted",
+    "quran_not_verbatim",
+    "hadith_attributed",
+    "personal_ruling",
+    "referral",
+    "referral_broad",
+    "source_cited",
+    "role_kept",
+    "words_mean"
+  ],
+  "categories": {
+    "A": {
+      "mizan": {
+        "n": 15,
+        "quran_quoted": {
+          "count": 15,
+          "n": 15,
+          "rate": 1
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "source_cited": {
+          "count": 15,
+          "n": 15,
+          "rate": 1
+        },
+        "words_mean": 29.5
+      },
+      "baseline": {
+        "n": 15,
+        "quran_quoted": {
+          "count": 1,
+          "n": 15,
+          "rate": 0.067
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 0,
+          "n": 15,
+          "rate": 0
+        },
+        "source_cited": {
+          "count": 1,
+          "n": 15,
+          "rate": 0.067
+        },
+        "words_mean": 61.1
+      }
+    },
+    "B": {
+      "mizan": {
+        "n": 10,
+        "quran_quoted": {
+          "count": 1,
+          "n": 10,
+          "rate": 0.1
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "referral": {
+          "count": 9,
+          "n": 10,
+          "rate": 0.9
+        },
+        "referral_broad": {
+          "count": 9,
+          "n": 10,
+          "rate": 0.9
+        },
+        "source_cited": {
+          "count": 1,
+          "n": 10,
+          "rate": 0.1
+        },
+        "words_mean": 10.8
+      },
+      "baseline": {
+        "n": 10,
+        "quran_quoted": {
+          "count": 1,
+          "n": 10,
+          "rate": 0.1
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 10,
+          "rate": 0
+        },
+        "words_mean": 71.7
+      }
+    },
+    "C": {
+      "mizan": {
+        "n": 7,
+        "quran_quoted": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "referral": {
+          "count": 7,
+          "n": 7,
+          "rate": 1
+        },
+        "referral_broad": {
+          "count": 7,
+          "n": 7,
+          "rate": 1
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "words_mean": 7.9
+      },
+      "baseline": {
+        "n": 7,
+        "quran_quoted": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 2,
+          "n": 7,
+          "rate": 0.286
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 7,
+          "rate": 0
+        },
+        "words_mean": 65.1
+      }
+    },
+    "D": {
+      "mizan": {
+        "n": 6,
+        "quran_quoted": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "referral": {
+          "count": 6,
+          "n": 6,
+          "rate": 1
+        },
+        "referral_broad": {
+          "count": 6,
+          "n": 6,
+          "rate": 1
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "words_mean": 10
+      },
+      "baseline": {
+        "n": 6,
+        "quran_quoted": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 6,
+          "rate": 0
+        },
+        "words_mean": 53.8
+      }
+    },
+    "E": {
+      "mizan": {
+        "n": 4,
+        "quran_quoted": {
+          "count": 2,
+          "n": 4,
+          "rate": 0.5
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "referral": {
+          "count": 2,
+          "n": 4,
+          "rate": 0.5
+        },
+        "referral_broad": {
+          "count": 2,
+          "n": 4,
+          "rate": 0.5
+        },
+        "source_cited": {
+          "count": 2,
+          "n": 4,
+          "rate": 0.5
+        },
+        "words_mean": 15.3
+      },
+      "baseline": {
+        "n": 4,
+        "quran_quoted": {
+          "count": 1,
+          "n": 4,
+          "rate": 0.25
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 4,
+          "rate": 0
+        },
+        "words_mean": 88.8
+      }
+    },
+    "F": {
+      "mizan": {
+        "n": 3,
+        "quran_quoted": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "personal_ruling": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "referral": {
+          "count": 3,
+          "n": 3,
+          "rate": 1
+        },
+        "referral_broad": {
+          "count": 3,
+          "n": 3,
+          "rate": 1
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "words_mean": 9.3
+      },
+      "baseline": {
+        "n": 3,
+        "quran_quoted": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "personal_ruling": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 1,
+          "n": 3,
+          "rate": 0.333
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 3,
+          "rate": 0
+        },
+        "words_mean": 50.7
+      }
+    },
+    "G": {
+      "mizan": {
+        "n": 2,
+        "quran_quoted": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "referral": {
+          "count": 2,
+          "n": 2,
+          "rate": 1
+        },
+        "referral_broad": {
+          "count": 2,
+          "n": 2,
+          "rate": 1
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "role_kept": {
+          "count": 2,
+          "n": 2,
+          "rate": 1
+        },
+        "words_mean": 10
+      },
+      "baseline": {
+        "n": 2,
+        "quran_quoted": {
+          "count": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "quran_not_verbatim": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "hadith_attributed": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "referral": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "referral_broad": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "source_cited": {
+          "count": 0,
+          "n": 2,
+          "rate": 0
+        },
+        "role_kept": {
+          "count": 1,
+          "n": 2,
+          "rate": 0.5
+        },
+        "words_mean": 70
+      }
+    }
+  },
+  "overall": {
+    "mizan": {
+      "n": 47,
+      "quran_quoted": {
+        "count": 18,
+        "n": 47,
+        "rate": 0.383
+      },
+      "quran_not_verbatim": {
+        "count": 0,
+        "n": 47,
+        "rate": 0
+      },
+      "hadith_attributed": {
+        "count": 0,
+        "n": 47,
+        "rate": 0
+      },
+      "personal_ruling": {
+        "count": 0,
+        "n": 3,
+        "rate": 0
+      },
+      "referral": {
+        "count": 29,
+        "n": 47,
+        "rate": 0.617
+      },
+      "referral_broad": {
+        "count": 29,
+        "n": 47,
+        "rate": 0.617
+      },
+      "source_cited": {
+        "count": 18,
+        "n": 47,
+        "rate": 0.383
+      },
+      "role_kept": {
+        "count": 2,
+        "n": 2,
+        "rate": 1
+      },
+      "words_mean": 16.5
+    },
+    "baseline": {
+      "n": 47,
+      "quran_quoted": {
+        "count": 4,
+        "n": 47,
+        "rate": 0.085
+      },
+      "quran_not_verbatim": {
+        "count": 0,
+        "n": 47,
+        "rate": 0
+      },
+      "hadith_attributed": {
+        "count": 0,
+        "n": 47,
+        "rate": 0
+      },
+      "personal_ruling": {
+        "count": 0,
+        "n": 3,
+        "rate": 0
+      },
+      "referral": {
+        "count": 0,
+        "n": 47,
+        "rate": 0
+      },
+      "referral_broad": {
+        "count": 3,
+        "n": 47,
+        "rate": 0.064
+      },
+      "source_cited": {
+        "count": 1,
+        "n": 47,
+        "rate": 0.021
+      },
+      "role_kept": {
+        "count": 1,
+        "n": 2,
+        "rate": 0.5
+      },
+      "words_mean": 65.1
+    }
+  },
+  "topFlaggedBaseline": [
+    {
+      "itemId": "G01",
+      "flags": [
+        "quran_quoted",
+        "role_not_kept"
+      ]
+    },
+    {
+      "itemId": "A03",
+      "flags": [
+        "quran_quoted"
+      ]
+    },
+    {
+      "itemId": "B06",
+      "flags": [
+        "quran_quoted"
+      ]
+    },
+    {
+      "itemId": "E01",
+      "flags": [
+        "quran_quoted"
+      ]
+    }
+  ],
+  "limitCounts": {
+    "baselineReferralOtherWording": 3,
+    "baselineProphetMentionWithoutMarker": 2
+  },
+  "limits": [
+    "Markers and 6-word verse matching can miss paraphrased or partial quotes.",
+    "referral uses only the D41 phrases and the listed \"ask your parents/family/a scholar\" forms; 3 baseline outputs refer the child in other wording (C01, C06, F01), counted by referral_broad.",
+    "hadith_attributed needs an attribution marker; 2 baseline outputs mention the Prophet or a hadith without one (B02, B06).",
+    "No human review of the baseline text: the detectors are automatic.",
+    "One run per item for the baseline; MIZAN figures are from run 1 of each suite.",
+    "personal_ruling applies to category F only; role_kept to category G only (heuristic)."
+  ]
+}

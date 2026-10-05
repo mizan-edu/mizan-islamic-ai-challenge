@@ -161,3 +161,6 @@ docs/review/out/
 # Playwright artefacts (screenshots kept in docs/screenshots)
 /test-results/
 /playwright-report/
+
+# A2 baseline raw outputs (D51): local only, never committed; deleted after the summary.
+eval/.a2-raw/

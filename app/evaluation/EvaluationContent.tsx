@@ -2,7 +2,7 @@
 // eval-data.ts (each with a link to its source file on GitHub) and mounts «جرّب سؤالًا».
 
 import Link from 'next/link';
-import type { EvalPageData } from '@/app/_lib/eval-data';
+import type { EvalPageData, Rate } from '@/app/_lib/eval-data';
 import type { Labels } from '@/app/_lib/labels';
 import { MAX_CHARS } from '@/app/_lib/try-limits';
 import { LIVE_URL, REPO_URL, sourceUrl, T } from './text';
@@ -25,6 +25,47 @@ const Section = ({ id, title, children }: { id: string; title: string; children:
 const Badge = ({ children, tone = 'leaf' }: { children: React.ReactNode; tone?: 'leaf' | 'sun' }) => (
   <span className={`inline-block self-start rounded-full px-4 py-1 font-display text-base ${tone === 'leaf' ? 'bg-leaf-soft text-leaf-dark' : 'bg-sun-soft text-ink'}`}>{children}</span>
 );
+
+const rateCell = (x: unknown) => {
+  const r = x as Rate | undefined;
+  return r && typeof r === 'object' ? `${r.count}/${r.n} (${Number((r.rate * 100).toFixed(1))}%)` : '—';
+};
+
+function Compare({ a2 }: { a2: NonNullable<EvalPageData['a2']> }) {
+  const { summary: s } = a2;
+  const rows = s.detectors.filter((d) => d !== 'words_mean');
+  return (
+    <>
+      <p className="text-lg leading-relaxed text-ink">{T.compare.method(s.meta.model, s.meta.items)} <Src path={a2.method} /></p>
+      {/* Scrolls sideways on a phone: a focusable, labelled region (axe). */}
+      <div className="overflow-x-auto" role="region" aria-labelledby="compare-h" tabIndex={0}>
+        <table className="w-full border-collapse text-start text-base" data-compare-table>
+          <thead><tr>{T.compare.cols.map((c) => <th key={c} scope="col" className="border-b border-stone px-2 py-2 text-start font-display text-ink">{c}</th>)}</tr></thead>
+          <tbody>
+            {rows.map((d) => (
+              <tr key={d} data-detector={d}>
+                <th scope="row" className="border-b border-stone px-2 py-2 text-start font-normal text-ink">{T.compare.detectors[d] ?? d}</th>
+                <td className="border-b border-stone px-2 py-2" dir="ltr">{rateCell(s.overall.mizan[d])}</td>
+                <td className="border-b border-stone px-2 py-2" dir="ltr">{rateCell(s.overall.baseline[d])}</td>
+              </tr>
+            ))}
+            <tr data-detector="words_mean">
+              <th scope="row" className="border-b border-stone px-2 py-2 text-start font-normal text-ink">{T.compare.words}</th>
+              <td className="border-b border-stone px-2 py-2" dir="ltr">{s.overall.mizan.words_mean}</td>
+              <td className="border-b border-stone px-2 py-2" dir="ltr">{s.overall.baseline.words_mean}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p className="font-display text-lg text-ink" data-no-baseline-text>{T.compare.noText}</p>
+      <h3 className="font-display text-2xl text-ink">{T.compare.limitsTitle}</h3>
+      <ul className="list-disc ps-6 text-base leading-relaxed text-ink">
+        {T.compare.limits(s.limitCounts.baselineReferralOtherWording, s.limitCounts.baselineProphetMentionWithoutMarker).map((l) => <li key={l}>{l}</li>)}
+      </ul>
+      <p className="text-base text-ink-2">{T.compare.cost(`${s.meta.baselineCostUsd.toFixed(4)}`)} <Src path={a2.source} /></p>
+    </>
+  );
+}
 
 export default function EvaluationContent({ data, labels, stations, items }: { data: EvalPageData; labels: Labels; stations: { id: string; title: string }[]; items: PickItem[] }) {
   const s = data.suite;
@@ -151,7 +192,7 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
       </Section>
 
       <Section id="compare" title={T.heading.compare}>
-        <Badge tone="sun">{T.pendingTuesday}</Badge>
+        {data.a2 ? <Compare a2={data.a2} /> : <Badge tone="sun">{T.pendingTuesday}</Badge>}
       </Section>
 
       <Section id="vision" title={T.heading.vision}>

@@ -27,7 +27,17 @@ export interface CategoryRow { category: string; items: number; perRun: number[]
 const RERUNS = [{ prefix: 'mon-d6-', category: 'D', decision: 'D46' }];
 export interface RunRef { runId: string; commit: string; source: string }
 
+export interface Rate { count: number; n: number; rate: number }
+export interface A2Side { n: number; words_mean: number | null; [detector: string]: Rate | number | null }
+export interface A2Summary {
+  meta: { baselineRunId: string; model: string; items: number; baselineCostUsd: number; hafsDataAvailable: boolean; mizanRuns: Record<string, string | number> };
+  detectors: string[];
+  overall: { mizan: A2Side; baseline: A2Side };
+  limitCounts: { baselineReferralOtherWording: number; baselineProphetMentionWithoutMarker: number };
+}
+
 export interface EvalPageData {
+  a2: { summary: A2Summary; source: string; method: string } | null;
   suite: {
     runs: RunRef[]; model: string | null; categories: CategoryRow[]; items: number; executions: number;
     all3: number; sameLevelRecord: number;
@@ -160,7 +170,13 @@ export function loadEvalPageData(paths: EvalDataPaths = {}): EvalPageData {
   const drafts = files.filter((f) => f.startsWith('mon-draft') || RERUNS.some((rr) => f.startsWith(rr.prefix))).sort((a, b) => stamp(a).localeCompare(stamp(b))).map((f) => ({ f, file: JSON.parse(readFileSync(/*turbopackIgnore: true*/ path.join(resultsDir, f), 'utf8')) as ResultFile }));
   const d09 = drafts.flatMap(({ f, file }) => file.results.filter((r) => r.itemId === 'D09').map((r) => ({ level: r.assignedLevel, source: rel(root, path.join(resultsDir, f)) })));
 
+  const a2Path = path.join(root, 'eval', 'a2', 'summary.json');
+  const a2 = existsSync(/*turbopackIgnore: true*/ a2Path)
+    ? { summary: JSON.parse(readFileSync(/*turbopackIgnore: true*/ a2Path, 'utf8')) as A2Summary, source: rel(root, a2Path), method: 'eval/a2/METHOD.md' }
+    : null;
+
   return {
+    a2,
     suite: {
       runs: mon.map((m) => m.ref), model: mon[0].file.meta.modelId, categories, items: items.length, executions: results.length, all3, sameLevelRecord,
       cost: { total, perExecution: total === null ? null : total / results.length, perCall: total === null || !calls.length ? null : total / calls.length, calls: calls.length },
