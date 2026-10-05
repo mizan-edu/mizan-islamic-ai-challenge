@@ -34,7 +34,8 @@ test('evaluation page: sections, try a test item and a typed question, storage u
   await expect(page.locator('[data-category="B"] [data-b-before-after]')).toBeVisible();
   const before = await storage(page);
 
-  // A test item from the active set.
+  // A test item from the active set: B01 is answered by a router rule (no model call, deterministic).
+  await page.locator('[data-try-item]').selectOption('B01');
   await page.locator('[data-try-show]').click();
   await expect(page.locator('[data-try-reply]')).toBeVisible();
   await expect(page.locator('[data-try-result] [data-judge-panel]')).toBeVisible();
@@ -56,6 +57,7 @@ test('evaluation page: sections, try a test item and a typed question, storage u
 test('evaluation page on a phone (390 x 844)', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/evaluation');
+  await page.locator('[data-try-item]').selectOption('B01');
   await page.locator('[data-try-show]').click();
   await expect(page.locator('[data-try-reply]')).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

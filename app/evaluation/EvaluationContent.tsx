@@ -33,13 +33,15 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
   const activeNotPickable = data.testset.activeIds.filter((id) => !pickable.has(id));
   const im = data.improvements;
   const sc = data.content.scholar;
+  const vt = data.content.verseText;
+  const verseSource = T.verseSource(vt.platform, vt.file, vt.version);
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-4xl flex-col gap-6 px-4 py-8 sm:px-8" data-screen="evaluation">
       <h1 className="font-display text-4xl text-ink">{T.title}</h1>
 
       <Section id="about" title={T.heading.about}>
         <Badge>{T.badgeBuilt}</Badge>
-        <p className="text-lg leading-loose text-ink">{T.about}</p>
+        <p className="text-lg leading-loose text-ink" data-about>{T.about(verseSource)}</p>
       </Section>
 
       <Section id="try" title={T.heading.try}>
@@ -65,7 +67,7 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
                     <td className="border-b border-stone px-2 py-2" data-mean={c.category}>
                       {isB ? <span data-b-before-after>{T.results.bBeforeAfter(pct(data.d41.before), pct(data.d41.after))}</span> : <span dir="ltr">{pct(c.mean)}</span>}
                     </td>
-                    <td className="border-b border-stone px-2 py-2" dir="ltr">{`≥ ${pct(c.threshold)}`}</td>
+                    <td className="border-b border-stone px-2 py-2" dir="ltr">{c.threshold < 1 ? `≥ ${pct(c.threshold)}` : pct(c.threshold)}</td>
                     <td className="border-b border-stone px-2 py-2">{(isB ? data.d41.after >= c.threshold - 1e-9 : c.met) ? T.results.yes : T.results.no}</td>
                   </tr>
                 );
@@ -100,9 +102,10 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
         <p className="text-lg text-ink" data-approved>{T.safety.approved(data.content.approved.value)} ({Object.entries(data.content.byType).map(([k, v]) => `${v} ${T.safety.types[k] ?? k}`).join('، ')})</p>
         <h3 className="font-display text-2xl text-ink">{T.safety.sourcesTitle}</h3>
         <ul className="list-disc ps-6 text-lg leading-relaxed text-ink">
-          <li>{T.safety.quran(data.content.quran.platform, data.content.quran.count, data.content.font)}</li>
+          <li data-verse-source>{T.safety.quran(verseSource, data.content.quran.count)} <Src path={vt.snapshot} /></li>
+          <li data-font-source>{T.safety.font(T.fontName, data.content.font)} <Src path="LICENSES.md" /></li>
           <li>{T.safety.tafsir(data.content.tafsir.platform, data.content.tafsir.edition, data.content.tafsir.count)}</li>
-          <li>{T.safety.recitation(data.content.recitation.platform, data.content.recitation.reciterMatch, data.content.recitation.rewaya)} <Src path={data.content.recitation.snapshot} /></li>
+          <li>{T.safety.recitation(data.content.recitation.platform, data.content.recitation.reciter, data.content.recitation.rewaya)} <Src path={data.content.recitation.snapshot} /></li>
         </ul>
         <p className="text-lg text-ink">{T.safety.voice}</p>
         <p className="text-lg text-ink">{T.safety.validator}</p>

@@ -39,7 +39,8 @@ export interface EvalPageData {
   content: {
     approved: Sourced<number>; byType: Record<string, number>;
     tafsir: { platform: string; edition: string; count: number }; quran: { platform: string; count: number };
-    font: string; recitation: { platform: string; reciterMatch: string; rewaya: string; snapshot: string };
+    font: string; recitation: { platform: string; reciter: string; rewaya: string; snapshot: string };
+    verseText: { platform: string; file: string; version: string; snapshot: string }; // as recorded in the snapshot
     scholar: { date: string; count: number; byKind: Record<string, number>; source: string };
   };
   limits: { a04: { passed: number; runs: number }; d09Levels: string[]; d09Sources: string[]; stationsBuilt: number; stationsPlanned: number };
@@ -117,7 +118,7 @@ export function loadEvalPageData(paths: EvalDataPaths = {}): EvalPageData {
   const quran = recs.filter((r) => r.type === 'quran');
   const snapDir = path.join(contentDir, 'snapshots');
   const snapFile = readdirSync(/*turbopackIgnore: true*/ snapDir).filter((f) => f.endsWith('.json') && !f.includes('dry-run')).sort().at(-1)!;
-  const snap = JSON.parse(readFileSync(/*turbopackIgnore: true*/ path.join(snapDir, snapFile), 'utf8')) as { config?: { mp3quran?: { reciterNameContains?: string } }; sources?: { mp3quran?: { rewaya?: string } } };
+  const snap = JSON.parse(readFileSync(/*turbopackIgnore: true*/ path.join(snapDir, snapFile), 'utf8')) as { sources?: { kfc?: { file?: string; sourceVersion?: string }; mp3quran?: { name?: string; rewaya?: string } } };
   const fontDir = path.join(root, 'public', 'fonts');
   const font = existsSync(/*turbopackIgnore: true*/ fontDir) ? readdirSync(/*turbopackIgnore: true*/ fontDir).find((f) => /hafs/i.test(f) && /\.(ttf|otf|woff2?)$/.test(f)) ?? '' : '';
   const logPath = path.join(contentDir, 'review-log.json');
@@ -154,7 +155,11 @@ export function loadEvalPageData(paths: EvalDataPaths = {}): EvalPageData {
       font,
       recitation: {
         platform: String((quran[0]?.recitation as { platform?: string } | undefined)?.platform ?? ''),
-        reciterMatch: snap.config?.mp3quran?.reciterNameContains ?? '', rewaya: snap.sources?.mp3quran?.rewaya ?? '',
+        reciter: snap.sources?.mp3quran?.name ?? '', rewaya: snap.sources?.mp3quran?.rewaya ?? '',
+        snapshot: rel(root, path.join(snapDir, snapFile)),
+      },
+      verseText: {
+        platform: String(quran[0]?.sourcePlatform ?? ''), file: snap.sources?.kfc?.file ?? '', version: snap.sources?.kfc?.sourceVersion ?? '',
         snapshot: rel(root, path.join(snapDir, snapFile)),
       },
       scholar: { date: r2Dates.at(-1) ?? '', count: r2.length, byKind: r2.reduce<Record<string, number>>((m, e) => ({ ...m, [e.kind]: (m[e.kind] ?? 0) + 1 }), {}), source: rel(root, logPath) },

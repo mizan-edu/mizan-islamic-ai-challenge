@@ -69,6 +69,25 @@ describe('figures are read from the committed result files', () => {
     expect(html).toContain('data-b-before-after');
   });
 
+  it('D45: verse-text source exactly as recorded in the snapshot; font, reciter, category names, thresholds', () => {
+    const data = loadEvalPageData();
+    const snapDir = path.join(ROOT, 'content', 'snapshots');
+    const snapFile = readdirSync(snapDir).filter((f) => f.endsWith('.json') && !f.includes('dry-run')).sort().at(-1)!;
+    const snap = JSON.parse(readFileSync(path.join(snapDir, snapFile), 'utf8')) as { sources: { kfc: { file: string; sourceVersion: string }; mp3quran: { name: string; rewaya: string } } };
+    const platforms = new Set([...lib.byId.values()].filter((r) => r.type === 'quran').map((r) => r.sourcePlatform));
+    expect(platforms.size).toBe(1);
+    expect(data.content.verseText).toMatchObject({ platform: [...platforms][0], file: snap.sources.kfc.file, version: snap.sources.kfc.sourceVersion });
+    const html = page(data).replace(/<!-- -->/g, '');
+    const source = T.verseSource(data.content.verseText.platform, data.content.verseText.file, data.content.verseText.version);
+    expect(/<li[^>]*data-verse-source[^>]*>([\s\S]*?)<\/li>/.exec(html)![1]).toContain(source);
+    expect(/<p[^>]*data-about[^>]*>([\s\S]*?)<\/p>/.exec(html)![1]).toContain(source);
+    expect(/<li[^>]*data-font-source[^>]*>([\s\S]*?)<\/li>/.exec(html)![1]).toContain('خط مجمع الملك فهد لطباعة المصحف الشريف');
+    expect(html).toContain(`الشيخ ${snap.sources.mp3quran.name}، رواية ${snap.sources.mp3quran.rewaya}`);
+    for (const c of data.suite.categories) expect(row(html, c.category)).toContain(T.results.categories[c.category]);
+    expect(row(html, 'A')).toContain('≥ 90%');
+    for (const c of ['B', 'C', 'D', 'E', 'F', 'G']) { expect(row(html, c)).toContain('>100%<'); expect(row(html, c)).not.toContain('≥'); }
+  });
+
   it('every button, link and form control is named (accessibility)', () => {
     const html = page();
     for (const m of html.matchAll(/<(button|a)\b([^>]*)>([\s\S]*?)<\/\1>/g)) {
