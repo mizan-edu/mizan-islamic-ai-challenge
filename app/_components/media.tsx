@@ -123,14 +123,20 @@ const Star = ({ className }: { className: string }) => (
 
 // Verse card: calm and still. Stored text in the KFC font (never animated), the reference, and the
 // real recitation limited to the ayah. Only the recitation button moves, and only while playing.
-export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { verse: VerseView; playLabel?: string; label?: string; surahLabel?: string; ayahLabel?: string }) {
+// Story mode (D47): autoPlay starts the recitation on mount (the story's play tap is the user gesture)
+// and onDone fires once when it ends, fails or is missing.
+export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, autoPlay = false, onDone }: {
+  verse: VerseView; playLabel?: string; label?: string; surahLabel?: string; ayahLabel?: string; autoPlay?: boolean; onDone?: () => void;
+}) {
   const ref = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const reciting = useRef(false);
   const rc = verse.recitation;
   // Qur'an recitation: sound effects stop and stay silent until it ends (D38).
   const started = () => { reciting.current = true; sfx.recitationStarted(); };
-  const stopped = () => { setPlaying(false); reciting.current = false; sfx.recitationStopped(); };
+  const done = useRef(false);
+  const finish = () => { if (!done.current && onDone) { done.current = true; onDone(); } };
+  const stopped = () => { setPlaying(false); reciting.current = false; sfx.recitationStopped(); finish(); };
 
   const play = () => {
     const a = ref.current;
@@ -148,6 +154,12 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel }: { 
   };
   // Leaving the card mid-recitation (next step, another page): stop the recitation and let sound
   // effects play again; the element's own pause event no longer reaches React once it is unmounted.
+  useEffect(() => {
+    if (!autoPlay) return;
+    if (rc) play(); else finish();
+    // Mount only: autoplay once.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     const a = ref.current;
     return () => {
