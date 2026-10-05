@@ -4522,6 +4522,72 @@
       ],
       "packet": "docs/review/mon-scholar-outputs.html",
       "packetSha256": "e540f5c3683027a03ae9091839e965c55c1f29414c745582450857dcf5ad5c66"
+    },
+    {
+      "id": "UI.JUDGE_DECISION",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T20:32:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D55 (2026-10-05): AI-lens and parental-gate label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_RECORDS",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T20:32:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D55 (2026-10-05): AI-lens and parental-gate label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_SOURCE",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T20:32:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D55 (2026-10-05): AI-lens and parental-gate label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_TOKENS",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T20:32:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "before": "الرموز (إدخال / إخراج)",
+      "after": "عدد الرموز (المدخلات / المخرجات)",
+      "source": "chat decision D55 (2026-10-05): AI-lens and parental-gate label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_FALLBACK",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T20:32:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "before": "الرد البديل",
+      "after": "المسار الاحتياطي",
+      "source": "chat decision D55 (2026-10-05): AI-lens and parental-gate label approved by Hussein"
+    },
+    {
+      "id": "UI.GATE_PROMPT",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T20:32:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "before": "للوالدين: اضغطوا الأرقام 7 ثم 3 ثم 9.",
+      "after": "للوالدين: اضغطوا على الأرقام 7 ثم 3 ثم 9.",
+      "source": "chat decision D55 (2026-10-05): AI-lens and parental-gate label approved by Hussein"
     }
   ]
 }

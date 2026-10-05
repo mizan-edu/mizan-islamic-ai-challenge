@@ -530,11 +530,11 @@
       "role": "frame",
       "text": "نوع القرار",
       "note": "AI lens (D54): decision kind, value rule or model (English code)",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T20:32:10+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -549,11 +549,11 @@
       "role": "frame",
       "text": "السجلات المستخدمة",
       "note": "AI lens (D54): record IDs used by the decision",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T20:32:10+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -568,11 +568,11 @@
       "role": "frame",
       "text": "المصدر",
       "note": "AI lens (D54): source platform and platform ID of each record",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T20:32:10+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -585,13 +585,13 @@
       "reference": null,
       "id": "UI.JUDGE_TOKENS",
       "role": "frame",
-      "text": "الرموز (إدخال / إخراج)",
+      "text": "عدد الرموز (المدخلات / المخرجات)",
       "note": "AI lens (D54): input / output tokens of each model call",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T20:32:10+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -604,13 +604,13 @@
       "reference": null,
       "id": "UI.JUDGE_FALLBACK",
       "role": "frame",
-      "text": "الرد البديل",
+      "text": "المسار الاحتياطي",
       "note": "AI lens (D54): whether the fallback path answered (yes/no code)",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T20:32:10+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -623,13 +623,13 @@
       "reference": null,
       "id": "UI.GATE_PROMPT",
       "role": "frame",
-      "text": "للوالدين: اضغطوا الأرقام 7 ثم 3 ثم 9.",
+      "text": "للوالدين: اضغطوا على الأرقام 7 ثم 3 ثم 9.",
       "note": "parent page parental gate (D54): adult instruction above the number pad; Western numerals",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-05T20:32:10+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     }
   ]
 }

@@ -107,13 +107,15 @@ describe('parental gate (D54)', () => {
     expect(html).not.toMatch(/[٠-٩]/);
   });
 
-  it('the parent page puts the lens switch behind the gate, and the gate prompt label is a draft until Review 1', () => {
+  it('the parent page puts the lens switch behind the gate; the six D54 labels are approved (D55) and load', () => {
     const page = readFileSync(path.join(process.cwd(), 'app', 'parent', 'page.tsx'), 'utf8');
     expect(page).toMatch(/<ParentGate[^>]*>\s*<JudgeSwitch/);
     const ui = JSON.parse(readFileSync(path.join(process.cwd(), 'content', 'ui.json'), 'utf8')) as { records: { id: string; status: string; level: string; reviewer1: unknown; reviewer2: unknown }[] };
     for (const id of ['UI.GATE_PROMPT', 'UI.JUDGE_DECISION', 'UI.JUDGE_RECORDS', 'UI.JUDGE_SOURCE', 'UI.JUDGE_TOKENS', 'UI.JUDGE_FALLBACK']) {
       const r = ui.records.find((x) => x.id === id);
-      expect(r, id).toMatchObject({ status: 'draft', level: 'NA', reviewer1: null, reviewer2: null });
+      expect(r, id).toMatchObject({ status: 'approved', level: 'NA', reviewer1: 'Hussein', reviewer2: null });
     }
+    for (const k of ['gatePrompt', 'judgeDecision', 'judgeRecords', 'judgeSource', 'judgeTokens', 'judgeFallback'] as const) expect(labels[k], k).toBeTruthy();
+    expect(labels.gatePrompt).not.toMatch(/[٠-٩]/); // Western numerals
   });
 });
