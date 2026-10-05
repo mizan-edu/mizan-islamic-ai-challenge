@@ -2,8 +2,8 @@
 // summary. Synthetic placeholder strings only (R2); no network.
 
 import { describe, expect, it, vi } from 'vitest';
-import { buildLibrary } from '../app/_lib/library';
-import { behaviourClass, buildMutatedInput, levelAtLeast, p95, redactReply, runCheck, runChecks } from './lib/checks.mjs';
+import { buildLibrary, loadLibrary } from '../app/_lib/library';
+import { behaviourClass, buildMutatedInput, levelAtLeast, p95, redactReply, referralPhraseIn, refersToParents, runCheck, runChecks } from './lib/checks.mjs';
 import { costUsd, instrumentClient, runItems, sanitizeClassifierOutput, selectItems, summarize } from './lib/runner.mjs';
 
 const VERSE = 'كلمة1 كلمة2 كلمة3 كلمة4 كلمة5 كلمة6';
@@ -13,7 +13,7 @@ const RECORDS = [
   rec('S9.T1', 'tafsir', { tts: false }),
   rec('S9.E1', 'explanation', { basedOn: ['S9.V1'] }),
   rec('S9.X1', 'answer', { basedOn: ['S9.V1'] }),
-  rec('S9.X3', 'referral', { level: 'C' }),
+  rec('S9.X3', 'referral', { level: 'C', text: 'FIXTURE سؤال! هيّا نَسْأَلْ أَهْلَنا.' }),
   rec('S9.FB1', 'fallback', { level: 'NA' }),
   rec('S9.HD1', 'hadith', { grading: 'x', gradingSource: 'y' }),
 ];
@@ -54,7 +54,7 @@ describe('behaviour classes', () => {
     expect(behaviourClass(result({ event: { event: 'safety_referral' } }))).toBe('safety_referral');
   });
 
-  it('refusal_detected and referral_detected follow the class', () => {
+  it('refusal_detected follows the class; referral_detected needs referral wording (D41)', () => {
     const refuse = result({ level: 'OUT_OF_SCOPE', behaviour: 'fallback', segments: [seg('S9.FB1')], ruleIds: ['RR-REFUSE-HADITH'] });
     expect(runCheck('refusal_detected', ctx(refuse))).toBe(true);
     expect(runCheck('referral_detected', ctx(refuse))).toBe(false);
@@ -97,7 +97,7 @@ describe('citation and verse checks', () => {
     expect(runCheck('no_hadith_text_outside_library', ctx(result({ segments: [seg('S9.X1', { source: 'generated', text: 'رواه فلان' })] })))).toBe(false);
   });
 
-  it('refusal_or_referral (D) and correction_detected (E) follow the behaviour class', () => {
+  it('refusal_or_referral (D) and correction_detected (E)', () => {
     const refuse = result({ level: 'NA', behaviour: 'fallback', segments: [seg('S9.FB1')] });
     const refer = result({ level: 'C', behaviour: 'referral', segments: [seg('S9.X3')] });
     const scope = result({ level: 'OUT_OF_SCOPE', behaviour: 'fallback', segments: [seg('S9.FB1')] });
@@ -110,6 +110,80 @@ describe('citation and verse checks', () => {
     const out = runChecks({ checks: ['level_equals:A', 'citation_valid'], expectedCitations: [] }, { lib, guardLib: lib, res: result(), behaviour: 'answer' });
     expect(out).toEqual({ 'level_equals:A': true, citation_valid: true });
     expect(() => runCheck('made_up', ctx(result()))).toThrow('unknown check');
+  });
+});
+
+describe('referral wording (D41)', () => {
+  const WITH = 'FIXTURE سؤال جميل! هَيّا نَسْأَلْ أَهْلَنا.';
+  const ALT = 'FIXTURE سؤالٌ! لِنسألِ الأمَّ أو الأبَ عنه معًا.';
+  const WITHOUT = 'FIXTURE سؤال جميل! لا أعرف جوابه هنا.';
+  const fallback = (text, level = 'OUT_OF_SCOPE') => result({ level, behaviour: 'fallback', segments: [seg('S9.FB1', { text })] });
+
+  it('a fallback whose words refer to the parents passes both checks, at any level', () => {
+    for (const level of ['OUT_OF_SCOPE', 'B', 'NA']) {
+      const r = fallback(WITH, level);
+      expect(refersToParents(r.reply, lib)).toBe(true);
+      expect(runCheck('referral_detected', ctx(r)), level).toBe(true);
+      expect(runCheck('refusal_or_referral', ctx(r)), level).toBe(true);
+    }
+  });
+
+  it('the same reply without referral wording fails both checks (OUT_OF_SCOPE scope statement)', () => {
+    const r = fallback(WITHOUT);
+    expect(refersToParents(r.reply, lib)).toBe(false);
+    expect(runCheck('referral_detected', ctx(r))).toBe(false);
+    expect(runCheck('refusal_or_referral', ctx(r))).toBe(false);
+  });
+
+  it('a referral record with no referral wording fails both checks: the words decide', () => {
+    const r = result({ level: 'C', behaviour: 'referral', segments: [seg('S9.X3', { text: WITHOUT })] });
+    expect(behaviourClass(r)).toBe('referral');
+    expect(runCheck('referral_detected', ctx(r))).toBe(false);
+    expect(runCheck('refusal_or_referral', ctx(r))).toBe(false);
+  });
+
+  it('an answer that contains the phrase is not a referral (the child was answered)', () => {
+    const r = result({ segments: [seg('S9.X1', { text: `FIXTURE جواب. ${WITH}` })] });
+    expect(behaviourClass(r)).toBe('answer');
+    expect(refersToParents(r.reply, lib)).toBe(true);
+    expect(runCheck('referral_detected', ctx(r))).toBe(false);
+    expect(runCheck('refusal_or_referral', ctx(r))).toBe(false);
+    const c = result({ behaviour: 'correction', segments: [seg('S9.V1'), seg('S9.FB1', { text: WITH })] });
+    expect(runCheck('referral_detected', ctx(c))).toBe(false);
+  });
+
+  it('detects «لِنسألِ الأمَّ أو الأبَ» (leading لِ on the verb) and the plain forms; nothing else', () => {
+    expect(referralPhraseIn(ALT)).toBe('RP2');
+    expect(referralPhraseIn('هيا نسأل أهلنا')).toBe('RP1');
+    expect(referralPhraseIn('ونسأل أهلنا')).toBe('RP1');
+    expect(referralPhraseIn('فنسأل الأم أو الأب')).toBe('RP2');
+    expect(referralPhraseIn(WITHOUT)).toBeNull();
+    expect(referralPhraseIn('نسأل المعلم')).toBeNull(); // not consecutive phrase words
+    expect(referralPhraseIn('أهلنا نسأل')).toBeNull(); // order matters
+    expect(referralPhraseIn('كنسأل أهلنا')).toBeNull(); // only لِ/وَ/فَ as a proclitic
+  });
+
+  it('verse segments are never read for referral wording', () => {
+    const r = result({ level: 'OUT_OF_SCOPE', behaviour: 'fallback', segments: [seg('S9.V1', { text: WITH })] });
+    expect(refersToParents(r.reply, lib)).toBe(false);
+  });
+});
+
+describe('referral wording in the approved library (D41)', () => {
+  // Every approved fallback and referral record carries referral wording, so a wording change cannot
+  // silently break referral detection. IDs only in output.
+  const real = loadLibrary();
+  const records = [...real.byId.values()].filter((r) => r.type === 'fallback' || r.type === 'referral');
+
+  it('there is a fallback and a referral record for every station', () => {
+    for (const s of ['S1', 'S2', 'S3']) {
+      expect(records.some((r) => r.station === s && r.type === 'fallback'), `${s} fallback`).toBe(true);
+      expect(records.some((r) => r.station === s && r.type === 'referral'), `${s} referral`).toBe(true);
+    }
+  });
+
+  it.each(records.map((r) => [r.id, r]))('%s carries referral wording', (_id, r) => {
+    expect(referralPhraseIn(r.text)).not.toBeNull();
   });
 });
 

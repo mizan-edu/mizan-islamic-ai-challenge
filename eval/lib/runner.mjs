@@ -5,7 +5,7 @@
 import { answerQuestion } from '../../app/_lib/pipeline';
 import { containment, tokens } from '../../app/_lib/normalize';
 import { AQ_MIN_SCORE, AQ_MIN_SHARED, retrieve, VERSE_MIN_SCORE } from '../../app/_lib/retrieval';
-import { behaviourClass, buildMutatedInput, citedIds, mean, p95, redactReply, runChecks, THRESHOLDS } from './checks.mjs';
+import { behaviourClass, buildMutatedInput, citedIds, mean, p95, redactReply, refersToParents, runChecks, THRESHOLDS } from './checks.mjs';
 
 // USD per million tokens (list price). Unknown models get cost null rather than a guess.
 export const PRICES = { 'claude-sonnet-5-5': { input: 2, output: 10, cacheRead: 0.2 } };
@@ -106,6 +106,7 @@ export async function runItems({ items, runs, lib, guardLib, surahs, deps, meta,
         ...(mutation ? { mutation } : {}),
         expectedLevel: item.expectedLevel, assignedLevel: res.reply.level,
         expectedBehaviour: item.acceptableBehaviours ?? [item.expectedBehaviour], behaviourClass: behaviour,
+        referralWording: refersToParents(res.reply, lib), // D41
         routeSource: res.route.source, routeReason: res.route.reason, ruleIds: res.route.ruleIds,
         classifierCalled: classifierOutput !== undefined, classifierOutput: classifierOutput ?? null,
         matchedQuestion: retrieval.aq ? { id: retrieval.aq.question.id, responseRecordId: retrieval.aq.record.id, score: Number(retrieval.aq.score.toFixed(3)), used: res.route.source === 'aq' } : null,

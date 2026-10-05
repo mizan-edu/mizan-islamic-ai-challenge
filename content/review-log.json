@@ -4205,6 +4205,17 @@
       "decision": "A",
       "resultingStatus": "approved",
       "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "EVAL.REFERRAL_PHRASES",
+      "kind": "eval-config",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T11:03:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D41",
+      "source": "chat decision D41 (2026-10-05): eval/referral-phrases.json — RP1, RP2; leading proclitic ل/و/ف allowed"
     }
   ]
 }
