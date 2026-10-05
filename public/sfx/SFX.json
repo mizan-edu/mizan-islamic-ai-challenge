@@ -1,0 +1,117 @@
+{
+  "note": "Sound effects (D65): ElevenLabs Sound Effects (eleven_text_to_sound_v2), take 1, natural sounds only. Each file was gain-normalised to a peak of about -3 dBFS with scripts/assets/mp3-gain.mjs (lossless: whole 1.5 dB steps of the MP3 global gain; decoded output equals the original times the gain). The ID3 tag, which carried the ElevenLabs C2PA content credential, was removed because that credential no longer matches the changed audio; the originals with their intact credentials are kept outside the build (docs/sfx-originals, git-ignored) and identified here by SHA-256 and C2PA URN.",
+  "sounds": [
+    {
+      "name": "ambience",
+      "path": "/sfx/ambience.mp3",
+      "bytes": 160913,
+      "sha256": "dc52068284acb9fa0a472b1c485aaeaa24c03a1ccce9ab17c5755202cdffb813",
+      "durationS": 10,
+      "use": "map only, quiet loop (crossfaded)",
+      "gainDb": 34.5,
+      "peakDbfsBefore": -37.1,
+      "peakDbfsAfter": -2.4,
+      "original": {
+        "bytes": 178084,
+        "sha256": "68a16949b796904e33e3ee4f7eb36d0a9cfe138da0513537115a56c1fe4e5dc7",
+        "c2pa": "urn:c2pa:b3f99002-1df7-4c6e-9831-ec275cecbf46"
+      }
+    },
+    {
+      "name": "aside",
+      "path": "/sfx/aside.mp3",
+      "bytes": 10448,
+      "sha256": "ce79cbc72b80797b8d01079328b9141167b5a820e154e750eae61095972025b2",
+      "durationS": 0.6,
+      "use": "a card set aside",
+      "gainDb": 7.5,
+      "peakDbfsBefore": -11.1,
+      "peakDbfsAfter": -3.6,
+      "original": {
+        "bytes": 27619,
+        "sha256": "80f9ff253d6b912b9513d96e675999f7b13e670737d7fea2237496fce4a64d54",
+        "c2pa": "urn:c2pa:c5f0c940-5648-4901-abc6-95585c071343"
+      }
+    },
+    {
+      "name": "correct",
+      "path": "/sfx/correct.mp3",
+      "bytes": 17135,
+      "sha256": "81e307b158166824f6fc45c6632d8cef6020dc7a15a10d433341f09b645e7cf1",
+      "durationS": 1,
+      "use": "a correct pick, start of the hero moment",
+      "gainDb": 19.5,
+      "peakDbfsBefore": -21.9,
+      "peakDbfsAfter": -2.3,
+      "original": {
+        "bytes": 34306,
+        "sha256": "5306cdf9986e19581f29b7095a40f016e6c1c17345cde1b8f14cee8f9b4888a9",
+        "c2pa": "urn:c2pa:c6b9813d-ea6d-490a-bfb0-038197bee6a9"
+      }
+    },
+    {
+      "name": "grow",
+      "path": "/sfx/grow.mp3",
+      "bytes": 72723,
+      "sha256": "9ecd672fce8c0abd79066c1bf9f22857350120e061bd0c35aff2d3f45067bf26",
+      "durationS": 4.48,
+      "use": "S3 moment, with the clip",
+      "gainDb": 13.5,
+      "peakDbfsBefore": -16.6,
+      "peakDbfsAfter": -3.1,
+      "original": {
+        "bytes": 89894,
+        "sha256": "26accc39ea97dad3e8fb4b3bc093d54bb91d33be80a85e6032ff3fe13953177d",
+        "c2pa": "urn:c2pa:ffacfb98-a72d-44d1-ada5-9f9dbf858e96"
+      }
+    },
+    {
+      "name": "pour",
+      "path": "/sfx/pour.mp3",
+      "bytes": 72723,
+      "sha256": "2f66a0a0b4e595a66bf2a9ca9b8d221cd8d240228240092b6bdada7b7a1213e8",
+      "durationS": 4.48,
+      "use": "S2 moment, with the clip",
+      "gainDb": 13.5,
+      "peakDbfsBefore": -15.9,
+      "peakDbfsAfter": -2.4,
+      "original": {
+        "bytes": 89894,
+        "sha256": "988a8bf3073a076f09d7fc2725983121c73ce1d66d6604dd20376fbbcc8210fb",
+        "c2pa": "urn:c2pa:77b70e1b-e6b6-450c-a4cf-db458b6098d4"
+      }
+    },
+    {
+      "name": "rain",
+      "path": "/sfx/rain.mp3",
+      "bytes": 81083,
+      "sha256": "b16b093a7a6900d33c1d2b06ef2d7ca2ca8726b6f21f59355664bce8b6041411",
+      "durationS": 5,
+      "use": "S1 moment, with the clip",
+      "gainDb": -3,
+      "peakDbfsBefore": 0,
+      "peakDbfsAfter": -2.9,
+      "original": {
+        "bytes": 98254,
+        "sha256": "949732b3a4b5e67b2cba227a0a30fe4cc6d351da538b4f72ddbfd14db4afd593",
+        "c2pa": "urn:c2pa:6fdc9ae7-3527-4def-80f3-dbb2787484cf"
+      }
+    },
+    {
+      "name": "tap",
+      "path": "/sfx/tap.mp3",
+      "bytes": 8776,
+      "sha256": "72f3d4d8d4b3d70e5ff3a1e973c744d5cbac334e5357628939c15527a0ee821c",
+      "durationS": 0.48,
+      "use": "every card press",
+      "gainDb": 22.5,
+      "peakDbfsBefore": -26.1,
+      "peakDbfsAfter": -3.6,
+      "original": {
+        "bytes": 25947,
+        "sha256": "b116a45061ebda5d01e94490c157da1a359999a2302de5d2de5f7cb00fa6dd21",
+        "c2pa": "urn:c2pa:fbd0e1e3-1cc7-4b21-a2b9-e8260bfd8035"
+      }
+    }
+  ]
+}

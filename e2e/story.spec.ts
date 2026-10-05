@@ -12,8 +12,14 @@ const observe = (id: string) => (JSON.parse(readFileSync(`content/stations/${id}
 
 test.beforeEach(async ({ page, baseURL }) => {
   await page.addInitScript(() => {
-    const w = window as unknown as { __media: { src: string; at: number }[]; __steps: string[]; __choices: number };
+    const w = window as unknown as { __media: { src: string; at: number }[]; __sounds: { cue: string; at: number; step: string }[]; __steps: string[]; __choices: number };
     w.__media = [];
+    w.__sounds = [];
+    // Every effect the sound engine starts (D65), with the story step on screen at that moment.
+    document.addEventListener('mizan:sound', (e) => {
+      const d = (e as CustomEvent<{ cue: string; what: string }>).detail;
+      if (d.what === 'start') w.__sounds.push({ cue: d.cue, at: performance.now(), step: document.querySelector('[data-screen="story"]')?.getAttribute('data-story-step') ?? '' });
+    });
     w.__steps = [];
     w.__choices = 0;
     // Every change of the story step, recorded in the page (none can be missed), with a choice check.
@@ -61,7 +67,10 @@ test('story S1 plays every step in order, shows no choices, recitation only for 
   expect(media.some((m) => /mp3quran\.net/.test(m.src))).toBe(true);
   expect(media.some((m) => m.src.includes(`/audio/S1/${verseId}.`))).toBe(false);
   const rec = media.find((m) => /mp3quran\.net/.test(m.src))!;
-  expect(media.filter((m) => m.src.includes('/audio/sfx/') && m.at > rec.at && m.at < rec.at + 150)).toEqual([]);
+  // D65: no effect during the recitation, nor anywhere on the verse step.
+  const sounds = await page.evaluate(() => (window as unknown as { __sounds: { cue: string; at: number; step: string }[] }).__sounds);
+  expect(sounds.filter((x) => x.at > rec.at && x.at < rec.at + 150)).toEqual([]);
+  expect(sounds.filter((x) => x.step.startsWith('verse:'))).toEqual([]);
 
   // No progress saved.
   expect(await page.evaluate(() => sessionStorage.getItem('mizan.progress'))).toBeNull();
@@ -72,7 +81,7 @@ test('«إعادة البدء» clears this device\'s journey progress after a c
   await page.evaluate(() => {
     sessionStorage.setItem('mizan.progress', JSON.stringify(['S1', 'S2']));
     sessionStorage.setItem('mizan.events', JSON.stringify([{ stationId: 'S1', event: 'answered', sourceIds: ['S1.Q1'], t: 1 }]));
-    localStorage.setItem('mizan.sfx', 'off');
+    sessionStorage.setItem('mizan.sfx', 'off'); // the sound switch is session-only (D65)
   });
   await page.reload();
   await expect(page.locator('[data-story-link="S1"]')).toHaveAttribute('href', '/story/S1');
@@ -84,7 +93,7 @@ test('«إعادة البدء» clears this device\'s journey progress after a c
   await page.locator('[data-reset-confirm]').click();
   await expect(page.locator('[data-reset-done]')).toBeVisible();
   expect(await page.evaluate(() => [sessionStorage.getItem('mizan.progress'), sessionStorage.getItem('mizan.events')])).toEqual([null, null]);
-  expect(await page.evaluate(() => localStorage.getItem('mizan.sfx'))).toBe('off'); // settings kept
+  expect(await page.evaluate(() => sessionStorage.getItem('mizan.sfx'))).toBe('off'); // settings kept
   await page.goto('/');
   await expect(page.locator('[data-station="S1"]')).toHaveAttribute('data-state', 'current');
 });

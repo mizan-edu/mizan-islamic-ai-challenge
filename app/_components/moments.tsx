@@ -24,7 +24,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import type { VideoSources } from '@/app/_lib/media';
-import { sfx, type SfxCue } from '@/app/_lib/sfx';
+import { SCENE_CUE, sfx } from '@/app/_lib/sfx';
 import { plantSrc } from './media';
 
 export const MOMENT = { delayMs: 700, fadeInMs: 700, holdMs: 3000, fadeOutMs: 600 } as const;
@@ -119,10 +119,20 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, vi
   const timers = useRef<number[]>([]);
   const later = (fn: () => void, ms: number) => { timers.current.push(window.setTimeout(fn, ms)); };
 
+  // The scene's sound (D65): rain, pour or grow; it starts with the clip (or with the still when there
+  // is no clip) and fades out over 0.5 s when the clip ends, the moment ends or the child skips it.
+  const sounding = useRef(false);
+  const startSound = () => {
+    const cue = SCENE_CUE[stationId];
+    if (sounding.current || !cue) return;
+    sounding.current = true;
+    sfx.startScene(cue);
+  };
   // The moment ends: settle and fade (600 ms), then the praise line.
   const leave = () => {
     if (left.current) return;
     left.current = true;
+    sfx.fadeOutScene();
     setLeaving(true);
     later(() => done.current(), MOMENT.fadeOutMs);
   };
@@ -130,13 +140,14 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, vi
   const fail = () => {
     if (left.current) return;
     setVideoState('error');
+    startSound();
     later(leave, Math.max(0, MOMENT.fadeInMs + MOMENT.holdMs - (performance.now() - mountedAt.current)));
   };
 
   useEffect(() => {
     mountedAt.current = performance.now();
-    sfx.play(`moment${stationId}` as SfxCue);
     if (videoState === 'off') {
+      startSound();
       later(leave, MOMENT.fadeInMs + MOMENT.holdMs);
     } else {
       // Play once the card-to-scene expansion has finished; give up if it has not started 2.5 s later.
@@ -150,7 +161,7 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, vi
     const overflow = root.style.overflow;
     root.style.overflow = 'hidden';
     const pending = timers.current;
-    return () => { pending.forEach((t) => window.clearTimeout(t)); window.removeEventListener('keydown', key); root.style.overflow = overflow; };
+    return () => { pending.forEach((t) => window.clearTimeout(t)); window.removeEventListener('keydown', key); root.style.overflow = overflow; sfx.fadeOutScene(); };
     // Mount only: the moment's timeline starts once.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -159,6 +170,7 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, vi
     if (started.current) return;
     started.current = true;
     setVideoState('playing');
+    startSound();
     // D62: the moment lasts as long as the clip, at most 6 s; a longer clip stops (holding its frame).
     later(() => { clip.current?.pause(); leave(); }, MAX_CLIP_MS);
   };

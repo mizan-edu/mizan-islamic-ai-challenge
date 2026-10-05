@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { VideoSources } from '@/app/_lib/media';
 import { PlantMarker, plantSrc } from './media';
+import { sfx } from '@/app/_lib/sfx';
 import { videoAllowed } from './moments';
 import { completedStations } from './session';
 
@@ -29,15 +30,23 @@ const Icon = ({ id, dim }: { id: string; dim: boolean }) => (
   <img src={`/images/icons/${id}.webp`} alt="" width={800} height={800} className={`size-full scale-[1.12] rounded-full object-cover ${dim ? 'opacity-60 grayscale' : ''}`} />
 );
 
-export default function JourneyMap({ title, stations, parentsLabel, startLabel, comingSoonLabel, video = null }: {
+export default function JourneyMap({ title, stations, parentsLabel, startLabel, comingSoonLabel, video = null, sfxCues = [] }: {
   title: string | null; stations: MapStation[]; parentsLabel?: string; startLabel?: string; comingSoonLabel?: string;
   video?: VideoSources | null; // the looping map clip (D60), null when its files are missing
+  sfxCues?: readonly string[]; // sound files that exist (D65)
 }) {
   const [done, setDone] = useState<string[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
   // Device-only progress (sessionStorage) is read after mount so server and client markup match.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setDone(completedStations()); }, []);
+  // Ambience (D65): a quiet loop on the map only, from the first tap; it stops when the map closes.
+  useEffect(() => {
+    sfx.setAvailable(sfxCues);
+    sfx.install();
+    sfx.startAmbience();
+    return () => sfx.stopAmbience();
+  }, [sfxCues]);
   // Map clip (D60): loops behind the stones, muted, after mount; never with reduced motion or data
   // saver, and dropped on a load error (the approved still stays underneath).
   const [mapVideo, setMapVideo] = useState(false);

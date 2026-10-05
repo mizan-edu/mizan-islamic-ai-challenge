@@ -69,11 +69,11 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 
 ## Sound effects (ElevenLabs Sound Effects)
 
-- **Files:** `public/audio/sfx/tap.mp3`, `correct.mp3`, `tryAgain.mp3`, `momentS1.mp3`, `momentS2.mp3`, `momentS3.mp3`, `close.mp3` (7 files; D40).
-- **Source:** ElevenLabs Sound Effects, model `eleven_text_to_sound_v2`, generated 2026-10-04 and approved by Hussein. Nature/foley sounds only, no musical instruments.
-- **Processing:** ffmpeg (silence trimmed, length capped, 30 ms fade-in, 150 ms fade-out, normalised to -20 LUFS, mono 64 kbps MP3).
-- **Never with Qur'an:** no effect plays while a recitation is playing; a running effect stops when one starts (D38). Parents can turn all effects off.
-- **Licence:** generated under the project account's ElevenLabs **Scale** plan, under the ElevenLabs Terms of Service: https://elevenlabs.io/terms-of-use.
+- **Files:** `public/sfx/ambience.mp3`, `tap.mp3`, `aside.mp3`, `correct.mp3`, `rain.mp3`, `pour.mp3`, `grow.mp3` (7 files; D65). They replace the D40 set (`public/audio/sfx/`, removed). `public/sfx/SFX.json` lists each file with its size, SHA-256, gain, peak level and the C2PA credential ID of its original.
+- **Source:** ElevenLabs Sound Effects, model `eleven_text_to_sound_v2`, generated 2026-10-05 (take 1 of two; the second takes are kept locally, not shipped). Natural sounds only: rain, water, leaves, breeze; no music, instruments, chimes or bells.
+- **Processing:** gain only, to a peak of about -3 dBFS, with `scripts/assets/mp3-gain.mjs` (whole 1.5 dB steps of the MP3 global gain; no re-encoding, so the decoded sound is the original times the gain). The ID3 tag with ElevenLabs' C2PA content credential was removed from the shipped files, because the credential no longer matches the changed audio; the untouched originals, with valid credentials, are kept outside the build (`docs/sfx-originals/`, git-ignored).
+- **Never with Qur'an:** no effect or ambience plays while a recitation plays or anywhere on the verse-card step; anything playing stops when either starts (D65). Parents can turn all sound off for the session.
+- **Licence:** generated under the project account's ElevenLabs plan [VERIFY: plan tier for the 2026-10-05 generations; the D40 set was made on the Scale plan], under the ElevenLabs Terms of Service: https://elevenlabs.io/terms-of-use.
 
 ## Pictures (GPT Image 2.5 via Higgsfield)
 

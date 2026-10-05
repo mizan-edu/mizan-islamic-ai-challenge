@@ -5206,6 +5206,20 @@
       "decisionRef": "D64",
       "after": "- **الفيديو (D60، D63):** أربعة مقاطع MP4 بترميز H.264 فقط، دون WebM، وهذا الترميز يعمل في كل المتصفحات المستهدفة: Safari على iPad وiPhone، وChrome، وEdge، وFirefox. حجمها معًا 2.44 MB، وتحمّل المحطة مقطعها فقط (بين 261 و684 KB).",
       "source": "chat decision D64 (2026-10-06): OPERATIONS video line approved as written"
+    },
+    {
+      "id": "DOC.DISCLOSURE.md",
+      "kind": "doc-text",
+      "file": "DISCLOSURE.md",
+      "lines": "section 2, ElevenLabs Sound Effects row",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T00:52:10+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D65",
+      "after": "المؤثرات الصوتية مولَّدة بالذكاء الاصطناعي (ElevenLabs Sound Effects)، وهي أصوات طبيعية فقط: مطر وماء وأوراق ونسيم، دون موسيقى أو آلات أو أجراس، ولا يُشغَّل أيٌّ منها أثناء التلاوة أو في خطوة بطاقة الآية.",
+      "source": "chat decision D65 (2026-10-06): DISCLOSURE sound line worded and approved by Hussein"
     }
   ]
 }

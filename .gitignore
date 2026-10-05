@@ -170,3 +170,8 @@ eval/.a2-raw/
 
 # Video inputs for Higgsfield image-to-video (D60): local working copies of approved pictures, not shipped.
 docs/video-input/
+
+# Second takes of the sound effects (D65): local alternatives, not shipped.
+docs/sfx-alt/
+# Original take-1 sound files with their intact C2PA content credentials (D65); shipped copies are gain-normalised.
+docs/sfx-originals/

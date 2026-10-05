@@ -139,7 +139,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false, in
         data-state={state}
         disabled={state === 'greyed' || !onTap}
         onClick={onTap}
-        onPointerDown={onTap ? (e) => tiltTo(e, narration ? 3 : 6) : undefined}
+        onPointerDown={onTap ? (e) => { tiltTo(e, narration ? 3 : 6); sfx.play('tap'); } : undefined}
         onPointerUp={untilt}
         onPointerCancel={untilt}
         onPointerLeave={untilt}

@@ -122,7 +122,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   const momentTimer = useRef<number | null>(null);
   const endMoment = useCallback(() => { setMoment(false); setMomentPending(false); setPraiseAuto(true); }, []);
   useEffect(() => () => { if (momentTimer.current) window.clearTimeout(momentTimer.current); }, []);
-  useEffect(() => { sfx.setAvailable(sfxCues); }, [sfxCues]);
+  useEffect(() => { sfx.setAvailable(sfxCues); sfx.install(); }, [sfxCues]);
+  // D65 hard mute: no effect anywhere on the verse-card step; whatever plays stops when it starts.
+  useEffect(() => { sfx.setVerseStep(state.step === 'connect'); }, [state.step]);
+  useEffect(() => () => sfx.setVerseStep(false), []);
   // While a finger is on the screen, <html data-touching> pauses the cards' idle float (Phase 1b).
   useEffect(() => {
     const root = document.documentElement;
@@ -148,7 +151,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   }, [state.events]);
 
   useEffect(() => {
-    if (state.step === 'close') { markCompleted(view.stationId); sfx.play('close'); }
+    if (state.step === 'close') markCompleted(view.stationId);
   }, [state.step, view.stationId]);
 
   const askQuestion = async (questionId: string) => {
@@ -185,7 +188,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   const choose = (choiceId: string) => {
     dispatch({ type: 'choose', choiceId, t: now() });
     if (!o || state.observe.solved) return;
-    if (choiceId !== o.correctChoiceId) { sfx.play('tryAgain'); return; }
+    if (choiceId !== o.correctChoiceId) { sfx.play('aside'); return; }
     sfx.play('correct');
     // Reduced motion shows the moment too, as the still picture with an opacity fade (Phase 1c).
     setMomentPending(true);
@@ -327,7 +330,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}
-                  onTap={state.narrate.done ? undefined : () => { tap(); dispatch({ type: 'pick', cardId: c.id, t: now() }); }} />
+                  onTap={state.narrate.done ? undefined : () => dispatch({ type: 'pick', cardId: c.id, t: now() })} />
               );
             })}
           </div>

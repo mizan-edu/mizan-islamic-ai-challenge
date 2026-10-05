@@ -1,6 +1,7 @@
 'use client';
 
-// Parent switch for sound effects (D38, label D39): on by default, remembered on this device only.
+// Parent switch for sound (D38, label D39; D65): on by default; turning it off mutes effects and ambience
+// for this browser session only (sessionStorage).
 
 import { useEffect, useState } from 'react';
 import { sfx } from '@/app/_lib/sfx';

@@ -44,7 +44,7 @@ export default function StoryPlayer({ view, steps, labels, sfxCues = [], initial
   const [phase, setPhase] = useState<'ring' | 'moment' | 'praise'>('ring'); // answer step only
   const audio = useRef<HTMLAudioElement>(null);
   const timer = useRef<number | null>(null);
-  useEffect(() => { sfx.setAvailable(sfxCues); }, [sfxCues]);
+  useEffect(() => { sfx.setAvailable(sfxCues); sfx.install(); }, [sfxCues]);
 
   const after = useCallback((ms: number, fn: () => void) => {
     if (timer.current) window.clearTimeout(timer.current);
@@ -61,6 +61,9 @@ export default function StoryPlayer({ view, steps, labels, sfxCues = [], initial
   useEffect(() => () => { if (timer.current) window.clearTimeout(timer.current); audio.current?.pause(); }, []);
 
   const step = index >= 0 && index < steps.length ? steps[index] : null;
+  // D65 hard mute, as in the stations: no effect on the verse step; whatever plays stops when it starts.
+  useEffect(() => { sfx.setVerseStep(step?.kind === 'verse'); }, [step]);
+  useEffect(() => () => sfx.setVerseStep(false), []);
   useEffect(() => {
     if (!step) return;
     if (step.kind === 'verse') {
