@@ -164,3 +164,6 @@ docs/review/out/
 
 # A2 baseline raw outputs (D51): local only, never committed; deleted after the summary.
 eval/.a2-raw/
+
+# Local preview server config for Claude Code (not part of the app).
+.claude/launch.json
