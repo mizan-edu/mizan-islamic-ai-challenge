@@ -268,12 +268,13 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, auto
 // the roadmap Stations 4-5 and appear only as faint locked thumbnails on the map). Decorative.
 export const plantSrc = (stage: number): string => `/images/plant/stage-${Math.min(Math.max(stage, 1), 5)}.webp`;
 
-// grow (close moment, Phase 1b): the approved pot picture springs in, then a small leaf burst.
+// grow (close moment, Phase 1b/1c): a light bloom behind the approved pot picture, which springs in,
+// then a small leaf burst.
 export function PlantMarker({ done, className = 'size-20', grow = false }: { done: number; className?: string; grow?: boolean }) {
   const stage = Math.min(Math.max(done, 1), 5);
   // eslint-disable-next-line @next/next/no-img-element
   const img = <img src={plantSrc(stage)} alt="" aria-hidden="true" width={800} height={800} data-plant={done}
     className={`${className} rounded-[22%] object-contain ${done === 0 ? 'opacity-40' : ''} ${grow ? 'anim-grow-in' : ''}`} />;
   if (!grow) return img;
-  return <span className="relative inline-flex">{img}<Particles kind="leaf" delayMs={480} /></span>;
+  return <span className="relative isolate inline-flex"><span className="bloom" aria-hidden="true" data-bloom />{img}<Particles kind="leaf" delayMs={480} /></span>;
 }

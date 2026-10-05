@@ -9,7 +9,7 @@ import { initialState, reducer, type FlowAction, type FlowState } from '@/app/_l
 import { publicFileExists } from '@/app/_lib/media';
 import { buildStationView } from '@/app/_lib/station-view';
 import { runtimeLibrary } from '@/app/_lib/test-helpers';
-import { MomentOverlay } from './moments';
+import { liveElementCount, MAX_LIVE_ELEMENTS, MomentOverlay } from './moments';
 import StationFlow from './StationFlow';
 
 const lib = runtimeLibrary();
@@ -175,6 +175,42 @@ describe('moments (full screen, decorative)', () => {
     const s2 = renderToString(<MomentOverlay stationId="S2" pictures={pics} onDone={() => {}} />);
     expect(s2.indexOf('S2.Q1.webp')).toBeLessThan(s2.indexOf('S2.N1.webp'));
     expect(s2).toContain('anim-fade-out-late');
+  });
+
+  it.each(['S1', 'S2', 'S3'])('%s live layer (Phase 1c): abstract shapes only, at most 40 animated elements, over the picture', (s) => {
+    const html = renderToString(<MomentOverlay stationId={s} pictures={pics} onDone={() => {}} />);
+    const layer = new RegExp(`<div[^>]*data-moment-live="${s}"[\\s\\S]*$`).exec(html)![0];
+    const shapes = layer.match(/class="(streak streak-(far|near)|ripple( ripple-soil)?|glint|shimmer|beam|mote)"/g) ?? [];
+    expect(shapes.length).toBe(liveElementCount(s));
+    expect(shapes.length).toBeGreaterThan(0);
+    expect(shapes.length).toBeLessThanOrEqual(MAX_LIVE_ELEMENTS);
+    expect(layer).not.toMatch(/<img|<text/);
+    // The live layer sits inside the picture area (90 % of the frame), so its % positions match the picture.
+    expect(html).toMatch(/data-moment-picture[\s\S]*data-moment-live/);
+    expect(html).toMatch(/class="absolute inset-\[5%\]" data-moment-picture/);
+  });
+
+  it('S1 rain falls at two depths and splashes; S2 glints and ripples; S3 sunbeams and rising motes', () => {
+    const at2 = (s: string) => renderToString(<MomentOverlay stationId={s} pictures={pics} onDone={() => {}} />);
+    const s1 = at2('S1');
+    expect(s1).toContain('streak streak-far');
+    expect(s1).toContain('streak streak-near');
+    expect(s1).toContain('class="ripple"');
+    const s2 = at2('S2');
+    expect(s2).toContain('class="glint"');
+    expect(s2).toContain('class="shimmer"');
+    expect(s2).toContain('ripple ripple-soil');
+    const s3 = at2('S3');
+    expect(s3).toContain('class="beam"');
+    expect(s3).toContain('class="mote"');
+  });
+
+  it('opens from the chosen card\'s rect (FLIP vars), or grows from the centre without one', () => {
+    const rect = { left: 100, top: 200, width: 300, height: 360 };
+    const flip = renderToString(<MomentOverlay stationId="S1" pictures={pics} onDone={() => {}} fromRect={rect} />);
+    // Server render has no window: it falls back to the centre; the client sets the vars (e2e checks them).
+    expect(flip).toContain('data-moment-flip="center"');
+    expect(renderToString(<MomentOverlay stationId="S1" pictures={pics} onDone={() => {}} />)).toContain('moment-grow');
   });
 
   it('is not open on first render of a solved state (it opens only from the tap)', () => {

@@ -178,7 +178,38 @@ test('prefers-reduced-motion: nothing moves, only opacity cross-fades', async ({
   expect(await moving()).toBe(0);
   await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
   expect(await moving()).toBe(0);
-  // No moment at all under reduced motion; the praise shows straight away.
+  // Reduced motion (Phase 1c): the moment shows as the still picture with an opacity fade only;
+  // no live layer, no push-in, no tilt. Then the praise.
+  const moment = page.locator('[data-moment="S1"]');
+  await expect(moment).toBeVisible();
+  expect(await moving()).toBe(0);
+  await expect(moment.locator('[data-moment-live]')).toBeHidden();
+  await page.mouse.move(10, 10);
+  await page.mouse.move(600, 500);
+  expect(await moving()).toBe(0);
+  await moment.click();
   await expect(page.locator('[data-strip="praise"]')).toBeVisible();
-  expect(await page.locator('[data-moment]').count()).toBe(0);
+});
+
+// Phase 1c: the moment opens from the chosen card's on-screen rect (FLIP), its live layer runs at
+// most 40 animated elements, and by the end of the 700 ms opening the frame fits the screen.
+test('moment scene opens from the chosen card, with at most 40 live elements', async ({ page }) => {
+  for (const id of ['S1', 'S2', 'S3']) {
+    await page.goto(`/stations/${id}`);
+    await page.locator('[data-action="start"]').click();
+    const card = page.locator(`[data-record="${observe(id).correctChoiceId}"]`);
+    await card.click();
+    const panel = page.locator(`[data-moment="${id}"] [data-moment-flip]`);
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute('data-moment-flip', 'card');
+    const vars = await panel.evaluate((el) => ['--fx', '--fy', '--fsx', '--fsy'].map((v) => parseFloat((el as HTMLElement).style.getPropertyValue(v))));
+    expect(vars.every((n) => Number.isFinite(n))).toBe(true);
+    expect(vars[2]).toBeGreaterThan(0.05);
+    expect(vars[2]).toBeLessThan(1);
+    const live = await page.evaluate((s) => document.querySelector(`[data-moment-live="${s}"]`)!.getAnimations({ subtree: true }).filter((a) => a.playState === 'running' || a.playState === 'paused').length, id);
+    expect(live, `${id} live animations`).toBeGreaterThan(0);
+    expect(live, `${id} live animations`).toBeLessThanOrEqual(40);
+    await page.locator(`[data-moment="${id}"]`).click();
+    await expect(page.locator('[data-strip="praise"]')).toBeVisible();
+  }
 });

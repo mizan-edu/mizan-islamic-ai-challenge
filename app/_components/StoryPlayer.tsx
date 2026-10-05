@@ -13,7 +13,7 @@ import { sfx } from '@/app/_lib/sfx';
 import type { RecordView, StationView } from '@/app/_lib/station-view';
 import { stepKey, type StoryStep } from '@/app/_lib/story';
 import { VerseCard } from './media';
-import { MOMENT, MomentOverlay, prefersReducedMotion, type MomentPicture } from './moments';
+import { MOMENT, MomentOverlay, type MomentPicture } from './moments';
 import { addEvents } from './session';
 
 export const STEP_GAP_MS = 1000; // after each step's audio ends
@@ -69,9 +69,8 @@ export default function StoryPlayer({ view, steps, labels, sfxCues = [], initial
     if (step.kind === 'answer') {
       if (phase === 'ring') {
         sfx.play('correct');
-        // Reduced motion: no moment; the praise follows at once.
-        const reduced = prefersReducedMotion();
-        after(reduced ? 0 : MOMENT.delayMs, () => setPhase(reduced ? 'praise' : 'moment'));
+        // Reduced motion too: the moment shows as the still picture with an opacity fade (Phase 1c).
+        after(MOMENT.delayMs, () => setPhase('moment'));
       } else if (phase === 'praise') speak(step.praise?.audio ?? null);
       return;
     }

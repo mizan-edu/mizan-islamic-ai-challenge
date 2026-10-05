@@ -15,7 +15,7 @@ import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view
 import JudgePanel from './JudgePanel';
 import { NarrationButton, PictureCard, PlantMarker, VerseCard, type ParticleKind } from './media';
 import { sfx } from '@/app/_lib/sfx';
-import { MOMENT, MomentOverlay, prefersReducedMotion, type MomentPicture } from './moments';
+import { MOMENT, MomentOverlay, type MomentPicture, type MomentRect } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -110,6 +110,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   // then the praise line with its narration. momentPending holds the praise back meanwhile.
   const [momentPending, setMomentPending] = useState(false);
   const [moment, setMoment] = useState(false);
+  // The chosen card's on-screen rect when the moment opens: the scene expands from it (Phase 1c).
+  const [momentRect, setMomentRect] = useState<MomentRect | null>(null);
   const [praiseAuto, setPraiseAuto] = useState(false);
   const momentTimer = useRef<number | null>(null);
   const endMoment = useCallback(() => { setMoment(false); setMomentPending(false); setPraiseAuto(true); }, []);
@@ -179,9 +181,13 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
     if (!o || state.observe.solved) return;
     if (choiceId !== o.correctChoiceId) { sfx.play('tryAgain'); return; }
     sfx.play('correct');
-    if (prefersReducedMotion()) return; // no overlay; the praise shows at once, as before
+    // Reduced motion shows the moment too, as the still picture with an opacity fade (Phase 1c).
     setMomentPending(true);
-    momentTimer.current = window.setTimeout(() => setMoment(true), MOMENT.delayMs);
+    momentTimer.current = window.setTimeout(() => {
+      const r = document.querySelector(`[data-record="${choiceId}"]`)?.getBoundingClientRect();
+      setMomentRect(r ? { left: r.left, top: r.top, width: r.width, height: r.height } : null);
+      setMoment(true);
+    }, MOMENT.delayMs);
   };
 
   return (
@@ -194,7 +200,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
 
       <StepDots step={state.step} />
 
-      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(o?.question), to: picture(firstCard) }} onDone={endMoment} />}
+      {moment && <MomentOverlay stationId={view.stationId} pictures={{ scene: picture(firstCard), from: picture(o?.question), to: picture(firstCard) }} onDone={endMoment} fromRect={momentRect} />}
 
       {state.step === 'frame' && (
         <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="frame">

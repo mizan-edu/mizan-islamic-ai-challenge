@@ -195,7 +195,6 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes rise { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes grow-in { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-@keyframes rainfall { from { transform: translateY(-12vh); } to { transform: translateY(112vh); } }
 @keyframes moment-in { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: scale(1); } }
 @keyframes moment-out { from { opacity: 1; } to { opacity: 0; } }
 @keyframes correct-pop { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
@@ -228,6 +227,25 @@
 @keyframes place { from { transform: translateY(-6px) scale(1.03); } to { transform: none; } }
 @keyframes glow-breathe { 0%, 100% { opacity: 0.95; } 50% { opacity: 0.4; } }
 @keyframes fade-dim { to { opacity: 0.45; } }
+/* Phase 1c moment scenes (transform and opacity only). Purposes:
+   flip-in, scene-in   cause and effect: the chosen card opens into its scene;
+   camera              attention: a slow push-in holds the eye on the picture's subject;
+   scene-out           the scene settles and fades into the next step;
+   streak, ripple      cause and effect: rain falls from the cloud and lands on the lake (S1);
+   glint, shimmer      cause and effect: the water catches the light as it reaches the plant (S2);
+   beam, mote          cause and effect: light and growth around the sprouting plant (S3);
+   bloom               reward: light behind the plant on the close step. */
+@keyframes flip-in { from { transform: translate(var(--fx), var(--fy)) scale(var(--fsx), var(--fsy)); } to { transform: none; } }
+@keyframes scene-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes camera { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.06) translate(-1%, -0.6%); } }
+@keyframes scene-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(0.98); } }
+@keyframes streak { 0% { opacity: 0; transform: translateY(-4%); } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; transform: translateY(100%); } }
+@keyframes ripple { 0% { opacity: 0; transform: scale(0.2); } 15% { opacity: 0.9; } 100% { opacity: 0; transform: scale(1.6); } }
+@keyframes glint { 0% { opacity: 0; transform: scale(0) rotate(0deg); } 45% { opacity: 1; transform: scale(1) rotate(45deg); } 100% { opacity: 0; transform: scale(0) rotate(90deg); } }
+@keyframes shimmer { from { transform: translateX(-120%) skewX(-12deg); } to { transform: translateX(420%) skewX(-12deg); } }
+@keyframes beam { from { opacity: 0.25; transform: rotate(var(--a)); } to { opacity: 0.7; transform: rotate(calc(var(--a) + 3deg)); } }
+@keyframes mote { 0% { opacity: 0; transform: translate(0, 0); } 20% { opacity: 0.9; } 80% { opacity: 0.6; } 100% { opacity: 0; transform: translate(8px, -100%); } }
+@keyframes bloom { 0% { opacity: 0; transform: scale(0.5); } 35% { opacity: 1; } 100% { opacity: 0; transform: scale(1.35); } }
 
 .anim-pulse::before {
   content: "";
@@ -240,7 +258,6 @@
 }
 .anim-rise { animation: rise 400ms ease-out both; }
 .anim-grow-in { transform-origin: 50% 90%; animation: grow-in 700ms var(--ease-spring) both; }
-.anim-rainfall { animation: rainfall 1100ms linear infinite both; }
 .anim-moment-in { animation: moment-in 700ms ease-out both; }
 .anim-moment-out { animation: moment-out 600ms ease-in both; }
 .anim-correct { animation: correct-pop 200ms ease-out both; }
@@ -272,6 +289,90 @@
 .anim-card-in.anim-place { animation: card-in 420ms var(--ease-spring-soft) backwards, place 520ms var(--ease-spring); animation-delay: calc(120ms + var(--i, 0) * 90ms), 0ms; }
 .hint-glow { animation: glow-breathe 1.6s ease-in-out infinite; }
 
+/* Moment scene (Phase 1c; moments.tsx). The D38 total is unchanged: 700 ms in, 3 s hold, 600 ms out.
+   The panel opens from the chosen card's rect (FLIP) or, without one, grows from the centre. */
+.moment-flip { transform-origin: 0 0; animation: flip-in 560ms var(--ease-spring-soft) both; }
+.moment-grow { animation: moment-in 700ms ease-out both; }
+.moment-scene { animation: scene-in 450ms ease-out 200ms both; }
+.moment-root [data-moment-box] { perspective: 1000px; }
+.moment-tilt { transform: rotateX(var(--mtx, 0deg)) rotateY(var(--mty, 0deg)); transition: transform 450ms ease-out; }
+.moment-camera { animation: camera 4300ms cubic-bezier(0.25, 0.1, 0.25, 1) both; }
+.moment-leaving > .moment-panel { transform-origin: 50% 50%; animation: scene-out 600ms ease-in forwards; }
+/* Live layer elements: positioned by moments.tsx in % of the picture. Streaks and motes are columns
+   whose visible part (::before) travels from one end to the other. */
+.streak,
+.mote {
+  position: absolute;
+  opacity: 0;
+}
+.streak { height: 58%; animation: streak linear infinite; }
+.streak::before,
+.mote::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.streak::before { top: 0; height: var(--len); border-radius: 3px; background: linear-gradient(to bottom, rgba(79, 163, 221, 0), rgba(79, 163, 221, 0.95)); }
+.streak-far { width: 2px; --len: 22px; animation-duration: 1600ms; }
+.streak-far::before { opacity: 0.7; }
+.streak-near { width: 4px; --len: 46px; animation-duration: 1000ms; }
+.streak-near::before { background: linear-gradient(to bottom, rgba(47, 128, 201, 0), rgba(47, 128, 201, 0.9)); }
+.ripple {
+  position: absolute;
+  width: 5%;
+  aspect-ratio: 3 / 1;
+  margin-left: -2.5%;
+  margin-top: -0.8%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple 1100ms ease-out infinite;
+}
+.ripple-soil { width: 4%; margin-left: -2%; border-color: rgba(255, 255, 255, 0.7); animation-duration: 1300ms; }
+.glint {
+  position: absolute;
+  width: clamp(16px, 3.4%, 28px);
+  margin-left: calc(clamp(16px, 3.4%, 28px) / -2);
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.95)); /* static glow; only transform and opacity animate */
+  opacity: 0;
+  animation: glint 1400ms ease-in-out infinite;
+}
+.shimmer {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 28%;
+  background: linear-gradient(100deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.45) 50%, rgba(255, 255, 255, 0) 100%);
+  transform: translateX(-120%) skewX(-12deg);
+  animation: shimmer 3200ms ease-in-out 1200ms infinite;
+}
+.beam {
+  position: absolute;
+  top: -15%;
+  right: 8%;
+  width: 16%;
+  height: 150%;
+  transform-origin: 50% 0;
+  background: linear-gradient(to bottom, rgba(255, 201, 74, 0.45), rgba(255, 201, 74, 0) 80%);
+  opacity: 0.25;
+  transform: rotate(var(--a));
+  animation: beam 4200ms ease-in-out infinite alternate;
+}
+.mote { height: 54%; width: 11px; animation: mote 3200ms ease-out infinite; }
+.mote::before { bottom: 0; height: 11px; border-radius: 9999px; background: radial-gradient(circle, rgba(255, 214, 102, 1) 0%, rgba(255, 201, 74, 0.6) 55%, rgba(255, 201, 74, 0) 100%); }
+/* Close moment: a light bloom behind the approved plant picture. */
+.bloom {
+  position: absolute;
+  inset: -15%;
+  z-index: -1;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 201, 74, 0.55) 0%, rgba(255, 201, 74, 0) 65%);
+  opacity: 0;
+  animation: bloom 1600ms ease-out 200ms both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -299,6 +400,22 @@
   .particle,
   .sheen,
   .hero-ring {
+    display: none;
+  }
+  /* Moment scene: the still picture with an opacity fade only; no expansion, push-in, tilt, live
+     layer or bloom (Phase 1c). */
+  .moment-flip,
+  .moment-grow {
+    animation: fade-in 700ms ease-out both !important;
+  }
+  .moment-leaving > .moment-panel {
+    animation: moment-out 600ms ease-in forwards !important;
+  }
+  .moment-tilt {
+    transform: none !important;
+  }
+  .moment-live,
+  .bloom {
     display: none;
   }
   .hint-glow {

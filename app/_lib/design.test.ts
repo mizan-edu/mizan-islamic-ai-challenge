@@ -62,7 +62,7 @@ describe('motion', () => {
   it('reduced-motion path: every replacement animation is opacity-only; no tilt, press, particles, sheen or ring pulse (D54, Phase 1b)', () => {
     const block = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(css)?.[1] ?? '';
     const overrides = [...new Set([...block.matchAll(/animation:\s*([a-z-]+)\s/g)].map((m) => m[1]).filter((n) => n !== 'none'))];
-    expect(overrides.sort()).toEqual(['fade-dim', 'fade-in']);
+    expect(overrides.sort()).toEqual(['fade-dim', 'fade-in', 'moment-out']);
     for (const name of overrides) {
       expect(keyframes(name), name).toMatch(/opacity/);
       expect(keyframes(name), name).not.toMatch(/transform|scale|translate|rotate/);
@@ -111,6 +111,26 @@ describe('motion', () => {
       expect(dur + delay, r).toBeLessThanOrEqual(D38);
     }
     expect(ms(rule('.anim-hero > .sheen::after'))[0]).toBe(600);
+  });
+
+  it('moment scene (Phase 1c): FLIP inside the 700 ms fade-in, push-in 1.00 -> 1.06 across the D38 total, 3 degree tilt in 1000 px', () => {
+    const D38 = { fadeIn: 700, hold: 3000, fadeOut: 600 };
+    expect(ms(rule('.moment-flip'))[0]).toBeLessThanOrEqual(D38.fadeIn);
+    expect(rule('.moment-flip')).toContain('var(--ease-spring-soft)');
+    expect(keyframes('flip-in')).toContain('translate(var(--fx), var(--fy)) scale(var(--fsx), var(--fsy))');
+    expect(ms(rule('.moment-camera'))[0]).toBe(D38.fadeIn + D38.hold + D38.fadeOut);
+    expect(keyframes('camera')).toMatch(/from \{ transform: scale\(1\)[^}]*\} to \{ transform: scale\(1\.06\)/);
+    expect(ms(rule('.moment-leaving > .moment-panel'))[0]).toBe(D38.fadeOut);
+    expect(css).toMatch(/\.moment-root \[data-moment-box\] \{ perspective: 1000px; \}/);
+  });
+
+  it('moment scene, reduced motion: the still picture with opacity fades only (no live layer, bloom, tilt or push-in)', () => {
+    const block = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(css)?.[1] ?? '';
+    expect(block).toMatch(/\.moment-flip,\s*\.moment-grow \{\s*animation: fade-in 700ms ease-out both !important;/);
+    expect(block).toMatch(/\.moment-leaving > \.moment-panel \{\s*animation: moment-out 600ms ease-in forwards !important;/);
+    expect(block).toMatch(/\.moment-tilt \{\s*transform: none !important;/);
+    expect(block).toMatch(/\.moment-live,\s*\.bloom \{\s*display: none;/);
+    expect(keyframes('moment-out')).not.toMatch(/transform/);
   });
 
   it('idle float is 2 px at most and pauses while narration plays or a finger is down', () => {
