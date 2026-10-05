@@ -644,11 +644,11 @@
       "role": "frame",
       "text": "النظرة الشفافة: كيف يقرّر ميزان",
       "note": "glass box (D60): page title",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -661,13 +661,13 @@
       "reference": null,
       "id": "UI.GLASS_INTRO",
       "role": "frame",
-      "text": "كل خطوة أدناه مأخوذة من المسار الفعلي لهذا السؤال كما سجّله الخادم. الخطوات التي لم تحدث تبقى باهتة.",
+      "text": "كل خطوة أدناه مأخوذة من المسار الفعلي الذي أعاده الخادم لهذا السؤال. الخطوات التي لم تحدث تبقى باهتة.",
       "note": "glass box: intro under the title",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -682,11 +682,11 @@
       "role": "frame",
       "text": "النظرة الشفافة على قرارات ميزان",
       "note": "glass box: link text on the evaluation and parent pages",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -701,11 +701,11 @@
       "role": "frame",
       "text": "سؤال من الكبار",
       "note": "glass box: tab for typed questions and test-set examples",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -720,11 +720,11 @@
       "role": "frame",
       "text": "وضع الطفل",
       "note": "glass box: tab for the child path (pre-written questions)",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -739,11 +739,11 @@
       "role": "frame",
       "text": "أمثلة من مجموعة الاختبار",
       "note": "glass box: heading above the four test-set examples",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -758,11 +758,11 @@
       "role": "frame",
       "text": "السؤال",
       "note": "glass box: pipeline node 1",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -777,11 +777,11 @@
       "role": "frame",
       "text": "القواعد الثابتة",
       "note": "glass box: pipeline node 2",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -796,11 +796,11 @@
       "role": "frame",
       "text": "مصنِّف الذكاء الاصطناعي (النموذج)",
       "note": "glass box: pipeline node 3",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -815,11 +815,11 @@
       "role": "frame",
       "text": "بوابة المستوى A–D",
       "note": "glass box: pipeline node 4",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -834,11 +834,11 @@
       "role": "frame",
       "text": "المكتبة المعتمدة",
       "note": "glass box: pipeline node 5",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -853,11 +853,11 @@
       "role": "frame",
       "text": "مدقّق الآيات (بمعرّف مجمع الملك فهد)",
       "note": "glass box: pipeline node 6",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -872,11 +872,11 @@
       "role": "frame",
       "text": "الرد",
       "note": "glass box: pipeline node 7",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -891,11 +891,11 @@
       "role": "frame",
       "text": "لم تحدث هذه الخطوة في هذا الرد",
       "note": "glass box: state of a node the trace did not use",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -910,11 +910,11 @@
       "role": "frame",
       "text": "إعادة عرض بسرعة مقروءة",
       "note": "glass box: label over the pipeline while and after it replays (Hussein's wording, D60 brief)",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -929,11 +929,11 @@
       "role": "frame",
       "text": "الزمن الفعلي",
       "note": "glass box: the real server time of the reply, next to the replay label",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -948,11 +948,11 @@
       "role": "frame",
       "text": "يختار الطفل من أسئلة معدّة مسبقًا، فتُجاب بالقواعد الثابتة دون استدعاء النموذج.",
       "note": "glass box: child-mode explanation",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     },
     {
       "station": null,
@@ -967,11 +967,11 @@
       "role": "frame",
       "text": "استدعاءات النموذج في جلسة الطفل",
       "note": "glass box: child-mode live counter label (Hussein's wording, D60 brief); the number follows it",
-      "reviewer1": null,
-      "reviewer1At": null,
+      "reviewer1": "Hussein",
+      "reviewer1At": "2026-10-06T00:27:33+03:00",
       "reviewer2": null,
       "reviewer2At": null,
-      "status": "draft"
+      "status": "approved"
     }
   ]
 }

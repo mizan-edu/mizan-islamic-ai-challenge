@@ -1,6 +1,6 @@
 // Glass-box view (D60): presets are existing active test items; the pipeline shows only what the trace
 // shows, step by step; the reply (and any verse card) appears only after the replay; the typed text is
-// never stored; links from the evaluation and parent pages; labels are drafts. Never prints record text.
+// never stored; links from the evaluation and parent pages; labels approved (D64). Never prints record text.
 
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -98,12 +98,14 @@ describe('glass view', () => {
     expect(readFileSync(path.join(ROOT, 'README.md'), 'utf8')).toMatch(/^2\. .*`\/glass`/m);
   });
 
-  it('its new labels are drafts until Review 1 (English codes meanwhile)', () => {
-    const ui = JSON.parse(readFileSync(path.join(ROOT, 'content', 'ui.json'), 'utf8')) as { records: { id: string; status: string; level: string; reviewer1: unknown }[] };
+  it('its 18 labels are approved (D64) and load; no English placeholder is shown any more', () => {
+    const ui = JSON.parse(readFileSync(path.join(ROOT, 'content', 'ui.json'), 'utf8')) as { records: { id: string; text: string; status: string; level: string; reviewer1: unknown }[] };
     const glass = ui.records.filter((r) => r.id.startsWith('UI.GLASS_'));
     expect(glass).toHaveLength(18);
-    for (const r of glass) expect(r, r.id).toMatchObject({ status: 'draft', level: 'NA', reviewer1: null });
-    expect(labels.glassTitle).toBeUndefined();
-    expect(render(null)).toContain('Glass box');
+    for (const r of glass) expect(r, r.id).toMatchObject({ status: 'approved', level: 'NA', reviewer1: 'Hussein' });
+    expect(glass.find((r) => r.id === 'UI.GLASS_INTRO')!.text).toBe('كل خطوة أدناه مأخوذة من المسار الفعلي الذي أعاده الخادم لهذا السؤال. الخطوات التي لم تحدث تبقى باهتة.');
+    for (const k of ['glassTitle', 'glassIntro', 'glassLink', 'glassTabAsk', 'glassTabChild', 'glassPresets', 'glassNodeQuestion', 'glassNodeRules', 'glassNodeClassifier', 'glassNodeLevel', 'glassNodeLibrary', 'glassNodeValidator', 'glassNodeOutput', 'glassNotTaken', 'glassReplay', 'glassRealTime', 'glassChildIntro', 'glassChildCounter'] as const) expect(labels[k], k).toBeTruthy();
+    const html = render(null);
+    for (const english of ['Glass box', 'Adult question', 'Child mode', 'Test-set examples', 'Fixed rules', 'AI classifier (model)']) expect(html).not.toContain(english);
   });
 });
