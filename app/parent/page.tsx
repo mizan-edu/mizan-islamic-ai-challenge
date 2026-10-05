@@ -41,6 +41,8 @@ export default function ParentPage() {
         <div className="flex flex-col gap-6" data-gated>
           {labels.judgeMode && <JudgeSwitch label={labels.judgeMode} />}
           <ParentAsk stations={stations} sources={sources} labels={labels} maxChars={MAX_CHARS} />
+          {/* Glass-box view (D60), behind the gate like the lens switch and Parent Ask. */}
+          <Link href="/glass" className="self-start py-3 font-display text-xl text-water underline" data-glass-link>{labels.glassLink ?? 'Glass box: /glass'}</Link>
         </div>
       </ParentGate>
       <SessionSummary stations={summaryStations} />

@@ -39,6 +39,25 @@ export interface Labels {
   judgeTokens?: string;
   judgeFallback?: string;
   gatePrompt?: string;
+  // Glass-box view (D60): drafts until Review 1; the view shows English codes meanwhile.
+  glassTitle?: string;
+  glassIntro?: string;
+  glassLink?: string;
+  glassTabAsk?: string;
+  glassTabChild?: string;
+  glassPresets?: string;
+  glassNodeQuestion?: string;
+  glassNodeRules?: string;
+  glassNodeClassifier?: string;
+  glassNodeLevel?: string;
+  glassNodeLibrary?: string;
+  glassNodeValidator?: string;
+  glassNodeOutput?: string;
+  glassNotTaken?: string;
+  glassReplay?: string;
+  glassRealTime?: string;
+  glassChildIntro?: string;
+  glassChildCounter?: string;
 }
 
 const KEYS: Record<keyof Labels, string> = {
@@ -75,6 +94,24 @@ const KEYS: Record<keyof Labels, string> = {
   judgeTokens: 'UI.JUDGE_TOKENS',
   judgeFallback: 'UI.JUDGE_FALLBACK',
   gatePrompt: 'UI.GATE_PROMPT',
+  glassTitle: 'UI.GLASS_TITLE',
+  glassIntro: 'UI.GLASS_INTRO',
+  glassLink: 'UI.GLASS_LINK',
+  glassTabAsk: 'UI.GLASS_TAB_ASK',
+  glassTabChild: 'UI.GLASS_TAB_CHILD',
+  glassPresets: 'UI.GLASS_PRESETS',
+  glassNodeQuestion: 'UI.GLASS_NODE_QUESTION',
+  glassNodeRules: 'UI.GLASS_NODE_RULES',
+  glassNodeClassifier: 'UI.GLASS_NODE_CLASSIFIER',
+  glassNodeLevel: 'UI.GLASS_NODE_LEVEL',
+  glassNodeLibrary: 'UI.GLASS_NODE_LIBRARY',
+  glassNodeValidator: 'UI.GLASS_NODE_VALIDATOR',
+  glassNodeOutput: 'UI.GLASS_NODE_OUTPUT',
+  glassNotTaken: 'UI.GLASS_NOT_TAKEN',
+  glassReplay: 'UI.GLASS_REPLAY',
+  glassRealTime: 'UI.GLASS_REAL_TIME',
+  glassChildIntro: 'UI.GLASS_CHILD_INTRO',
+  glassChildCounter: 'UI.GLASS_CHILD_COUNTER',
 };
 
 export function loadLabels(): Labels {

@@ -88,6 +88,8 @@ export default function EvaluationContent({ data, labels, stations, items }: { d
 
       <Section id="try" title={T.heading.try}>
         <TryQuestion stations={stations} items={items} excluded={activeNotPickable} labels={labels} maxChars={MAX_CHARS} />
+        {/* Glass-box view (D60): the same pipeline, step by step, from the real trace. */}
+        <Link href="/glass" className="self-start py-3 font-display text-xl text-water underline" data-glass-link>{labels.glassLink ?? 'Glass box: /glass'}</Link>
       </Section>
 
       <Section id="results" title={T.heading.results}>

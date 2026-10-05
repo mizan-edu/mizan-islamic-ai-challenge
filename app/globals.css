@@ -227,6 +227,10 @@
 @keyframes place { from { transform: translateY(-6px) scale(1.03); } to { transform: none; } }
 @keyframes glow-breathe { 0%, 100% { opacity: 0.95; } 50% { opacity: 0.4; } }
 @keyframes fade-dim { to { opacity: 0.45; } }
+/* Glass-box view (D60). Purposes: glass-pulse attention — the step being replayed; glass-flow cause
+   and effect — the trace passing from one step to the next. Transform and opacity only. */
+@keyframes glass-pulse { 0% { opacity: 0.8; transform: scale(1); } 100% { opacity: 0; transform: scale(1.8); } }
+@keyframes glass-flow { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(100%); } }
 /* Phase 1c moment scenes (transform and opacity only). Purposes:
    flip-in, scene-in   cause and effect: the chosen card opens into its scene;
    camera              attention: a slow push-in holds the eye on the picture's subject;
@@ -288,6 +292,8 @@
    anim-place (a retry) does not restart the entrance. */
 .anim-card-in.anim-place { animation: card-in 420ms var(--ease-spring-soft) backwards, place 520ms var(--ease-spring); animation-delay: calc(120ms + var(--i, 0) * 90ms), 0ms; }
 .hint-glow { animation: glow-breathe 1.6s ease-in-out infinite; }
+.glass-pulse { transform-box: fill-box; transform-origin: center; animation: glass-pulse 1200ms ease-out infinite; }
+.glass-flow { animation: glass-flow 450ms ease-in both; }
 
 /* Moment scene (Phase 1c; moments.tsx). The D38 total is unchanged: 700 ms in, 3 s hold, 600 ms out.
    The panel opens from the chosen card's rect (FLIP) or, without one, grows from the centre. */
