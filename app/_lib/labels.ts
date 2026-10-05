@@ -32,6 +32,13 @@ export interface Labels {
   judgePass?: string;
   judgeBlocked?: string;
   judgeLatency?: string;
+  // AI lens (D54) and the parental gate: drafts until Review 1; the lens shows English codes meanwhile.
+  judgeDecision?: string;
+  judgeRecords?: string;
+  judgeSource?: string;
+  judgeTokens?: string;
+  judgeFallback?: string;
+  gatePrompt?: string;
 }
 
 const KEYS: Record<keyof Labels, string> = {
@@ -62,6 +69,12 @@ const KEYS: Record<keyof Labels, string> = {
   judgePass: 'UI.JUDGE_PASS',
   judgeBlocked: 'UI.JUDGE_BLOCKED',
   judgeLatency: 'UI.JUDGE_LATENCY',
+  judgeDecision: 'UI.JUDGE_DECISION',
+  judgeRecords: 'UI.JUDGE_RECORDS',
+  judgeSource: 'UI.JUDGE_SOURCE',
+  judgeTokens: 'UI.JUDGE_TOKENS',
+  judgeFallback: 'UI.JUDGE_FALLBACK',
+  gatePrompt: 'UI.GATE_PROMPT',
 };
 
 export function loadLabels(): Labels {

@@ -3,7 +3,7 @@
 // session event is the same with or without it. Never prints record or input text.
 
 import { describe, expect, it, vi } from 'vitest';
-import type { Classifier } from './classifier';
+import { createChainClassifier, type Classifier, type Provider } from './classifier';
 import { JUDGE_KEY, NO_MODEL_CALL, judgeFromUrl, storeJudge, type FlagStorage } from './judge';
 import { answerQuestion } from './pipeline';
 import { answerWithTrace, isSafeTrace, type Trace } from './trace';
@@ -11,7 +11,7 @@ import { item, libraryWithoutRules, runtimeLibrary } from './test-helpers';
 
 const lib = runtimeLibrary();
 const ARABIC = /[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]/;
-const KEYS = ['route', 'behaviour', 'level', 'classifierLevel', 'provider', 'model', 'retrieved', 'thresholds', 'cited', 'validator', 'latencyMs'];
+const KEYS = ['route', 'behaviour', 'level', 'classifierLevel', 'provider', 'model', 'retrieved', 'thresholds', 'cited', 'validator', 'latencyMs', 'modelCalls'];
 
 function expectComplete(trace: Trace, input: string) {
   expect(Object.keys(trace).sort()).toEqual([...KEYS].sort());
@@ -67,6 +67,31 @@ describe('every route type produces a complete trace of IDs and codes', () => {
     expectComplete(trace, text);
     expect(classifier).toHaveBeenCalledOnce();
     expect(trace).toMatchObject({ route: { type: 'model_classifier', code: 'CLASSIFIER_LEVEL' }, level: 'C', classifierLevel: 'C', model: 'FIXTURE-MODEL', behaviour: 'referral' });
+  });
+
+  it('model calls: latency, tokens and result per provider attempt (AI lens, D54)', async () => {
+    const text = item('C01').input.text;
+    const provider: Provider = {
+      name: 'anthropic', model: 'FIXTURE-PRIMARY', timeoutMs: 1000,
+      call: async (_input, _signal, report) => { report?.({ inputTokens: 1200, outputTokens: 30 }); return { level: 'C', recordId: null }; },
+    };
+    const { trace } = await answerWithTrace(libraryWithoutRules(), { stationId: 'S1', text }, { classifier: createChainClassifier({ primary: provider }), modelId: 'FIXTURE-PRIMARY' });
+    expectComplete(trace, text);
+    expect(trace.modelCalls).toEqual([{ provider: 'anthropic', model: 'FIXTURE-PRIMARY', ms: expect.any(Number), inputTokens: 1200, outputTokens: 30, result: 'ok' }]);
+  });
+
+  it('model calls: a timed-out primary is recorded with no tokens, and the turn goes to the static tier', async () => {
+    const text = item('C01').input.text;
+    const provider: Provider = { name: 'anthropic', model: 'FIXTURE-PRIMARY', timeoutMs: 20, call: () => new Promise(() => {}) };
+    const { trace } = await answerWithTrace(libraryWithoutRules(), { stationId: 'S1', text }, { classifier: createChainClassifier({ primary: provider }), modelId: 'FIXTURE-PRIMARY' });
+    expectComplete(trace, text);
+    expect(trace.route).toMatchObject({ type: 'fallback:static', fallbackReason: 'timeout' });
+    expect(trace.modelCalls).toEqual([{ provider: 'anthropic', model: 'FIXTURE-PRIMARY', ms: expect.any(Number), inputTokens: null, outputTokens: null, result: 'timeout' }]);
+  });
+
+  it('no model call: modelCalls is empty', async () => {
+    const aq = lib.stations.get('S1')!.anticipatedQuestions[0];
+    expect((await answerWithTrace(lib, { stationId: 'S1', text: aq.childQuestion })).trace.modelCalls).toEqual([]);
   });
 
   it('fallback (no deterministic match, no classifier)', async () => {

@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { initialState, reducer, type FlowState } from '@/app/_lib/flow';
 import { judgeEnabled } from '@/app/_lib/judge';
+import { stepDecisions } from '@/app/_lib/lens';
 import type { Labels } from '@/app/_lib/labels';
 import type { Trace } from '@/app/_lib/trace';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
@@ -153,6 +154,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   };
   const narrateKind = (id: string | null): 'praise' | 'redirect' | 'none' => (!id ? 'none' : id === view.narrate?.praise?.id ? 'praise' : 'redirect');
   const finished = state.step === 'close' || state.step === 'done';
+  // AI lens (D54): the decisions behind the step on screen, in judge mode only.
+  const decisions = judge ? stepDecisions(view, state, ask ? { id: ask.id, trace: ask.reply?.trace ?? null } : null) : [];
   // Scene picture beside the prompt: the question's own picture (S2, S3), else the first narration
   // card's picture (S1: S1.N1). Moment pictures: S1 scene = S1.N1; S2 from S2.Q1 to S2.N1.
   const firstCard = view.narrate?.cards[0] ?? null;
@@ -276,7 +279,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
           )}
           <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
           {/* Judge panel: below the controls, away from the reply and any verse card in it. */}
-          {judge && ask?.reply?.trace && <JudgePanel trace={ask.reply.trace} labels={labels} />}
+          {judge && <JudgePanel decisions={decisions} trace={ask?.reply?.trace ?? null} labels={labels} />}
         </section>
       )}
 
@@ -321,6 +324,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
           )}
         </section>
       )}
+
+      {/* AI lens on every other step (D54): after the step's section and its controls; on the connect
+          step that puts it below the Next button, away from the verse card. */}
+      {judge && state.step !== 'ask' && <JudgePanel decisions={decisions} labels={labels} />}
     </main>
   );
 }

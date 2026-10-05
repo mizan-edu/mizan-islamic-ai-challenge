@@ -29,8 +29,9 @@ export interface ClassifierOutput {
 }
 
 // withOutcome (provider chains): the same classification plus which tier, provider and model produced it.
+// onCall (AI lens and call log, D54) receives one record per provider attempt: timing, tokens, result.
 export type Classifier = ((input: ClassifierInput) => Promise<ClassifierOutput | null>) & {
-  withOutcome?: (input: ClassifierInput) => Promise<ClassifierResult>;
+  withOutcome?: (input: ClassifierInput, onCall?: (call: ModelCall) => void) => Promise<ClassifierResult>;
 };
 
 const LEVELS = ['A', 'B', 'C', 'D', 'OUT_OF_SCOPE'] as const;
@@ -86,12 +87,24 @@ export const PRIMARY_TIMEOUT_MS = 8000;
 export const SECONDARY_TIMEOUT_MS = 6000;
 
 // A provider returns the model's raw parsed output (validated by the chain), REFUSED, or throws.
+// It may report the call's token usage through `report`.
 export const REFUSED = Symbol('refused');
+export interface Usage { inputTokens: number; outputTokens: number }
 export interface Provider {
   name: 'anthropic' | 'openai';
   model: string;
   timeoutMs: number;
-  call: (input: ClassifierInput, signal: AbortSignal) => Promise<unknown>;
+  call: (input: ClassifierInput, signal: AbortSignal, report?: (usage: Usage) => void) => Promise<unknown>;
+}
+
+// One provider attempt, as the AI lens and the call log see it (D54): numbers and codes only.
+export interface ModelCall {
+  provider: 'anthropic' | 'openai';
+  model: string;
+  ms: number;
+  inputTokens: number | null; // null: not reported (timeout or error before a response)
+  outputTokens: number | null;
+  result: 'ok' | 'refused' | FallbackReason;
 }
 
 export class ProviderTimeoutError extends Error {}
@@ -112,31 +125,41 @@ export async function withTimeout<T>(run: (signal: AbortSignal) => Promise<T>, m
 
 type Attempt = { ok: true; output: ClassifierOutput } | { ok: false; reason: FallbackReason; refused: boolean };
 
-async function attempt(p: Provider, input: ClassifierInput): Promise<Attempt> {
+async function attempt(p: Provider, input: ClassifierInput, onCall?: (call: ModelCall) => void): Promise<Attempt> {
+  const t0 = Date.now();
+  let usage: Usage | null = null;
+  const done = (a: Attempt): Attempt => {
+    onCall?.({
+      provider: p.name, model: p.model, ms: Date.now() - t0,
+      inputTokens: usage?.inputTokens ?? null, outputTokens: usage?.outputTokens ?? null,
+      result: a.ok ? 'ok' : a.refused ? 'refused' : a.reason,
+    });
+    return a;
+  };
   try {
-    const raw = await withTimeout((signal) => p.call(input, signal), p.timeoutMs);
-    if (raw === REFUSED) return { ok: false, reason: 'invalid_output', refused: true };
+    const raw = await withTimeout((signal) => p.call(input, signal, (u) => { usage = u; }), p.timeoutMs);
+    if (raw === REFUSED) return done({ ok: false, reason: 'invalid_output', refused: true });
     const output = validateClassifierOutput(raw, input);
-    return output ? { ok: true, output } : { ok: false, reason: 'invalid_output', refused: false };
+    return done(output ? { ok: true, output } : { ok: false, reason: 'invalid_output', refused: false });
   } catch (e) {
-    return { ok: false, reason: e instanceof ProviderTimeoutError ? 'timeout' : 'http_error', refused: false };
+    return done({ ok: false, reason: e instanceof ProviderTimeoutError ? 'timeout' : 'http_error', refused: false });
   }
 }
 
 export interface ClassifierResult { output: ClassifierOutput | null; outcome: LlmOutcome }
 
 export function createChainClassifier({ primary = null, secondary = null }: { primary?: Provider | null; secondary?: Provider | null }): Classifier {
-  const withOutcome = async (input: ClassifierInput): Promise<ClassifierResult> => {
+  const withOutcome = async (input: ClassifierInput, onCall?: (call: ModelCall) => void): Promise<ClassifierResult> => {
     let reason: FallbackReason | null = null;
     if (primary) {
-      const a = await attempt(primary, input);
+      const a = await attempt(primary, input, onCall);
       if (a.ok) return { output: a.output, outcome: { tier: 'primary', reason: null, provider: primary.name, model: primary.model } };
       reason = a.reason;
       // The primary declined to classify: take the safest path (static) rather than ask another model.
       if (a.refused) return { output: null, outcome: { tier: 'static', reason, provider: null, model: null } };
     }
     if (secondary) {
-      const b = await attempt(secondary, input);
+      const b = await attempt(secondary, input, onCall);
       if (b.ok) return { output: b.output, outcome: { tier: 'secondary', reason, provider: secondary.name, model: secondary.model } };
       reason = b.reason;
     }
@@ -151,7 +174,7 @@ export function createChainClassifier({ primary = null, secondary = null }: { pr
 
 interface MessagesParseClient {
   messages: {
-    parse: (params: Record<string, unknown>, options?: { signal?: AbortSignal; maxRetries?: number }) => Promise<{ parsed_output?: unknown; stop_reason?: string | null }>;
+    parse: (params: Record<string, unknown>, options?: { signal?: AbortSignal; maxRetries?: number }) => Promise<{ parsed_output?: unknown; stop_reason?: string | null; usage?: { input_tokens?: number; output_tokens?: number } }>;
   };
 }
 
@@ -168,7 +191,7 @@ export function anthropicProvider(opts: AnthropicClassifierOptions): Provider {
     name: 'anthropic',
     model: opts.model,
     timeoutMs: opts.timeoutMs ?? PRIMARY_TIMEOUT_MS,
-    call: async (input, signal) => {
+    call: async (input, signal, report) => {
       const res = await client.messages.parse({
         model: opts.model,
         max_tokens: 1024,
@@ -176,6 +199,7 @@ export function anthropicProvider(opts: AnthropicClassifierOptions): Provider {
         messages: [{ role: 'user', content: buildUserMessage(input) }],
         output_config: { format: zodOutputFormat(Schema), ...(opts.effort ? { effort: opts.effort } : {}) },
       }, { signal, maxRetries: 0 }); // no SDK retries: the chain owns the time budget
+      if (res.usage) report?.({ inputTokens: res.usage.input_tokens ?? 0, outputTokens: res.usage.output_tokens ?? 0 });
       return res.stop_reason === 'refusal' ? REFUSED : res.parsed_output;
     },
   };
@@ -239,7 +263,7 @@ export function openaiProvider(opts: OpenAIProviderOptions): Provider {
     name: 'openai',
     model: opts.model,
     timeoutMs: opts.timeoutMs ?? SECONDARY_TIMEOUT_MS,
-    call: async (input, signal) => {
+    call: async (input, signal, report) => {
       const t0 = Date.now();
       const rec: ProviderCall = { model: opts.model, ms: 0, inputTokens: 0, outputTokens: 0, error: null };
       try {
@@ -259,6 +283,7 @@ export function openaiProvider(opts: OpenAIProviderOptions): Provider {
         const body = (await res.json()) as { usage?: { prompt_tokens?: number; completion_tokens?: number }; choices?: { message?: { content?: string | null; refusal?: string | null } }[] };
         rec.inputTokens = body.usage?.prompt_tokens ?? 0;
         rec.outputTokens = body.usage?.completion_tokens ?? 0;
+        report?.({ inputTokens: rec.inputTokens, outputTokens: rec.outputTokens });
         const msg = body.choices?.[0]?.message;
         if (msg?.refusal) return REFUSED;
         try {

@@ -2,10 +2,16 @@
 // step's controls, never inside the reply card or a verse card; the twelve labels are approved (D37).
 // Replies are built through the real pipeline from approved questions; never prints record text.
 
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
 import { renderToString } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { loadLabels, type Labels } from '@/app/_lib/labels';
 import { askStep } from './ask-fixture';
+import { initialState, reducer, type FlowAction, type FlowState } from '@/app/_lib/flow';
+import { buildStationView } from '@/app/_lib/station-view';
+import { runtimeLibrary } from '@/app/_lib/test-helpers';
+import ParentGate, { GATE_CODE, gateStep } from './ParentGate';
 import StationFlow from './StationFlow';
 
 const labels = loadLabels();
@@ -37,5 +43,77 @@ describe('judge panel on the ask step', () => {
     for (const f of ['route', 'level', 'classifierLevel', 'model', 'retrieved', 'cited', 'validator', 'latency']) expect(section).toContain(`data-judge-field="${f}"`);
     expect(section).toContain(labels.judgeNoModelCall!); // approved questions route without a model call
     expect(section).toContain(labels.judgePass!);
+  });
+});
+
+describe('AI lens on every step (D54)', () => {
+  const lib = runtimeLibrary();
+  const t = 1700000000;
+  const view = (s: string) => buildStationView(lib, s, () => false)!;
+  const at = (s: string, actions: FlowAction[]): FlowState => actions.reduce((st, a) => reducer(view(s), st, a), initialState());
+  const toConnect = (s: string): FlowAction[] => [{ type: 'start' }, { type: 'choose', choiceId: view(s).observe!.correctChoiceId, t }, { type: 'next', t }];
+  const render = (s: string, state: FlowState, judge: boolean) => renderToString(<StationFlow view={view(s)} labels={labels} initial={state} initialJudge={judge} />);
+
+  it.each(['S1', 'S2', 'S3'])('%s: off by default on every step', (s) => {
+    for (const st of [at(s, []), at(s, [{ type: 'start' }]), at(s, toConnect(s))]) expect(render(s, st, false)).not.toContain('data-judge-panel');
+  });
+
+  it.each(['S1', 'S2', 'S3'])('%s: on — one panel per step, each decision labelled rule or model, no animation', (s) => {
+    for (const st of [at(s, []), at(s, [{ type: 'start' }]), at(s, toConnect(s))]) {
+      const html = render(s, st, true);
+      expect(html.match(/data-judge-panel/g)).toHaveLength(1);
+      const panel = /<details[^>]*data-judge-panel[\s\S]*?<\/details>/.exec(html)![0];
+      expect(panel).toMatch(/data-lens-kind="rule"/);
+      expect(panel).not.toMatch(/data-lens-kind="(?!rule|model)/);
+      expect(panel).not.toMatch(/anim-|transition/);
+      for (const f of ['decision', 'records', 'decisionLevel', 'noModel']) expect(panel).toContain(`data-judge-field="${f}"`);
+    }
+  });
+
+  it.each(['S1', 'S2', 'S3'])('%s connect: the panel sits after the connect section (below its Next button), never inside it or the verse card', (s) => {
+    const html = render(s, at(s, toConnect(s)), true);
+    const section = /<section[^>]*data-screen="connect"[\s\S]*?<\/section>/.exec(html)![0];
+    expect(section).not.toContain('data-judge-panel');
+    expect(html.indexOf('data-judge-panel')).toBeGreaterThan(html.indexOf(section) + section.length - 1);
+    expect(/<details[^>]*data-judge-panel[\s\S]*?<\/details>/.exec(html)![0]).toContain('data-judge-field="source"');
+  });
+
+  it('ask step before any question: the panel lists the offered question IDs', () => {
+    const v = view('S1');
+    const html = render('S1', at('S1', [...toConnect('S1'), { type: 'next', t }]), true);
+    expect(html).toContain('data-lens-code="SCRIPT_ASK_OPTIONS"');
+    for (const q of v.ask) expect(html).toContain(q.id);
+  });
+});
+
+describe('parental gate (D54)', () => {
+  it('7, 3, 9 in order opens it; a wrong digit quietly starts again', () => {
+    let s = { entered: [] as number[], open: false };
+    for (const d of [7, 3, 9]) s = gateStep(s.entered, d);
+    expect(s.open).toBe(true);
+    expect(gateStep([7, 3], 8)).toEqual({ entered: [], open: false });
+    expect(gateStep([7, 3], 7)).toEqual({ entered: [7], open: false });
+    expect(gateStep([], 3)).toEqual({ entered: [], open: false });
+    expect(GATE_CODE).toEqual([7, 3, 9]);
+  });
+
+  it('closed: shows the keypad (80 px keys, 16 px gaps, Western numerals), not what it guards', () => {
+    const html = renderToString(<ParentGate prompt="FIXTURE_PROMPT"><span data-guarded /></ParentGate>);
+    expect(html).toContain('data-parent-gate');
+    expect(html).not.toContain('data-guarded');
+    expect(html.match(/data-gate-key="\d"/g)).toHaveLength(9);
+    expect(html).toMatch(/class="grid grid-cols-3 gap-4"/);
+    for (const k of html.match(/<button[^>]*data-gate-key[^>]*>/g)!) expect(k).toContain('size-20');
+    expect(html).not.toMatch(/[٠-٩]/);
+  });
+
+  it('the parent page puts the lens switch behind the gate, and the gate prompt label is a draft until Review 1', () => {
+    const page = readFileSync(path.join(process.cwd(), 'app', 'parent', 'page.tsx'), 'utf8');
+    expect(page).toMatch(/<ParentGate[^>]*>\s*<JudgeSwitch/);
+    const ui = JSON.parse(readFileSync(path.join(process.cwd(), 'content', 'ui.json'), 'utf8')) as { records: { id: string; status: string; level: string; reviewer1: unknown; reviewer2: unknown }[] };
+    for (const id of ['UI.GATE_PROMPT', 'UI.JUDGE_DECISION', 'UI.JUDGE_RECORDS', 'UI.JUDGE_SOURCE', 'UI.JUDGE_TOKENS', 'UI.JUDGE_FALLBACK']) {
+      const r = ui.records.find((x) => x.id === id);
+      expect(r, id).toMatchObject({ status: 'draft', level: 'NA', reviewer1: null, reviewer2: null });
+    }
   });
 });

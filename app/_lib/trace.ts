@@ -2,7 +2,7 @@
 // system. IDs, codes and numbers only: never record text and never the child's input text
 // (CLAUDE.md §6). Built on the server and sent only when judge mode asks for it; nothing is stored.
 
-import type { Classifier, LlmOutcome } from './classifier';
+import type { Classifier, LlmOutcome, ModelCall } from './classifier';
 import { NO_MODEL_CALL } from './judge';
 import type { RouteLevel } from './levels';
 import type { Library } from './library';
@@ -36,6 +36,7 @@ export interface Trace {
   cited: string[];
   validator: { result: 'pass' } | { result: 'blocked'; codes: string[] };
   latencyMs: number;
+  modelCalls: ModelCall[]; // every provider attempt this turn, in order (AI lens, D54); [] when no model was called
 }
 
 const ROUTE_TYPE: Record<RouteResult['source'], RouteType> = {
@@ -74,9 +75,10 @@ export interface TraceParts {
   llm?: LlmOutcome | null;
   modelId: string | null;
   latencyMs: number;
+  modelCalls?: ModelCall[];
 }
 
-export function buildTrace({ result, retrieval, retrieved, classifier, modelId, latencyMs }: TraceParts): Trace {
+export function buildTrace({ result, retrieval, retrieved, classifier, modelId, latencyMs, modelCalls = [] }: TraceParts): Trace {
   const { route, reply, validation, llm } = result;
   const type: RouteType = llm?.tier === 'secondary' ? 'fallback:secondary' : llm?.tier === 'static' ? 'fallback:static' : ROUTE_TYPE[route.source];
   return {
@@ -98,6 +100,7 @@ export function buildTrace({ result, retrieval, retrieved, classifier, modelId, 
     cited: reply.citations,
     validator: validation.ok ? { result: 'pass' } : { result: 'blocked', codes: validation.codes },
     latencyMs,
+    modelCalls,
   };
 }
 
@@ -118,12 +121,13 @@ export interface TracedResult extends PipelineResult { trace: Trace }
 // called and what level it returned; its output reaches the router exactly as before.
 export async function answerWithTrace(lib: Library, input: RouteInput, deps: PipelineDeps & { modelId?: string | null } = {}): Promise<TracedResult> {
   const seen = { called: false, level: null as RouteLevel | null };
+  const modelCalls: ModelCall[] = [];
   const inner = deps.classifier ?? null;
   // A chain classifier keeps its withOutcome, so the pipeline still learns the tier, provider and model.
   const classifier: Classifier | null = inner
     ? Object.assign(
       (async (ci) => { seen.called = true; const out = await inner(ci); seen.level = out?.level ?? null; return out; }) as Classifier,
-      inner.withOutcome ? { withOutcome: async (ci: Parameters<NonNullable<Classifier['withOutcome']>>[0]) => { seen.called = true; const r = await inner.withOutcome!(ci); seen.level = r.output?.level ?? null; return r; } } : {},
+      inner.withOutcome ? { withOutcome: async (ci: Parameters<NonNullable<Classifier['withOutcome']>>[0]) => { seen.called = true; const r = await inner.withOutcome!(ci, (c) => modelCalls.push(c)); seen.level = r.output?.level ?? null; return r; } } : {},
     )
     : null;
   const t0 = performance.now();
@@ -131,5 +135,5 @@ export async function answerWithTrace(lib: Library, input: RouteInput, deps: Pip
   const latencyMs = Math.round(performance.now() - t0);
   const retrieval = retrieve(lib, input.stationId, input.text, input.onScreen ?? []);
   const retrieved = retrievedRecords(lib, input.stationId, input.text, retrieval);
-  return { ...result, trace: buildTrace({ result, retrieval, retrieved, classifier: seen, modelId: deps.modelId ?? null, latencyMs }) };
+  return { ...result, trace: buildTrace({ result, retrieval, retrieved, classifier: seen, modelId: deps.modelId ?? null, latencyMs, modelCalls }) };
 }

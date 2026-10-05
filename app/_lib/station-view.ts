@@ -64,7 +64,13 @@ export interface StationView {
   close: { lines: RecordView[]; stage: number };
   parent: RecordView[];
   nextStationId: string | null;
+  // AI lens (D54): where each record on these screens comes from, keyed by record ID. IDs and
+  // platform names only: an approved snapshot record carries its platform and platform ID; an
+  // explanation lists the records it is based on; MIZAN's own lines have neither.
+  sources: Record<string, RecordSource>;
 }
+
+export interface RecordSource { level: string; platform: string | null; platformId: string | null; basedOn: string[] }
 
 const MAX_QUESTIONS = 3;
 
@@ -130,7 +136,7 @@ export function buildStationView(
   const ids = [...lib.stations.keys()].sort();
   const next = ids[ids.indexOf(stationId) + 1] ?? null;
 
-  return {
+  const result: Omit<StationView, 'sources'> = {
     stationId,
     title: view(titleId),
     frame: views(frame?.recordIds).filter((r) => r.id !== titleId),
@@ -174,6 +180,29 @@ export function buildStationView(
     parent: views(close?.parentSummaryIds),
     nextStationId: next,
   };
+  return { ...result, sources: recordSources(lib, result) };
+}
+
+// Sources for every approved record of the station and every approved global record that is not a UI
+// label (an ask reply may cite those), plus the records the explanations are based on.
+function recordSources(lib: Library, v: Omit<StationView, 'sources'>): Record<string, RecordSource> {
+  const ids = new Set<string>();
+  for (const r of lib.byId.values()) if (r.station === v.stationId || (r.station === null && r.type !== 'ui')) ids.add(r.id);
+  const out: Record<string, RecordSource> = {};
+  const put = (id: string) => {
+    const r = lib.byId.get(id);
+    if (!r || out[id]) return;
+    const basedOn = Array.isArray(r.basedOn) ? (r.basedOn as unknown[]).filter((x): x is string => typeof x === 'string') : [];
+    out[id] = {
+      level: r.level,
+      platform: typeof r.sourcePlatform === 'string' ? r.sourcePlatform : null,
+      platformId: typeof r.platformId === 'string' ? r.platformId : null,
+      basedOn,
+    };
+    basedOn.forEach(put);
+  };
+  ids.forEach(put);
+  return out;
 }
 
 function toView(stationId: string, r: ContentRecord, exists: FileExists): RecordView {

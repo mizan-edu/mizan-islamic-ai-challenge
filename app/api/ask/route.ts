@@ -31,7 +31,7 @@ function errorTrace(reply: ReturnType<typeof fallbackReply>): Trace {
   return {
     route: { type: 'fallback', code: 'PIPELINE_ERROR', fallbackReason: null, ruleIds: [], questionId: null, verseId: null },
     behaviour: reply.behaviour, level: reply.level, classifierLevel: null, provider: null, model: NO_MODEL_CALL, retrieved: [],
-    thresholds: { question: AQ_MIN_SCORE, questionSharedWords: AQ_MIN_SHARED, verse: VERSE_MIN_SCORE }, cited: reply.citations, validator: { result: 'pass' }, latencyMs: 0,
+    thresholds: { question: AQ_MIN_SCORE, questionSharedWords: AQ_MIN_SHARED, verse: VERSE_MIN_SCORE }, cited: reply.citations, validator: { result: 'pass' }, latencyMs: 0, modelCalls: [],
   };
 }
 
