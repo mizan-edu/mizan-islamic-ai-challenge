@@ -49,8 +49,9 @@ describe('nothing moves on or near the verse', () => {
 describe('card motion (D54)', () => {
   const cards = (html: string, screen: string) => {
     const section = new RegExp(`<section[^>]*data-screen="${screen}"[\\s\\S]*?</section>`).exec(html)![0];
-    return [...section.matchAll(/<button[^>]*data-record="([^"]+)"[^>]*data-state="([^"]+)"[^>]*class="([^"]*)"[^>]*?(?:style="--i:(\d+)")?>/g)]
-      .map(([, id, state, cls, i]) => ({ id, state, cls, i: i === undefined ? null : Number(i) }));
+    // Each card is <div class="stage-3d ..." style="--i:N"><button data-record=...> (the index sits on the wrapper).
+    return [...section.matchAll(/<div class="(stage-3d[^"]*)"(?: style="--i:(\d+)")?[^>]*><button[^>]*data-record="([^"]+)"[^>]*data-state="([^"]+)"[^>]*class="([^"]*)"/g)]
+      .map(([, wrap, i, id, state, cls]) => ({ id, state, cls, wrap, i: i === undefined ? null : Number(i) }));
   };
 
   it.each(['S1', 'S2', 'S3'])('%s observe: choices rise in DOM order, which is right to left in the RTL page', (s) => {
@@ -81,6 +82,66 @@ describe('card motion (D54)', () => {
     const toNarrate: FlowAction[] = [...toConnect('S1'), { type: 'next', t }, ...(v.ask.length ? [{ type: 'next', t } as FlowAction] : [])];
     const html = render('S1', at('S1', [...toNarrate, { type: 'pick', cardId: first, t }]));
     expect(html).toMatch(/class="anim-badge[^"]*"[^>]*data-order="1"/);
+  });
+});
+
+describe('result-card motion (Phase 1b)', () => {
+  const KIND: Record<string, string> = { S1: 'rain', S2: 'drop', S3: 'leaf' };
+  const cardHtml = (html: string, id: string) => new RegExp(`<button[^>]*data-record="${id.replace(/\./g, '\\.')}"[\\s\\S]*?</button>`).exec(html)![0];
+
+  it.each(['S1', 'S2', 'S3'])('%s correct answer: the chosen card is the hero (ring, sheen, 12 station particles); the others recede', (s) => {
+    const v = view(s);
+    const o = v.observe!;
+    const html = render(s, at(s, [{ type: 'start' }, { type: 'choose', choiceId: o.correctChoiceId, t }]));
+    const hero = cardHtml(html, o.correctChoiceId);
+    expect(hero).toMatch(/class="tactile[^"]*anim-hero/);
+    expect(hero).toContain('data-hero-ring');
+    expect(hero).toContain('data-sheen');
+    expect(hero).toContain(`data-particles="${KIND[s]}"`);
+    expect(hero.match(/class="particle /g)).toHaveLength(12);
+    for (const c of o.choices.filter((x) => x.id !== o.correctChoiceId)) {
+      const other = cardHtml(html, c.id);
+      expect(other).toMatch(/class="tactile[^"]*anim-recede/);
+      expect(other).not.toContain('data-particles');
+    }
+    // No card floats once the answer is found; before it, every unchosen card's face does, inside a
+    // card (the tap target) that itself never floats.
+    expect(html).not.toContain('anim-float');
+    const before = render(s, at(s, [{ type: 'start' }]));
+    expect(before.match(/<span class="[^"]*anim-float"[^>]*data-card-face/g)).toHaveLength(3);
+    expect(before).not.toMatch(/<(div|button)[^>]*class="[^"]*anim-float/);
+  });
+
+  it('a set-aside card stops floating, and the hint glow marks the helpful card on the last rung', () => {
+    const v = view('S1');
+    const o = v.observe!;
+    const other = o.choices.find((c) => c.id !== o.correctChoiceId)!.id;
+    const hints: FlowAction[] = Array.from({ length: o.hints.length + 1 }, () => ({ type: 'hint', t }));
+    const html = render('S1', at('S1', [{ type: 'start' }, { type: 'choose', choiceId: other, t }, ...hints]));
+    expect(cardHtml(html, other)).not.toContain('anim-float');
+    expect(cardHtml(html, o.highlightChoiceId!)).toContain('class="hint-glow"');
+  });
+
+  it('narration in order mode: the placed cards lift one after another (150 ms apart) without particles', () => {
+    const v = view('S1');
+    expect(v.narrate!.mode).toBe('order');
+    const toNarrate: FlowAction[] = [...toConnect('S1'), { type: 'next', t }, ...(v.ask.length ? [{ type: 'next', t } as FlowAction] : [])];
+    const html = render('S1', at('S1', [...toNarrate, ...v.narrate!.expectedOrder!.map((cardId) => ({ type: 'pick', cardId, t }) as FlowAction)]));
+    v.narrate!.expectedOrder!.forEach((id, i) => {
+      const card = cardHtml(html, id);
+      expect(card).toContain('anim-hero');
+      if (i > 0) expect(card).toContain(`--hd:${i * 150}ms`);
+      expect(card).not.toContain('data-particles');
+    });
+  });
+
+  it('close: the approved plant springs in, followed by a leaf burst', () => {
+    const v = view('S2');
+    const toNarrate: FlowAction[] = [...toConnect('S2'), { type: 'next', t }, ...(v.ask.length ? [{ type: 'next', t } as FlowAction] : [])];
+    const html = render('S2', at('S2', [...toNarrate, { type: 'pick', cardId: v.narrate!.bestCardId!, t }, { type: 'next', t }]));
+    const close = /<section[^>]*data-screen="close"[\s\S]*?<\/section>/.exec(html)![0];
+    expect(close).toMatch(/<img[^>]*class="[^"]*anim-grow-in/);
+    expect(close).toContain('data-particles="leaf"');
   });
 });
 

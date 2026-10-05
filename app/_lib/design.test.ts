@@ -59,12 +59,64 @@ describe('motion', () => {
   const rule = (selector: string): string => new RegExp(`(?:^|\\n)${selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')} \\{([^}]*)\\}`).exec(css)?.[1] ?? '';
   const ms = (decl: string): number[] => [...decl.matchAll(/(\d+)ms/g)].map((m) => Number(m[1]));
 
-  it('reduced-motion path: entrances become opacity-only cross-fades and the press does not move (D54)', () => {
+  it('reduced-motion path: every replacement animation is opacity-only; no tilt, press, particles, sheen or ring pulse (D54, Phase 1b)', () => {
     const block = /@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n\}/.exec(css)?.[1] ?? '';
-    const overrides = [...block.matchAll(/animation:\s*([a-z-]+)\s/g)].map((m) => m[1]).filter((n) => n !== 'none');
-    expect(overrides).toEqual(['fade-in']);
-    expect(keyframes('fade-in')).not.toMatch(/transform|scale|translate/);
-    expect(block).toMatch(/\.press:active:not\(:disabled\) \{\s*transform: none !important;/);
+    const overrides = [...new Set([...block.matchAll(/animation:\s*([a-z-]+)\s/g)].map((m) => m[1]).filter((n) => n !== 'none'))];
+    expect(overrides.sort()).toEqual(['fade-dim', 'fade-in']);
+    for (const name of overrides) {
+      expect(keyframes(name), name).toMatch(/opacity/);
+      expect(keyframes(name), name).not.toMatch(/transform|scale|translate|rotate/);
+    }
+    const still = /((?:\s*\.[a-z-]+:active:not\(:disabled\),?)+)\s*\{\s*transform: none !important;/.exec(block)?.[1] ?? '';
+    for (const sel of ['.pill', '.press', '.tactile', '.tactile-lift']) expect(still).toContain(`${sel}:active:not(:disabled)`);
+    expect(block).toMatch(/\.particle,\s*\.sheen,\s*\.hero-ring \{\s*display: none;/);
+    expect(block).not.toMatch(/anim-float[^}]*animation:/); // the float stays off (the * rule)
+  });
+
+  it('cards animate only transform and opacity: no keyframe or card transition touches filter, shadow or layout (Phase 1b)', () => {
+    for (const m of css.matchAll(/@keyframes ([a-z-]+) \{(.*)\}/g)) {
+      const props = [...m[2].matchAll(/([a-z-]+):/g)].map((x) => x[1]);
+      for (const prop of props) expect(['transform', 'opacity'], `${m[1]}: ${prop}`).toContain(prop);
+    }
+    for (const sel of ['.pill', '.press', '.tactile']) {
+      const t = rule(sel).match(/transition:([^;]*)/)![1];
+      for (const part of t.split(',')) expect(['transform', 'opacity'], `${sel}: ${part}`).toContain(part.trim().split(' ')[0]);
+    }
+  });
+
+  it('spring easing tokens: linear() curves (about 10 % and 4 % overshoot) with cubic-bezier fallbacks (Phase 1b)', () => {
+    const peak = (name: string) => Math.max(...(new RegExp(`--${name}: linear\\(([^)]*)\\)`).exec(css)![1].split(',').map(Number)));
+    expect(peak('ease-spring')).toBeCloseTo(1.1, 2);
+    expect(peak('ease-spring-soft')).toBeCloseTo(1.04, 2);
+    expect(css).toMatch(/--ease-spring: cubic-bezier\(/);
+    expect(css).toMatch(/--ease-spring-soft: cubic-bezier\(/);
+    expect(css).toMatch(/@supports \(transition-timing-function: linear\(0, 1\)\)/);
+    for (const r of ['.anim-card-in', '.anim-settle', '.anim-hero', '.anim-recede', '.anim-badge']) expect(rule(r), r).toMatch(/var\(--ease-spring(-soft)?\)/);
+  });
+
+  it('tactile press: perspective stage, tilt from the touch point, scale 0.96 within 100 ms, two shadow levels (Phase 1b)', () => {
+    expect(rule('.stage-3d')).toMatch(/perspective: (8\d\d|9\d\d|1000)px/);
+    expect(css).toMatch(/\.tactile:active:not\(:disabled\) \{\s*transform: rotateX\(var\(--rx, 0deg\)\) rotateY\(var\(--ry, 0deg\)\) scale\(0\.96\);\s*transition-duration: 100ms;/);
+    expect(css).toMatch(/\.tactile > \.elev \{ box-shadow: var\(--shadow-rest\); \}/);
+    expect(css).toMatch(/\.tactile > \.elev-lift \{ box-shadow: var\(--shadow-lift\); opacity: 0; \}/);
+  });
+
+  it('hero moment: lift -14px and 1.08 with a 10 degree 3D settle, others recede to 0.92 / 0.45 / 8px, all layers done inside the D38 moment', () => {
+    expect(keyframes('hero')).toContain('translateY(-14px) scale(1.08) rotateX(0deg)');
+    expect(keyframes('hero')).toContain('rotateX(10deg)');
+    expect(keyframes('recede')).toContain('transform: translateY(8px) scale(0.92); opacity: 0.45;');
+    const D38 = 700 + 700 + 3000; // delay, scene fade-in, hold (moments.tsx MOMENT)
+    for (const r of ['.anim-hero', '.anim-hero > .hero-ring', '.anim-hero > .sheen::after']) {
+      const [dur, delay = 0] = ms(rule(r));
+      expect(dur + delay, r).toBeLessThanOrEqual(D38);
+    }
+    expect(ms(rule('.anim-hero > .sheen::after'))[0]).toBe(600);
+  });
+
+  it('idle float is 2 px at most and pauses while narration plays or a finger is down', () => {
+    expect(keyframes('float')).toMatch(/translateY\(-2px\)/);
+    expect(keyframes('float')).not.toMatch(/translateY\(-?[3-9]/);
+    expect(css).toMatch(/:root\[data-narrating\] \.anim-float,\s*:root\[data-touching\] \.anim-float \{ animation-play-state: paused; \}/);
   });
 
   it('touch feedback settles within 100 ms and scales to 0.96 (D54)', () => {
@@ -87,9 +139,12 @@ describe('motion', () => {
     expect(ms(rule('.anim-badge'))[0]).toBeLessThanOrEqual(250);
   });
 
-  it('no negative signal: no shake or wobble, and a set-aside card only dips (no sideways motion)', () => {
+  it('no negative signal: no shake or wobble, and a set-aside card only dips with a slight 3D turn (no sideways motion)', () => {
     expect(css).not.toMatch(/@keyframes (shake|wiggle|wobble|jiggle)/);
-    expect(keyframes('settle')).not.toMatch(/translateX|rotate/);
+    const settle = keyframes('settle');
+    expect(settle).not.toMatch(/translateX|rotateZ|rotate\(/);
+    expect(settle).toContain('rotateY(6deg)');
+    expect(settle).toMatch(/to \{ transform: none; \}/);
   });
 
   it('nothing repeats faster than three times a second', () => {

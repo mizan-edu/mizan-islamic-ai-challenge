@@ -13,12 +13,14 @@ import type { Labels } from '@/app/_lib/labels';
 import type { Trace } from '@/app/_lib/trace';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
 import JudgePanel from './JudgePanel';
-import { NarrationButton, PictureCard, PlantMarker, VerseCard } from './media';
+import { NarrationButton, PictureCard, PlantMarker, VerseCard, type ParticleKind } from './media';
 import { sfx } from '@/app/_lib/sfx';
 import { MOMENT, MomentOverlay, prefersReducedMotion, type MomentPicture } from './moments';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
+// Hero-moment particles per station (Phase 1b): raindrops, water droplets, small leaves.
+const PARTICLES: Record<string, ParticleKind> = { S1: 'rain', S2: 'drop', S3: 'leaf' };
 export const ASK_TIMEOUT_MS = 15000;
 
 const ArrowIcon = () => (
@@ -113,6 +115,16 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   const endMoment = useCallback(() => { setMoment(false); setMomentPending(false); setPraiseAuto(true); }, []);
   useEffect(() => () => { if (momentTimer.current) window.clearTimeout(momentTimer.current); }, []);
   useEffect(() => { sfx.setAvailable(sfxCues); }, [sfxCues]);
+  // While a finger is on the screen, <html data-touching> pauses the cards' idle float (Phase 1b).
+  useEffect(() => {
+    const root = document.documentElement;
+    const down = () => root.setAttribute('data-touching', '');
+    const up = () => root.removeAttribute('data-touching');
+    window.addEventListener('pointerdown', down);
+    window.addEventListener('pointerup', up);
+    window.addEventListener('pointercancel', up);
+    return () => { window.removeEventListener('pointerdown', down); window.removeEventListener('pointerup', up); window.removeEventListener('pointercancel', up); up(); };
+  }, []);
   const byId = useMemo(() => {
     const m = new Map<string, RecordView>();
     const add = (r: RecordView | null | undefined) => { if (r) m.set(r.id, r); };
@@ -225,7 +237,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
           </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {o.choices.map((c, i) => (
-              <PictureCard key={c.id} record={c} index={i}
+              <PictureCard key={c.id} record={c} index={i} particles={PARTICLES[view.stationId]}
                 state={state.observe.highlightId === c.id ? 'highlight' : state.observe.greyed.includes(c.id) ? 'greyed' : 'idle'}
                 celebrate={state.observe.solved}
                 onTap={state.observe.solved ? undefined : () => choose(c.id)} />
@@ -292,6 +304,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
               const highlight = state.narrate.done && (view.narrate!.mode === 'order' || c.id === view.narrate!.bestCardId);
               return (
                 <PictureCard key={c.id} record={c} index={i}
+                  // Narration hero: pick-best gets the particles; in order mode the cards lift one after
+                  // another in the child's order (150 ms apart), without particles.
+                  particles={view.narrate!.mode === 'pick_best' ? PARTICLES[view.stationId] : undefined}
+                  heroDelayMs={view.narrate!.mode === 'order' && pos >= 0 ? pos * 150 : 0}
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}
