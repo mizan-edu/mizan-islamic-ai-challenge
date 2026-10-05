@@ -102,3 +102,20 @@ describe('summary card', () => {
     expect(JSON.stringify(SUMMARY) + SUMMARY.completed(2, 3) + SUMMARY.hints(1, 5) + SUMMARY.referred(1)).not.toMatch(/[٠-٩]/);
   });
 });
+
+describe('parent page (D57)', () => {
+  it('the card replaces the per-station sections; each station entry keeps the /parent#S1 anchor', () => {
+    const page = readFileSync(path.join(ROOT, 'app', 'parent', 'page.tsx'), 'utf8');
+    expect(page).toContain('<SessionSummary');
+    expect(page).not.toMatch(/v\.parent\.map/);
+    const e = play('S1', [{ type: 'start' }, { type: 'choose', choiceId: correct('S1'), t }]);
+    expect(renderToString(<SessionSummary stations={stations} initial={summarize(e, ['S1'], stations)} />)).toMatch(/<li id="S1"/);
+  });
+
+  it('the approved wording edits (D57) are in place', () => {
+    expect(SUMMARY.together).toBe('واحتاج إلى المساعدة في آخر خطوة حتى وجد الإجابة.');
+    expect(SUMMARY.learned).toBe('ما تعرّف عليه الطفل في هذه المحطة');
+    expect(SUMMARY.privacy).toContain('أو عند إغلاق المتصفح'); // the summary reads sessionStorage
+    expect(readFileSync(path.join(ROOT, 'app', '_components', 'session.ts'), 'utf8')).toContain('window.sessionStorage.getItem');
+  });
+});

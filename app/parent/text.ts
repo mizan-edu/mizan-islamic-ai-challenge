@@ -24,8 +24,10 @@ export const PARENT_ASK = {
   behaviour: { answer: 'إجابة', verse_card: 'بطاقة آية', correction: 'توجيه', referral: 'إحالة', fallback: 'ردّ احتياطي' },
 };
 
-// Parent summary card (D54, Phase 4). Adult-facing Arabic (MSA), Western numerals. DRAFT — needs
-// Hussein's Review 1. Numbers are shown as "n من m" so no Arabic number agreement is needed.
+// Parent summary card (D54, Phase 4). Adult-facing Arabic (MSA), Western numerals. Approved by
+// Hussein, Review 1 (D57): together and learned edited, the rest as drafted; the privacy line stays
+// because the summary reads sessionStorage (cleared when the tab or browser closes). Numbers are
+// shown as "n من m" so no Arabic number agreement is needed.
 export const SUMMARY = {
   heading: 'ملخّص هذه الجلسة',
   privacy: 'يُبنى هذا الملخّص على هذا الجهاز فقط من خطوات الرحلة، ولا يُرسَل إلى أي خادم. يُمحى عند «إعادة البدء» أو عند إغلاق المتصفح.',
@@ -33,8 +35,8 @@ export const SUMMARY = {
   completed: (n: number, total: number) => `المحطات المكتملة: ${n} من ${total}`,
   noHints: 'وجد الإجابة دون تلميح.',
   hints: (n: number, total: number) => `التلميحات المستخدمة في خطوة الملاحظة: ${n} من ${total}`,
-  together: 'وبلغ آخر خطوة في سُلّم التلميحات.',
+  together: 'واحتاج إلى المساعدة في آخر خطوة حتى وجد الإجابة.',
   referred: (n: number) => `أسئلة أُحيلت إليكم في هذه المحطة: ${n}`,
-  learned: 'ما تعلّمه الطفل',
+  learned: 'ما تعرّف عليه الطفل في هذه المحطة',
   safety: 'مهمّ: ظهرت في هذه الجلسة رسالة تطلب من الطفل أن يتحدّث الآن إلى شخص بالغ يثق به. تحدّثوا معه بهدوء.',
 };

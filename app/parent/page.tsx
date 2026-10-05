@@ -13,8 +13,9 @@ import ParentAsk from './ParentAsk';
 import SessionSummary from './SessionSummary';
 import { PILOT } from './text';
 
-// Parent summary: the approved parent lines (PS records) of each station. No child data is shown
-// or collected here; the device-only session log stays on the device.
+// Parent page: the session summary card (approved PS lines of the completed stations, built on the
+// device; D57), the sound switch, the parental gate (AI-lens switch and Parent Ask), the pilot reset
+// and the story links. No child data is collected here; the device-only session log stays on the device.
 export default function ParentPage() {
   const lib = loadLibrary();
   assertNoPlaceholderProblems(lib); // fails the build, never a request: this page is static
@@ -44,12 +45,6 @@ export default function ParentPage() {
       </ParentGate>
       <SessionSummary stations={summaryStations} />
       <ResetJourney text={PILOT} />
-      {views.map((v) => (
-        <section key={v.stationId} id={v.stationId} className="card flex flex-col gap-3 p-6">
-          {v.title && <h2 className="font-display text-2xl leading-relaxed text-ink">{v.title.text}</h2>}
-          {v.parent.map((r) => <p key={r.id} data-line={r.id} className="text-xl leading-relaxed text-ink-2">{r.text}</p>)}
-        </section>
-      ))}
       <section className="card flex flex-col gap-3 p-6" data-story-links>
         <h2 className="font-display text-2xl text-ink">{PILOT.storyHeading}</h2>
         <ul className="flex flex-col gap-2">

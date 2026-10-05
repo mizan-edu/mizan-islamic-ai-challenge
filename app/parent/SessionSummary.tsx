@@ -6,6 +6,8 @@
 // approved parent-summary lines (PS records) of the completed stations. No score and no generated
 // prose: every line is approved wording or a count. A safety_referral event is shown first and
 // prominently (CLAUDE.md §5.2). Nothing is sent anywhere; «إعادة البدء» clears it at once.
+// The card replaces the per-station parent sections (D57); each station entry keeps the anchor
+// (/parent#S1) that the station's close screen links to.
 
 import { useCallback, useEffect, useState } from 'react';
 import type { RecordView } from '@/app/_lib/station-view';
@@ -41,7 +43,7 @@ export default function SessionSummary({ stations, initial = null }: { stations:
             {summary.completed.map((c) => {
               const s = byId.get(c.id)!;
               return (
-                <li key={c.id} className="flex flex-col gap-2 rounded-2xl bg-sky-soft px-4 py-3" data-summary-station={c.id} data-hints={c.hintsUsed} data-referred={c.referred}>
+                <li key={c.id} id={c.id} className="flex scroll-mt-4 flex-col gap-2 rounded-2xl bg-sky-soft px-4 py-3" data-summary-station={c.id} data-hints={c.hintsUsed} data-referred={c.referred}>
                   <h3 className="font-display text-xl leading-relaxed text-ink">{s.title}</h3>
                   <p className="text-lg text-ink" data-summary-hints>
                     {c.hintsUsed === 0 ? SUMMARY.noHints : `${SUMMARY.hints(c.hintsUsed, c.hintsTotal)}${c.together ? ` ${SUMMARY.together}` : ''}`}
