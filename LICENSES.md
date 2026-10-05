@@ -1,6 +1,6 @@
 # Licences
 
-Third-party components shipped with MIZAN, with their owners and licence terms.
+Third-party items used by MIZAN, one section each, with owners and terms (D53). MIZAN's own code is MIT (`LICENSE`); its original content (Arabic UI and narration texts, narration audio, AI-generated pictures and sound effects) is CC BY-NC-SA 4.0 (`CONTENT-LICENSE.md`). Third-party items keep their own terms below.
 
 ## KFGQPC Uthmanic Script HAFS font
 
@@ -13,6 +13,26 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Package:** `UthmanicHafs_v2-0.zip`, SHA-256 `a7b0e5591945712ec5e4d6142938ae4d1e9b49bdc89dff06222789bfebdfd72c`
 - **Owner:** King Fahd Glorious Qur'an Printing Complex, Madinah.
 - **Supporting evidence (DSIG):** the font carries a DSIG digital signature. Its signing certificate is issued to "King Fahd Glorious Quran Printing complex" by DigiCert SHA2 Assured ID Code Signing CA. The certificate names were read; the signature was not cryptographically verified.
+
+## King Fahd Complex Qur'an text (hafsData v2.0)
+
+- **What:** the official KFGQPC Hafs Uthmanic Data v2.0, file `hafsData_v2-0.json` (6,236 verses), from the package `UthmanicHafs_v2-0.zip` (SHA-256 above). The JSON's SHA-256 is `d2960b3217962e7e4252abdcece67bea3d6b48271e4cd3af45bbbb2dd5c872ca`.
+- **Route (D21):** retrieved on 2026-10-03 from the Internet Archive snapshot (2025-04-17) of the official URL, because the official hosts did not respond. Re-checked on 2026-10-05 13:13–13:14 UTC: the hosts still time out, so no new comparison was possible (decisions.md, "D21 re-check").
+- **Use:** only the verses used by the stations are copied, byte-identical, into `content/stations/*.json`. Each copy carries its `kfc-hafs:{id}` platform ID and retrieval date, and the citation validator checks every displayed verse against the stored text. The raw file is not redistributed (`sources/kfc/*` is git-ignored).
+- **Owner and terms:** King Fahd Glorious Qur'an Printing Complex, Madinah. The text is used unchanged, for display, under the Complex's terms for its published data.
+
+## QuranEnc tafsir (arabic_mokhtasar)
+
+- **What:** the QuranEnc Arabic tafsir with key `arabic_mokhtasar`, ayah by ayah, for the station verses only (3 records). Platform IDs are `quranenc:arabic_mokhtasar:{sura}:{aya}`, retrieved on 2026-10-03.
+- **Version:** QuranEnc returned no version for this key (it is unlisted). The snapshot records `version: null` and `listStatus: unlisted` (`content/snapshots/20261003T102742Z.json`).
+- **Use:** shown to parents only, separately from the verse text, never spoken (D15).
+- **Owner and terms:** QuranEnc (quranenc.com), under the platform's terms of use.
+
+## mp3quran.net recitation (Sheikh Mahmoud Khalil Al-Husary)
+
+- **What:** the recitation by Sheikh Mahmoud Khalil Al-Husary, rewaya Hafs from Asim (reciter 118, moshaf 118, folder `husr`). Ayah start and end timings come from the mp3quran.net API (D16).
+- **Use:** streamed from mp3quran.net at runtime. This is the only permitted runtime call to an external content source; the audio is not copied into this repository. If the audio fails, the verse text is shown without it.
+- **Owner and terms:** mp3quran.net, under the platform's terms of use.
 
 ## Noto Naskh Arabic (UI font)
 
@@ -43,7 +63,7 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Files:** `public/audio/S1–S3/*.mp3`, one per approved narratable line; each station's `manifest.json` records the text SHA-256, voice, model and date per file.
 - **Voice and model:** ElevenLabs voice Hams (`29hj550woDeJpvjtiu26`), model `eleven_v3`, output `mp3_44100_128` (D28). All 93 narrated lines are on `eleven_v3`: 82 regenerated 2026-10-05 from fully vocalized text, and the 11 whose new text was approved at Scholar Review 3 (D46) regenerated the same day.
 - **Never Qur'an:** quran, tafsir and hadith records are never sent; every line passes the app's TTS guard and the citation validator's Qur'anic-text checks (R4).
-- **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]
+- **Licence:** generated under the project account's ElevenLabs **Scale** plan, which includes commercial use of generated audio, under the ElevenLabs Terms of Service: https://elevenlabs.io/terms-of-use. MIZAN's narration texts and audio are also CC BY-NC-SA 4.0 (CONTENT-LICENSE.md).
 
 ## Sound effects (ElevenLabs Sound Effects)
 
@@ -51,7 +71,12 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Source:** ElevenLabs Sound Effects, model `eleven_text_to_sound_v2`, generated 2026-10-04 and approved by Hussein. Nature/foley sounds only, no musical instruments.
 - **Processing:** ffmpeg (silence trimmed, length capped, 30 ms fade-in, 150 ms fade-out, normalised to -20 LUFS, mono 64 kbps MP3).
 - **Never with Qur'an:** no effect plays while a recitation is playing; a running effect stops when one starts (D38). Parents can turn all effects off.
-- **Licence:** generated under the ElevenLabs plan of the project account. [Terms to be confirmed and linked by Hussein before submission.]
+- **Licence:** generated under the project account's ElevenLabs **Scale** plan, under the ElevenLabs Terms of Service: https://elevenlabs.io/terms-of-use.
+
+## Pictures (GPT Image 2.5 via Higgsfield)
+
+- **What:** the station pictures, journey map, station icons and plant-marker stages in `public/images/`, all AI-generated with GPT Image 2.5 through Higgsfield (2026-10-04) and approved by Hussein (D32). The S2.N2 picture was also approved by the scholar reviewer (D46). `public/images/IMAGES.json` lists each file with its source, original file name and SHA-256.
+- **Licence:** generated under the project's existing Higgsfield subscription, under Higgsfield's terms of service. They are also CC BY-NC-SA 4.0 as MIZAN content (CONTENT-LICENSE.md).
 
 ## OpenAI API (classifier fallback: built, disabled, not used in this submission)
 

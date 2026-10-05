@@ -1,52 +1,120 @@
-# mizan-islamic-ai-challenge
-MIZAN — AI-guided Islamic learning journey for children aged 4–6. Islamic AI Challenge 2026, Track 03.
+<div dir="rtl">
 
-## Live demo
+# ميزان — «آيات الله في الماء والنبات»
 
-**للمحكّمين: صفحة التقييم** — https://mizan-islamic-ai-challenge-three.vercel.app/evaluation (results, content safety, try a question; Built 4–6 Oct)
+**ميزان** رحلة تعليمية للأطفال من 4 إلى 6 سنوات، يتنقّل فيها الطفل بين محطات قصيرة يلاحظ فيها صورة ويختار بالنقر، ثم يرى آية من القرآن الكريم بنصّها من مجمع الملك فهد ويسمع تلاوتها الحقيقية.
 
-https://mizan-islamic-ai-challenge-three.vercel.app — Built 4–6 Oct: journey map and Stations 1–3 end to end (observe, verse card with real recitation, questions, narration, close). Narration audio files and pictures are not yet added; the screens show placeholders until they are.
+يجيب ميزان عن أسئلة الطفل من مكتبة محتوى مغلقة راجعها مراجع شرعي فقط. ولا يكتب النموذج نصًّا للطفل، ولا يقرأ الصوتُ الاصطناعي القرآنَ أبدًا.
 
-## Technical setup (English)
+المسابقة: Islamic AI Challenge 2026، المسار 03 (التجارب التفاعلية ورحلة المعرفة).
 
-Requires Node.js ≥ 22.12. Run all commands from the repository root:
+## مُنجَز خلال 4–6 أكتوبر
+
+- **الرحلة:** ثلاث محطات كاملة ضمن رحلة «آيات الله في الماء والنبات»: من أين ينزل المطر، الماء والحياة، من البذرة إلى النبتة.
+- **المحتوى القرآني:**
+  - بطاقة الآية: النص من مجمع الملك فهد بخط المصحف، مع اسم السورة ورقم الآية.
+  - التلاوة الحقيقية بصوت الشيخ محمود خليل الحصري.
+  - التفسير للوالدين منفصلًا عن النص.
+- **الأمان:** مكتبة مغلقة معتمدة، وموجِّه أسئلة يصنّف كل سؤال إلى المستويات A–D أو خارج النطاق، ومدقّق استشهاد يطابق كل آية بالنص المحفوظ حرفًا بحرف، وطبقة احتياطية تعرض الرد المعتمد عند تعذّر النموذج (D44).
+- **الصوت والصورة:** صوت سردي مسجَّل مسبقًا لكل سطر معتمد، وصور ومؤثّرات صوتية من الطبيعة، مع مفتاح للوالدين.
+- **للمحكّمين والكبار:**
+  - وضع المحكّم ومسار القرار لكل رد.
+  - صفحة التقييم مع «جرّب سؤالًا».
+  - المقارنة مع نموذج غير مضبوط.
+  - ملخّص الأهل.
+  - نسخة القصة الثابتة للتجربة.
+
+## خارطة الطريق
+
+لم يُنفَّذ أيٌّ مما يلي بعد. التفاصيل في [ROADMAP.md](ROADMAP.md).
+
+- المحطتان 4 و5 بمراجعة شرعية.
+- الرحلة الكاملة ولوحة للوالدين.
+- رحلات أخرى عن الآيات في الخلق.
+- منصة.
+- التجربة مع الأطفال: مؤجَّلة (D50).
+
+## روابط مباشرة
+
+- **التطبيق:** https://mizan-islamic-ai-challenge-three.vercel.app
+- **صفحة التقييم:** https://mizan-islamic-ai-challenge-three.vercel.app/evaluation
+- **وضع المحكّم:** https://mizan-islamic-ai-challenge-three.vercel.app/stations/S1?judge=1
+- **نسخة القصة:** https://mizan-islamic-ai-challenge-three.vercel.app/story/S1
+
+## للمحكّمين: خمس خطوات
+
+1. افتح التطبيق وادخل المحطة 1. اختر صورة خاطئة ثم الصحيحة، ثم استمع إلى الآية بالتلاوة الحقيقية.
+2. افتح المحطة 1 بوضع المحكّم (`?judge=1`). في خطوة الأسئلة اضغط سؤالًا لترى تحت الرد مسار القرار: المسار، والمستوى، والمصادر، ونتيجة المدقّق، وزمن الاستجابة.
+3. في صفحة التقييم، جرّب سؤالًا من مجموعة الاختبار أو اكتب سؤالك، مثل طلب فتوى شخصية أو آية محرّفة. يظهر الرد كما يراه الطفل.
+4. راجع في صفحة التقييم «نتائج الاختبار» و«مقارنة مع نموذج غير مضبوط»، ثم التفاصيل في [TESTING.md](TESTING.md).
+5. افتح نسخة القصة `/story/S1`، وصفحة الأهل `/parent`.
+
+## أين الأدلة
+
+| الدليل | المكان |
+|---|---|
+| الاختبار والنتائج والحدود | [TESTING.md](TESTING.md) |
+| ملفات كل تشغيل | `eval/results/` |
+| المقارنة مع النموذج غير المضبوط | `eval/a2/` |
+| القرارات بتواريخها | [docs/decisions.md](docs/decisions.md) |
+| سجلّ المراجعة: كل سجلّ وكل بند اختبار، ومن راجعه ومتى | `content/review-log.json` |
+| حزم المراجعة الشرعية | `docs/review/` |
+| المصادر والتراخيص والإفصاح | [SOURCES.md](SOURCES.md)، [LICENSES.md](LICENSES.md)، [DISCLOSURE.md](DISCLOSURE.md) |
+| التشغيل والتكلفة | [OPERATIONS.md](OPERATIONS.md) |
+
+**المراجعة الشرعية:** مراجع شرعي (توقيع مكتوب؛ الاسم محجوب بطلبه).
+
+**الترخيص:** الشيفرة MIT ([LICENSE](LICENSE)). المحتوى الأصلي CC BY-NC-SA 4.0 ([CONTENT-LICENSE.md](CONTENT-LICENSE.md)). المواد الخارجية بشروطها في [LICENSES.md](LICENSES.md).
+
+</div>
+
+## Technical setup
+
+Requires Node.js ≥ 22.12. Run all commands from the repository root.
 
 ```
 npm ci
-npm run dev         # local app
-npm run build       # production build
-npm run verify:clean-build   # before every push: fresh clone of HEAD, npm ci + npm run build, no .env.local (as Vercel builds)
+npm run dev                  # local app on http://localhost:3000
+npm test                     # unit tests (Vitest)
 npm run lint
 npm run typecheck
-npm test            # app unit tests (Vitest)
-npm run eval:run -- --categories A,D,E,F --runs 1   # evaluation: active test-set items through the /api/ask pipeline; writes eval/results/<runId>.json + -summary.md (uses the model settings in .env.local)
-npm run test:screens   # after a build: Playwright screenshots of every screen into docs/screenshots (uses the installed Chrome)
-npm run content:placeholders   # no rendered text may keep a { or } (the same check also runs inside next build)
-npm run check:rendered         # after a build: prerendered /parent and /stations/S1–S3 show no placeholder
+npm run build                # production build (as Vercel builds)
+npm run verify:clean-build   # before every push: fresh clone of HEAD, npm ci + npm run build, no .env.local
+npm run test:screens         # after a build: Playwright tests and screenshots (uses the installed Chrome)
+npm run eval:run -- --categories A,B,C,D,E,F,G --runs 3   # evaluation through the /api/ask pipeline; writes eval/results/<runId>.json + -summary.md
+npm run eval:a2:baseline     # A2: ungoverned baseline, raw outputs only in the git-ignored eval/.a2-raw/
+npm run eval:a2:summary -- --delete-raw   # A2: detectors -> eval/a2/summary.json + summary.md, then deletes the raw outputs
 ```
 
-**Environment variables:** names only are listed in `.env.example`. Put the values in `.env.local`, which is git-ignored and never committed; on Vercel, set them under Project Settings → Environment Variables.
+### Environment variables
+
+`.env.example` lists the names only. Put the values in `.env.local`, which is git-ignored and never committed. On Vercel, set them under Project Settings → Environment Variables.
 
 | Variable | Purpose |
 |---|---|
-| `ANTHROPIC_API_KEY` | API key for the model classifier. Console user keys start with `sk-ant-usr-` and also need `ANTHROPIC_WORKSPACE_ID`. |
-| `ANTHROPIC_WORKSPACE_ID` | Workspace ID (`wrkspc_…`). When set, it is sent as the `anthropic-workspace-id` header on every Anthropic call. Leave it empty for workspace-scoped keys. |
+| `ANTHROPIC_API_KEY` | API key for the model classifier. Console user keys (`sk-ant-usr-…`) also need `ANTHROPIC_WORKSPACE_ID`. |
+| `ANTHROPIC_WORKSPACE_ID` | Sent as the `anthropic-workspace-id` header when set. Leave it empty for workspace-scoped keys. |
 | `LLM_PROVIDER` | `anthropic`. The classifier is off when this is unset. |
-| `LLM_MODEL` | Model ID, set from the spike; never hard-coded. |
-| `LLM_EFFORT` | Optional: `low`, `medium` or `high`. |
-| `LLM_REPHRASE` | Optional: `on` lets the model rephrase NA science and UI lines. |
+| `LLM_MODEL` | Model ID (`claude-sonnet-5-5`); never hard-coded. |
+| `LLM_EFFORT` | Optional: `low`, `medium` or `high`. Default effort is used (D30). |
+| `LLM_REPHRASE` | Optional: `on` lets the model rephrase NA science and UI lines. Off. |
+| `EVAL_DAILY_CAP` | Optional daily cap on typed questions on /evaluation (default 300). |
+| `OPENAI_API_KEY`, `LLM_FALLBACK_MODEL`, `LLM_FALLBACK_EFFORT` | Secondary classifier provider. Built but disabled in this submission (D44): leave `LLM_FALLBACK_MODEL` empty everywhere. |
+| `FORCE_PRIMARY_FAIL` | Local evidence runs only. Ignored on Vercel; never set it there. |
 | `ELEVENLABS_API_KEY` | Narration generator only (`npm run assets:narrate`); never used by the running app. |
 
-**Asset tooling (pre-build, run locally):**
+### How it works
+
+- **No answer without an approved record:** every answer the app shows comes from approved library records in `/content`. Only records with `status: "approved"` are compiled in.
+- **Model role:** the model only classifies questions that no rule, anticipated question or verse match covers. It returns a level and a record ID, which the citation validator checks.
+- **Qur'an text:** shown byte-identical to the King Fahd Complex text, in its font, and never spoken by a synthetic voice.
+- **Reference:** see CLAUDE.md §3–5, docs/decisions.md and TESTING.md.
+
+### Asset tooling (pre-build, run locally)
 
 ```
-npm run assets:briefs -- --copy <file>   # docs/review/image-briefs.json: English picture briefs for approved S1–S3 records
-npm run assets:narrate -- S1 S2 S3       # public/audio/<station>/<recordId>.mp3 + manifest.json (--stale-only to redo changed text/voice/model, --keep-pending, --limit N, --force, --dry-run)
-npm run assets:images -- --base <url>    # public/images/<station>/<recordId>.webp (sharp, WebP q82, max width 1200) + public/images/IMAGES.json
+npm run assets:briefs -- --copy <file>   # English picture briefs for approved S1–S3 records
+npm run assets:narrate -- S1 S2 S3 --stale-only   # ElevenLabs narration for approved tts lines (never Qur'an, tafsir or hadith)
+npm run assets:images -- --base <url>    # public/images/<station>/<recordId>.webp + IMAGES.json
+npm run snapshot                         # ingestion from the official sources (pre-build tooling)
 ```
-
-The narration generator sends only approved `tts: true` records of type ui, explanation, answer, referral or fallback to ElevenLabs (voice Hams `29hj550woDeJpvjtiu26`, model `eleven_v3` since D28, `mp3_44100_128`). Quran, tafsir and hadith records are never sent, and every line must also pass the app's TTS guard and the citation validator's Qur'anic-text checks (R4). Each station's `manifest.json` stores the SHA-256 of the text each file was made from; the generator reports a file as stale when the record text has changed since.
-
-**Placeholders:** approved parent lines may contain `{verseRef}`. It is filled at render time with the ayah number and the surah name of the station's approved verse-card record; the record text itself is never edited. Surah names come from the King Fahd Complex hafsData v2.0 metadata via `npm run snapshot:surahs` (writes `content/kfc-surahs.json` with the source file's SHA-256). `npm run build` fails if any approved text would still render with a placeholder or brace (the prerendered pages run the check), and `npm run check:rendered` checks the built `/parent` and `/stations/S1–S3` pages.
-
-The model is only a fallback classifier. Every answer the app shows comes from approved library records (see CLAUDE.md §5).
