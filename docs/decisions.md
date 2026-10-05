@@ -48,6 +48,12 @@
 
 2026-10-05 — D34 Runbook Delta v1.4: two Monday sessions; the Q3 UI pass goes live in v0.9-pilot; UI freeze for child-facing screens stays Tue 13:00.
 
+2026-10-05 — D35 Five button labels approved by Hussein (Review 1): UI.BTN_PLAY, UI.BTN_PLAY_RECITATION, UI.BTN_HINT, UI.BTN_NEXT, UI.BTN_HOME in content/ui.json, with review-log entries; applied in commit 0d0efc4 ("a11y: approved button labels").
+
+2026-10-05 — D36 A single Claude Code session on Monday. Replaces the two-session part of D34; the rest of D34 stands (the Q3 UI pass goes live in v0.9-pilot; UI freeze for child-facing screens Tue 13:00).
+
+2026-10-05 — D37 Judge-panel labels approved by Hussein (Review 1), for judge mode (A1, Delta v1.3 D26): «وضع المحكّم», «المسار», «المستوى», «مستوى المصنِّف», «النموذج», «بلا استدعاء للنموذج», «السجلات المسترجعة», «المصادر المستشهد بها», «نتيجة المدقّق», «مقبول», «محجوب», «زمن الاستجابة» (content/ui.json UI.JUDGE_*; review-log entries). Route and reason codes stay as English codes (e.g. RR-D-VERSE-CLAIM, AQ_MATCH).
+
 2026-10-05 — D38 Moments: gentler timing (green ring 200 ms; the full-screen scene fades in after 700 ms over 700 ms, holds 3 s, fades out over 600 ms; then the praise line and its narration) and no cropping (the picture is always shown whole, centred, with the same picture blurred behind it to fill the edges). Sound effects reinstated, reversing the A9 tap-sound drop in D26: nature/foley sounds only, no musical instruments, never during Qur'an recitation, with a parent on/off switch (default on, remembered on the device).
 
 2026-10-05 — D39 Label «المؤثّرات الصوتية» approved by Hussein (content/ui.json UI.SFX_TOGGLE; review-log entry).

@@ -115,7 +115,7 @@ test('Station 3 screens', async ({ page }) => { await playStation(page, 'S3', 's
 
 test('parent summary', async ({ page }) => {
   await page.goto('/parent');
-  await expect(page.locator('[role="switch"]')).toHaveAttribute('aria-checked', 'true');
+  await expect(page.locator('[data-sfx-switch]')).toHaveAttribute('aria-checked', 'true');
   await shot(page, 'parent');
 });
 

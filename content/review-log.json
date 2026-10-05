@@ -4085,6 +4085,126 @@
       "decision": "A",
       "resultingStatus": "approved",
       "source": "chat decision D39 (2026-10-05): label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_MODE",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_ROUTE",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_LEVEL",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_CLASSIFIER_LEVEL",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_MODEL",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_NO_MODEL_CALL",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_RETRIEVED",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_CITED",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_VALIDATOR",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_PASS",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_BLOCKED",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
+    },
+    {
+      "id": "UI.JUDGE_LATENCY",
+      "kind": "ui-record",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-05T09:51:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "source": "chat decision D37 (2026-10-05): judge-panel label approved by Hussein"
     }
   ]
 }

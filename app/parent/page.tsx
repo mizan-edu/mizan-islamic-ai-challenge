@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import JudgeSwitch from '@/app/_components/JudgeSwitch';
 import SfxSwitch from '@/app/_components/SfxSwitch';
 import { loadLabels } from '@/app/_lib/labels';
 import { loadLibrary } from '@/app/_lib/library';
@@ -16,6 +17,7 @@ export default function ParentPage() {
     <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 px-4 py-8 sm:px-8" data-screen="parent">
       {labels.parents && <h1 className="font-display text-4xl text-ink">{labels.parents}</h1>}
       {labels.sfx && <SfxSwitch label={labels.sfx} />}
+      {labels.judgeMode && <JudgeSwitch label={labels.judgeMode} />}
       {views.map((v) => (
         <section key={v.stationId} id={v.stationId} className="card flex flex-col gap-3 p-6">
           {v.title && <h2 className="font-display text-2xl leading-relaxed text-ink">{v.title.text}</h2>}

@@ -7,8 +7,11 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { initialState, reducer, type FlowState } from '@/app/_lib/flow';
+import { judgeEnabled } from '@/app/_lib/judge';
 import type { Labels } from '@/app/_lib/labels';
+import type { Trace } from '@/app/_lib/trace';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
+import JudgePanel from './JudgePanel';
 import { NarrationButton, PictureCard, PlantMarker, VerseCard } from './media';
 import { sfx } from '@/app/_lib/sfx';
 import { MOMENT, MomentOverlay, prefersReducedMotion, type MomentPicture } from './moments';
@@ -81,15 +84,23 @@ function StepDots({ step }: { step: FlowState['step'] }) {
   );
 }
 
-interface AskReply {
+export interface AskReply {
   segments: { kind: 'text' | 'verse'; recordId: string; text: string }[];
   verses: VerseView[];
   event: Record<string, unknown> | null;
+  trace?: Trace | null; // judge mode only (A1)
 }
+export interface AskState { id: string; reply: AskReply | null; busy: boolean }
 
-export default function StationFlow({ view, labels, initial, sfxCues = [] }: { view: StationView; labels: Labels; initial?: FlowState; sfxCues?: readonly string[] }) {
+export default function StationFlow({ view, labels, initial, initialAsk = null, initialJudge = false, sfxCues = [] }: {
+  view: StationView; labels: Labels; initial?: FlowState; initialAsk?: AskState | null; initialJudge?: boolean; sfxCues?: readonly string[];
+}) {
   const [state, dispatch] = useReducer((s: FlowState, a: Parameters<typeof reducer>[2]) => reducer(view, s, a), initial ?? initialState());
-  const [ask, setAsk] = useState<{ id: string; reply: AskReply | null; busy: boolean } | null>(null);
+  const [ask, setAsk] = useState<AskState | null>(initialAsk);
+  // Judge mode (A1): off unless ?judge=1 or the parent-page switch turned it on for this session.
+  const [judge, setJudge] = useState(initialJudge);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { if (judgeEnabled()) setJudge(true); }, []);
   // Moment sequence (D38): correct tap -> green ring -> after 700 ms the full-screen scene -> back,
   // then the praise line with its narration. momentPending holds the praise back meanwhile.
   const [momentPending, setMomentPending] = useState(false);
@@ -120,7 +131,7 @@ export default function StationFlow({ view, labels, initial, sfxCues = [] }: { v
   const askQuestion = async (questionId: string) => {
     setAsk({ id: questionId, reply: null, busy: true });
     try {
-      const res = await fetch('/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ stationId: view.stationId, questionId }) });
+      const res = await fetch(judge ? '/api/ask?judge=1' : '/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ stationId: view.stationId, questionId }) });
       const reply = (await res.json()) as AskReply;
       if (reply.event) addEvents([reply.event]);
       setAsk({ id: questionId, reply, busy: false });
@@ -261,6 +272,8 @@ export default function StationFlow({ view, labels, initial, sfxCues = [] }: { v
             </div>
           )}
           <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
+          {/* Judge panel: below the controls, away from the reply and any verse card in it. */}
+          {judge && ask?.reply?.trace && <JudgePanel trace={ask.reply.trace} labels={labels} />}
         </section>
       )}
 

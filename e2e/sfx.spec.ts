@@ -67,7 +67,7 @@ test('effects play on taps, never during a recitation, and come back after the v
 
 test('the parent switch turns every effect off', async ({ page }) => {
   await page.goto('/parent');
-  const sw = page.locator('[role="switch"]');
+  const sw = page.locator('[data-sfx-switch]');
   await expect(sw).toHaveAttribute('aria-checked', 'true');
   await sw.click();
   await expect(sw).toHaveAttribute('aria-checked', 'false');

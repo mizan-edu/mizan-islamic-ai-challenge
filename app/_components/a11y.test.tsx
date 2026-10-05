@@ -8,6 +8,7 @@ import { loadLabels } from '@/app/_lib/labels';
 import { publicFileExists } from '@/app/_lib/media';
 import { buildStationView } from '@/app/_lib/station-view';
 import { runtimeLibrary } from '@/app/_lib/test-helpers';
+import { askStep } from './ask-fixture';
 import StationFlow from './StationFlow';
 
 const lib = runtimeLibrary();
@@ -46,5 +47,15 @@ describe('accessible names on the station screens', () => {
     }
     const close = { ...initialState(), step: 'close' as const };
     expect(unnamed(renderToString(<StationFlow view={view} labels={labels} initial={close} />)), `${s} close`).toEqual([]);
+  });
+});
+
+describe('accessible names with the judge panel open (A1)', () => {
+  it.each(['S1', 'S2'])('%s ask step: every button and link is named; the panel summary has its label', async (s) => {
+    const { view, state, ask } = await askStep(s, 'withVerse');
+    const html = renderToString(<StationFlow view={view} labels={labels} initial={state} initialAsk={ask} initialJudge />);
+    expect(html).toContain('data-judge-panel');
+    expect(unnamed(html)).toEqual([]);
+    expect(/<summary[^>]*>([^<]+)<\/summary>/.exec(html)?.[1]).toBe(labels.judgeMode);
   });
 });

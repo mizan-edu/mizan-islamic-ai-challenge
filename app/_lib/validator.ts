@@ -40,40 +40,43 @@ export function containsVerseWording(lib: Library, text: string, window = 4): bo
   return false;
 }
 
-export type Validation = { ok: true } | { ok: false; reasons: string[] };
+// codes: stable English reason codes with the record ID (judge-mode trace, A1), e.g. VERSE_TEXT_MISMATCH:S1.V1.
+export type Validation = { ok: true } | { ok: false; reasons: string[]; codes: string[] };
 
 export function validateReply(lib: Library, reply: Reply): Validation {
   const reasons: string[] = [];
+  const codes: string[] = [];
+  const fail = (code: string, id: string | null, reason: string) => { reasons.push(reason); codes.push(id ? `${code}:${id}` : code); };
   const ids = new Set([...reply.citations, ...reply.segments.map((s) => s.recordId)]);
   for (const id of ids) {
     const r = lib.byId.get(id);
-    if (!r) reasons.push(`unknown or non-approved record ${id}`);
-    else if (r.type === 'hadith') reasons.push(`hadith record ${id}`);
+    if (!r) fail('UNKNOWN_RECORD', id, `unknown or non-approved record ${id}`);
+    else if (r.type === 'hadith') fail('HADITH_RECORD', id, `hadith record ${id}`);
   }
-  if (!reply.segments.length) reasons.push('empty reply');
+  if (!reply.segments.length) fail('EMPTY_REPLY', null, 'empty reply');
 
   for (const s of reply.segments) {
     const r = lib.byId.get(s.recordId);
     if (!r) continue;
     if (s.kind === 'verse') {
-      if (r.type !== 'quran') reasons.push(`${s.recordId}: verse segment is not a quran record`);
-      else if (!sameBytes(s.text, r.text)) reasons.push(`${s.recordId}: verse text differs from the stored text`);
-      if (s.speakable || s.source !== 'library') reasons.push(`${s.recordId}: verse must be library-sourced and never spoken`);
+      if (r.type !== 'quran') fail('VERSE_NOT_QURAN', s.recordId, `${s.recordId}: verse segment is not a quran record`);
+      else if (!sameBytes(s.text, r.text)) fail('VERSE_TEXT_MISMATCH', s.recordId, `${s.recordId}: verse text differs from the stored text`);
+      if (s.speakable || s.source !== 'library') fail('VERSE_NOT_LIBRARY_OR_SPOKEN', s.recordId, `${s.recordId}: verse must be library-sourced and never spoken`);
       continue;
     }
-    if (r.type === 'quran' || r.type === 'tafsir' || r.type === 'hadith') reasons.push(`${s.recordId}: ${r.type} text outside a verse/tafsir panel`);
+    if (r.type === 'quran' || r.type === 'tafsir' || r.type === 'hadith') fail('SCRIPTURE_OUTSIDE_PANEL', s.recordId, `${s.recordId}: ${r.type} text outside a verse/tafsir panel`);
     if (s.source === 'library') {
-      if (!sameBytes(s.text, r.text)) reasons.push(`${s.recordId}: text differs from the approved record`);
-      if (hasQuranMarks(s.text)) reasons.push(`${s.recordId}: Qur'anic marks in a text segment`);
+      if (!sameBytes(s.text, r.text)) fail('TEXT_MISMATCH', s.recordId, `${s.recordId}: text differs from the approved record`);
+      if (hasQuranMarks(s.text)) fail('QURAN_MARKS_IN_TEXT', s.recordId, `${s.recordId}: Qur'anic marks in a text segment`);
       continue;
     }
     // generated
-    if (!isRephrasable(r)) reasons.push(`${s.recordId}: only NA science/UI lines may be rephrased`);
-    if (hasQuranMarks(s.text) || containsVerseWording(lib, s.text)) reasons.push(`${s.recordId}: generated text contains Qur'anic text`);
-    if (hasHadithWording(s.text)) reasons.push(`${s.recordId}: generated text contains hadith wording`);
-    if (namesAllah(s.text)) reasons.push(`${s.recordId}: generated NA text adds Islamic content`);
+    if (!isRephrasable(r)) fail('REPHRASE_NOT_ALLOWED', s.recordId, `${s.recordId}: only NA science/UI lines may be rephrased`);
+    if (hasQuranMarks(s.text) || containsVerseWording(lib, s.text)) fail('GENERATED_QURAN', s.recordId, `${s.recordId}: generated text contains Qur'anic text`);
+    if (hasHadithWording(s.text)) fail('GENERATED_HADITH', s.recordId, `${s.recordId}: generated text contains hadith wording`);
+    if (namesAllah(s.text)) fail('GENERATED_ISLAMIC', s.recordId, `${s.recordId}: generated NA text adds Islamic content`);
     const limit = Math.max(Math.ceil(r.text.length * 1.5), r.text.length + 40);
-    if (!s.text.trim() || s.text.length > limit) reasons.push(`${s.recordId}: generated text length out of bounds`);
+    if (!s.text.trim() || s.text.length > limit) fail('GENERATED_LENGTH', s.recordId, `${s.recordId}: generated text length out of bounds`);
   }
-  return reasons.length ? { ok: false, reasons } : { ok: true };
+  return reasons.length ? { ok: false, reasons, codes } : { ok: true };
 }

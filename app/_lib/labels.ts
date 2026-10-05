@@ -19,6 +19,19 @@ export interface Labels {
   surah?: string;
   ayah?: string;
   sfx?: string;
+  // Judge panel (A1, D37): adults only, shown in judge mode.
+  judgeMode?: string;
+  judgeRoute?: string;
+  judgeLevel?: string;
+  judgeClassifierLevel?: string;
+  judgeModel?: string;
+  judgeNoModelCall?: string;
+  judgeRetrieved?: string;
+  judgeCited?: string;
+  judgeValidator?: string;
+  judgePass?: string;
+  judgeBlocked?: string;
+  judgeLatency?: string;
 }
 
 const KEYS: Record<keyof Labels, string> = {
@@ -37,6 +50,18 @@ const KEYS: Record<keyof Labels, string> = {
   surah: 'UI.SURAH',
   ayah: 'UI.AYAH',
   sfx: 'UI.SFX_TOGGLE',
+  judgeMode: 'UI.JUDGE_MODE',
+  judgeRoute: 'UI.JUDGE_ROUTE',
+  judgeLevel: 'UI.JUDGE_LEVEL',
+  judgeClassifierLevel: 'UI.JUDGE_CLASSIFIER_LEVEL',
+  judgeModel: 'UI.JUDGE_MODEL',
+  judgeNoModelCall: 'UI.JUDGE_NO_MODEL_CALL',
+  judgeRetrieved: 'UI.JUDGE_RETRIEVED',
+  judgeCited: 'UI.JUDGE_CITED',
+  judgeValidator: 'UI.JUDGE_VALIDATOR',
+  judgePass: 'UI.JUDGE_PASS',
+  judgeBlocked: 'UI.JUDGE_BLOCKED',
+  judgeLatency: 'UI.JUDGE_LATENCY',
 };
 
 export function loadLabels(): Labels {

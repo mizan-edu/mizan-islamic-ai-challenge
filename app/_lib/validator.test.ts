@@ -74,7 +74,7 @@ describe('misquoted verses', () => {
 
 describe('record IDs', () => {
   it('rejects an unknown record ID', () => {
-    const reply: Reply = { ...buildReply(lib, 'S1', { level: 'A', behaviour: 'answer', recordId: 'S1.X1', source: 'aq', reason: '', ruleIds: [] }) };
+    const reply: Reply = { ...buildReply(lib, 'S1', { level: 'A', behaviour: 'answer', recordId: 'S1.X1', source: 'aq', reason: '', code: 'AQ_MATCH', ruleIds: [] }) };
     expect(validateReply(lib, reply).ok).toBe(true);
     expect(validateReply(lib, { ...reply, citations: [...reply.citations, 'S1.NOPE'] }).ok).toBe(false);
   });
@@ -123,7 +123,7 @@ describe('generation: only NA science/UI lines may be rephrased', () => {
 });
 
 describe('R4: TTS never speaks a verse', () => {
-  const answer = buildReply(lib, 'S1', { level: 'A', behaviour: 'answer', recordId: 'S1.X1', source: 'aq', reason: '', ruleIds: [] });
+  const answer = buildReply(lib, 'S1', { level: 'A', behaviour: 'answer', recordId: 'S1.X1', source: 'aq', reason: '', code: 'AQ_MATCH', ruleIds: [] });
 
   it('verse segments are excluded from TTS', () => {
     expect(answer.segments.some((s) => s.kind === 'verse')).toBe(true);
