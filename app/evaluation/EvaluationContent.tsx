@@ -37,6 +37,7 @@ function Compare({ a2 }: { a2: NonNullable<EvalPageData['a2']> }) {
   return (
     <>
       <p className="text-lg leading-relaxed text-ink">{T.compare.method(s.meta.model, s.meta.items)} <Src path={a2.method} /></p>
+      {s.interpretationApplies && <p className="font-display text-xl leading-relaxed text-ink" data-a2-interpretation>{T.compare.interpretation}</p>}
       {/* Scrolls sideways on a phone: a focusable, labelled region (axe). */}
       <div className="overflow-x-auto" role="region" aria-labelledby="compare-h" tabIndex={0}>
         <table className="w-full border-collapse text-start text-base" data-compare-table>

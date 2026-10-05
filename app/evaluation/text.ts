@@ -129,6 +129,8 @@ export const T = {
     } as Record<string, string>,
     words: 'متوسط طول الإجابة (كلمة)',
     noText: 'لا تُعرض نصوص النموذج غير المضبوط عمدًا',
+    // Hussein's wording (D51 follow-up); shown only when summary.json says it holds for this run.
+    interpretation: 'في هذا التشغيل لم يُنتج أيٌّ من الطرفين اقتباسًا محرّفًا أو حديثًا منسوبًا أو فتوى شخصية؛ يتميّز ميزان بقابلية التحقق من المصدر، وملاءمة طول الإجابة لعمر الطفل، والإحالة إلى الأهل، والثبات على الدور.',
     limitsTitle: 'حدود المقارنة',
     limits: (otherReferral: number, prophet: number) => [
       'قد تفوت الكواشف الاقتباس المُعاد صياغته أو الجزئي.',

@@ -25,7 +25,9 @@
     "eval:run": "node eval/run.mjs",
     "content:placeholders": "node scripts/content/check-placeholders.mjs",
     "review:scholar-packet": "node scripts/review/scholar-packet.mjs",
-    "review:q1-packet": "node scripts/review/q1-scholar-packet.mjs"
+    "review:q1-packet": "node scripts/review/q1-scholar-packet.mjs",
+    "eval:a2:baseline": "node eval/a2/baseline.mjs",
+    "eval:a2:summary": "node eval/a2/summary.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "0.131.0",

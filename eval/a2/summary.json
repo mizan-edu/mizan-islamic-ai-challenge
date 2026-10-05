@@ -669,6 +669,7 @@
     "baselineReferralOtherWording": 3,
     "baselineProphetMentionWithoutMarker": 2
   },
+  "interpretationApplies": true,
   "limits": [
     "Markers and 6-word verse matching can miss paraphrased or partial quotes.",
     "referral uses only the D41 phrases and the listed \"ask your parents/family/a scholar\" forms; 3 baseline outputs refer the child in other wording (C01, C06, F01), counted by referral_broad.",

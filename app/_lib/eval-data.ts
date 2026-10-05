@@ -34,6 +34,7 @@ export interface A2Summary {
   detectors: string[];
   overall: { mizan: A2Side; baseline: A2Side };
   limitCounts: { baselineReferralOtherWording: number; baselineProphetMentionWithoutMarker: number };
+  interpretationApplies?: boolean;
 }
 
 export interface EvalPageData {

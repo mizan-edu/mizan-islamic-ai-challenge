@@ -40,6 +40,21 @@ Text is normalised with `app/_lib/normalize.ts` (`normalizeArabic`: diacritics, 
 
 **Flags for human inspection:** `quran_quoted`, `quran_not_verbatim`, `hadith_attributed`, `personal_ruling`, and `role_kept` false. The five baseline items with the most flags are listed by ID and flag name only.
 
+## Re-run it
+
+Any reader can reproduce the comparison with their own Anthropic API key. The detectors are in `eval/a2/detectors.mjs`, the runner in `eval/a2/baseline.mjs`, and the summary in `eval/a2/summary.mjs`.
+
+```
+# .env.local (git-ignored): ANTHROPIC_API_KEY=<your key>, LLM_MODEL=claude-sonnet-5-5
+npm ci
+npm run eval:a2:baseline                # 47 calls; raw outputs only in eval/.a2-raw/ (git-ignored)
+npm run eval:a2:summary -- --delete-raw # writes eval/a2/summary.json + summary.md, then deletes eval/.a2-raw/
+```
+
+- **Verse matching:** needs the King Fahd hafsData v2.0 file at `sources/kfc/hafsData_v2-0.json`. It is not redistributed in this repository: download `UthmanicHafs_v2-0.zip` from the King Fahd Complex and place `hafsData_v2-0.json` in `sources/kfc/`. The URL and the SHA-256 to check are in `scripts/snapshot/README.md`. Without it, `quran_quoted` uses the markers only, and `quran_not_verbatim` and the surah-name part of `source_cited` are not computed. The summary records which mode was used (`hafsDataAvailable`).
+- **Run to run:** a re-run calls the model again, so the baseline figures can differ from this run. The MIZAN figures come from the committed result files and do not change.
+- **Interpretation line:** `summary.md` and the evaluation page show it only when, in that run, neither side has a non-verbatim quote, an attributed hadith or a personal ruling (`interpretationApplies`).
+
 ## Limits
 
 - **Paraphrase:** markers and 6-word matching can miss paraphrased or partial quotes. A quote without ﴿﴾ or «قال تعالى» is detected by matching but is not checked for exactness.

@@ -2,10 +2,12 @@
 
 - Baseline: `claude-sonnet-5-5`, effort default, the D51 system prompt only (no router, library, validator or rules); 47 active test items, one run each (`a2-base-20261005T124604Z`). Raw outputs were kept only in a git-ignored local folder and are not published.
 - MIZAN: the same items from `mon-r1-20261005T072551Z` (run 1), category B from `mon-b-20261005T080902Z` (run 1, after D41) and category D from `mon-d6-20261005T121255Z` (run 1, D07–D10 active); replies as the child sees them.
-- King Fahd hafsData available for verse matching: yes. Detector definitions: eval/a2/METHOD.md.
+- King Fahd hafsData available for verse matching: yes. Detector definitions and how to re-run: eval/a2/METHOD.md.
 - Baseline cost: 4344 input + 19996 output tokens = $0.2086 (list price $2 / $10 per million tokens).
 
 ## Overall
+
+في هذا التشغيل لم يُنتج أيٌّ من الطرفين اقتباسًا محرّفًا أو حديثًا منسوبًا أو فتوى شخصية؛ يتميّز ميزان بقابلية التحقق من المصدر، وملاءمة طول الإجابة لعمر الطفل، والإحالة إلى الأهل، والثبات على الدور.
 
 | Detector | MIZAN | Baseline |
 |---|---|---|
