@@ -73,18 +73,18 @@ Official KFGQPC Uthmanic Script HAFS font v2.0 (vendor URL fonts.qurancomplex.go
 - **Source:** ElevenLabs Sound Effects, model `eleven_text_to_sound_v2`, generated 2026-10-05 (take 1 of two; the second takes are kept locally, not shipped). Natural sounds only: rain, water, leaves, breeze; no music, instruments, chimes or bells.
 - **Processing:** none (D66). The shipped files are the untouched ElevenLabs downloads, with ElevenLabs' C2PA content credential in their ID3 tag. Each is brought to a peak of about -3 dBFS at playback by a measured gain (`SFX_GAIN_DB` in `app/_lib/sfx.ts`, also in `SFX.json`). Credential check (CAI library c2pa-python 0.38.0, 2026-10-06): the claim signature, time stamp, assertion hashes and the data hash over the audio verify; the library reports the ElevenLabs signing certificate as untrusted (not on its default trust list) and as missing a required extended key usage, a property of ElevenLabs' certificate rather than of these files.
 - **Never with Qur'an:** no effect or ambience plays while a recitation plays or anywhere on the verse-card step; anything playing stops when either starts (D65). Parents can turn all sound off for the session.
-- **Licence:** generated under the project account's ElevenLabs plan [VERIFY: plan tier for the 2026-10-05 generations; the D40 set was made on the Scale plan], under the ElevenLabs Terms of Service: https://elevenlabs.io/terms-of-use.
+- **Licence:** generated under the project account's ElevenLabs **Scale** plan (the 2026-10-05 generations, like the D40 set), under the ElevenLabs Terms of Service: https://elevenlabs.io/terms-of-use.
 
 ## Pictures (GPT Image 2.5 via Higgsfield)
 
 - **What:** the station pictures, journey map, station icons and plant-marker stages in `public/images/`, all AI-generated with GPT Image 2.5 through Higgsfield (2026-10-04) and approved by Hussein (D32). The S2.N2 picture was also approved by the scholar reviewer (D46). `public/images/IMAGES.json` lists each file with its source, original file name and SHA-256.
-- **Licence:** generated under the project's existing Higgsfield subscription, under Higgsfield's terms of service. Plan tier and its commercial-use terms: [VERIFY: plan tier]. They are also CC BY-NC-SA 4.0 as MIZAN content (CONTENT-LICENSE.md).
+- **Licence:** generated under the project's existing Higgsfield subscription (**Ultra** plan), under Higgsfield's terms of service for that plan. They are also CC BY-NC-SA 4.0 as MIZAN content (CONTENT-LICENSE.md).
 
 ## Video clips (Higgsfield image-to-video)
 
 - **What:** four clips in `public/video/` (D60, D62): `map.mp4` (5 s loop behind the journey-map stones), `S1.mp4`, `S2.mp4` and `S3.mp4` (4.33 s moment scenes). Each was made with Higgsfield image-to-video from an approved picture listed above (start frames: `map/background`, `S1.N1`, `S2.N1`, `plant/stage-1`) on 2026-10-05, then trimmed and encoded by Hussein. H.264 MP4, no audio track. `public/video/VIDEOS.json` lists each file with its size, SHA-256, duration and start frame.
-- **Model:** [VERIFY: the Higgsfield image-to-video model used for each clip].
-- **Licence:** generated under the project's Higgsfield subscription, under Higgsfield's terms of service. Plan tier and its commercial-use terms: [VERIFY: plan tier]. As MIZAN content the clips are also CC BY-NC-SA 4.0 (CONTENT-LICENSE.md), as far as those terms allow.
+- **Model:** FLUX.3 Video (image-to-video, via Higgsfield) for all four clips (map, S1, S2, S3), as recorded by Hussein. The files themselves name no generator: their only metadata is the FFmpeg/x264 encoder tags from trimming and encoding.
+- **Licence:** generated under the project's Higgsfield subscription (**Ultra** plan), under Higgsfield's terms of service for that plan. As MIZAN content the clips are also CC BY-NC-SA 4.0 (CONTENT-LICENSE.md), as far as those terms allow.
 - **Content check:** every clip was checked at 0.5 s intervals for figures, hands, faces, text or added objects; none found. Each clip was reviewed and approved by Hussein (D60, D63). MP4 (H.264) only, no WebM (D63). The originals are kept outside the build (`docs/video-input/originals/`, git-ignored); the shipped files are byte-identical copies.
 
 ## OpenAI API (classifier fallback: built, disabled, not used in this submission)

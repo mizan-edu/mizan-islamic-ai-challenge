@@ -4,6 +4,21 @@
 
 **ميزان** رحلة تعليمية للأطفال من 4 إلى 6 سنوات، يتنقّل فيها الطفل بين محطات قصيرة يلاحظ فيها صورة ويختار بالنقر، ثم يرى آية من القرآن الكريم بنصّها من مجمع الملك فهد ويسمع تلاوتها الحقيقية.
 
+## روابط مباشرة
+
+- **التطبيق:** https://mizan-islamic-ai-challenge-three.vercel.app
+- **صفحة التقييم:** https://mizan-islamic-ai-challenge-three.vercel.app/evaluation
+- **وضع المحكّم:** https://mizan-islamic-ai-challenge-three.vercel.app/stations/S1?judge=1
+- **نسخة القصة:** https://mizan-islamic-ai-challenge-three.vercel.app/story/S1
+
+## للمحكّمين: خمس خطوات
+
+1. افتح التطبيق وادخل المحطة 1. اختر صورة خاطئة ثم الصحيحة، ثم استمع إلى الآية بالتلاوة الحقيقية.
+2. افتح المحطة 1 بوضع المحكّم (`?judge=1`). يظهر تحت كل خطوة مسار القرار: «قاعدة» أو «نموذج»، والسجلات، والمستوى، والمصدر. وفي خطوة الأسئلة اضغط سؤالًا لترى أيضًا المسار ونتيجة المدقّق وزمن الاستجابة. ثم افتح `/glass` لترى خطوات القرار نفسها تُعاد خطوةً خطوة من المسار الفعلي للسؤال، ومعها وضع الطفل بعدّاد استدعاءات النموذج.
+3. في صفحة التقييم، جرّب سؤالًا من مجموعة الاختبار أو اكتب سؤالك، مثل طلب فتوى شخصية أو آية محرّفة. يظهر الرد كما يراه الطفل.
+4. راجع في صفحة التقييم «نتائج الاختبار» و«مقارنة مع نموذج غير مضبوط»، ثم التفاصيل في [TESTING.md](TESTING.md).
+5. افتح نسخة القصة `/story/S1`، ثم صفحة الأهل `/parent`: اضغط 7 ثم 3 ثم 9، واكتب سؤالًا في «اسألوا عن رحلة طفلكم».
+
 يجيب ميزان عن أسئلة الطفل من مكتبة محتوى مغلقة راجعها مراجع شرعي فقط. ولا يكتب النموذج نصًّا للطفل، ولا يقرأ الصوتُ الاصطناعي القرآنَ أبدًا.
 
 المسابقة: Islamic AI Challenge 2026، المسار 03 (التجارب التفاعلية ورحلة المعرفة).
@@ -18,6 +33,7 @@
 - **استدعاءات النموذج:** جلسة الطفل بلا أي استدعاء للنموذج. لا يُرسَل نص مكتوب إلى النموذج إلا من سؤال الوالدين وصفحة التقييم، ولتصنيفه فقط: 0 أو 1 استدعاء للسؤال، بنحو $0.0045 للاستدعاء. لا يخزّن ميزان هذا النص ولا يسجّله ([OPERATIONS.md](OPERATIONS.md)).
 - **الأمان:** مكتبة مغلقة معتمدة، وموجِّه أسئلة يصنّف كل سؤال إلى المستويات A–D أو خارج النطاق، ومدقّق استشهاد يطابق كل آية بالنص المحفوظ حرفًا بحرف، وطبقة احتياطية تعرض الرد المعتمد عند تعذّر النموذج (D44).
 - **الصوت والصورة:** صوت سردي مسجَّل مسبقًا لكل سطر معتمد، وصور ومؤثّرات صوتية من الطبيعة، مع مفتاح للوالدين.
+- **مقاطع الفيديو (D60، D63):** عند الإجابة الصحيحة يتحرّك مشهد المحطة في مقطع قصير مولَّد بالذكاء الاصطناعي من صورتها المعتمدة، لا يتجاوز 6 ثوانٍ، وللخريطة مقطع هادئ متكرّر. راجع حسين كل مقطع، ومع تقليل الحركة أو توفير البيانات تبقى الصورة الثابتة.
 - **الهاتف (D67):** تظهر كل شاشات الطفل كاملةً في الشاشة المرئية دون تمرير، عموديًّا وأفقيًّا: أهداف اللمس 64 بكسل على الأقل، ونص الآية 20 بكسل على الأقل، ولا يتغيّر شيء على الجهاز اللوحي والحاسوب.
 - **للمحكّمين والكبار:**
   - وضع المحكّم ومسار القرار لكل رد.
@@ -47,21 +63,6 @@
 - ستُبنى منصة للمدارس والجمعيات.
 - ستُجرى التجربة مع الأطفال بعد التسليم، ولم تُجرَ أيّ تجربة قبله (D71).
 - ستُدرَس لاحقًا عناصر أُخرجت من نطاق D54: مُختار تلميحات بالنموذج في مسار الطفل، وشخصية مرافقة، ونبتة ثلاثية الأبعاد، ولحظات «جرّب بنفسك»، وسؤال تذكّر في بداية المحطة، وعدد بطاقات متكيّف، ودرجة سرد آلية، وضوء مرشد.
-
-## روابط مباشرة
-
-- **التطبيق:** https://mizan-islamic-ai-challenge-three.vercel.app
-- **صفحة التقييم:** https://mizan-islamic-ai-challenge-three.vercel.app/evaluation
-- **وضع المحكّم:** https://mizan-islamic-ai-challenge-three.vercel.app/stations/S1?judge=1
-- **نسخة القصة:** https://mizan-islamic-ai-challenge-three.vercel.app/story/S1
-
-## للمحكّمين: خمس خطوات
-
-1. افتح التطبيق وادخل المحطة 1. اختر صورة خاطئة ثم الصحيحة، ثم استمع إلى الآية بالتلاوة الحقيقية.
-2. افتح المحطة 1 بوضع المحكّم (`?judge=1`). يظهر تحت كل خطوة مسار القرار: «قاعدة» أو «نموذج»، والسجلات، والمستوى، والمصدر. وفي خطوة الأسئلة اضغط سؤالًا لترى أيضًا المسار ونتيجة المدقّق وزمن الاستجابة. ثم افتح `/glass` لترى خطوات القرار نفسها تُعاد خطوةً خطوة من المسار الفعلي للسؤال، ومعها وضع الطفل بعدّاد استدعاءات النموذج.
-3. في صفحة التقييم، جرّب سؤالًا من مجموعة الاختبار أو اكتب سؤالك، مثل طلب فتوى شخصية أو آية محرّفة. يظهر الرد كما يراه الطفل.
-4. راجع في صفحة التقييم «نتائج الاختبار» و«مقارنة مع نموذج غير مضبوط»، ثم التفاصيل في [TESTING.md](TESTING.md).
-5. افتح نسخة القصة `/story/S1`، ثم صفحة الأهل `/parent`: اضغط 7 ثم 3 ثم 9، واكتب سؤالًا في «اسألوا عن رحلة طفلكم».
 
 ## أين الأدلة
 
@@ -100,13 +101,17 @@ npm run eval:a2:baseline     # A2: ungoverned baseline, raw outputs only in the 
 npm run eval:a2:summary -- --delete-raw   # A2: detectors -> eval/a2/summary.json + summary.md, then deletes the raw outputs
 ```
 
+`npm run eval:run` needs `ANTHROPIC_API_KEY`, `LLM_PROVIDER=anthropic` and `LLM_MODEL` to reproduce the TESTING figures. Without a key it still runs, but by design every item that needs the model classifier falls to OUT_OF_SCOPE and is reported as FAIL (99 of 141 executions pass without a key). The two A2 commands need the key too and stop with a message without it.
+
 ### Environment variables
 
 `.env.example` lists the names only. Put the values in `.env.local`, which is git-ignored and never committed. On Vercel, set them under Project Settings → Environment Variables.
 
+**No key is needed to run the app.** With `ANTHROPIC_API_KEY` or `LLM_PROVIDER` unset, the model classifier is off: the child journey never calls the model anyway, and typed questions on `/evaluation` and in Parent Ask are answered by the rules, the anticipated questions and verse matching; a question that would need the classifier gets the out-of-scope reply. To turn the classifier on, create a key at console.anthropic.com → API Keys and set `ANTHROPIC_API_KEY`, `LLM_PROVIDER=anthropic` and `LLM_MODEL=claude-sonnet-5-5` in `.env.local`.
+
 | Variable | Purpose |
 |---|---|
-| `ANTHROPIC_API_KEY` | API key for the model classifier. Console user keys (`sk-ant-usr-…`) also need `ANTHROPIC_WORKSPACE_ID`. |
+| `ANTHROPIC_API_KEY` | API key for the model classifier, from console.anthropic.com → API Keys. Console user keys (`sk-ant-usr-…`) also need `ANTHROPIC_WORKSPACE_ID`. |
 | `ANTHROPIC_WORKSPACE_ID` | Sent as the `anthropic-workspace-id` header when set. Leave it empty for workspace-scoped keys. |
 | `LLM_PROVIDER` | `anthropic`. The classifier is off when this is unset. |
 | `LLM_MODEL` | Model ID (`claude-sonnet-5-5`); never hard-coded. |

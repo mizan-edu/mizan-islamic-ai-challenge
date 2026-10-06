@@ -12,7 +12,7 @@
       "codec": "H.264 (avc1), 24 fps, no audio, faststart",
       "startFrame": "/images/map/background.webp",
       "use": "journey map, looping behind the station stones",
-      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+      "source": "AI-generated, FLUX.3 Video (image-to-video, via Higgsfield, Ultra plan) from the approved picture, 2026-10-05; trimmed and encoded by Hussein"
     },
     {
       "name": "S1",
@@ -25,7 +25,7 @@
       "codec": "H.264 (avc1), 24 fps, no audio, faststart",
       "startFrame": "/images/S1/S1.N1.webp",
       "use": "S1 moment scene",
-      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+      "source": "AI-generated, FLUX.3 Video (image-to-video, via Higgsfield, Ultra plan) from the approved picture, 2026-10-05; trimmed and encoded by Hussein"
     },
     {
       "name": "S2",
@@ -38,7 +38,7 @@
       "codec": "H.264 (avc1), 24 fps, no audio, faststart",
       "startFrame": "/images/S2/S2.N1.webp",
       "use": "S2 moment scene (start frame S2.N1 only)",
-      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+      "source": "AI-generated, FLUX.3 Video (image-to-video, via Higgsfield, Ultra plan) from the approved picture, 2026-10-05; trimmed and encoded by Hussein"
     },
     {
       "name": "S3",
@@ -51,7 +51,7 @@
       "codec": "H.264 (avc1), 24 fps, no audio, faststart",
       "startFrame": "/images/plant/stage-1.webp",
       "use": "S3 moment scene",
-      "source": "AI-generated, Higgsfield image-to-video from the approved picture [VERIFY: model and plan tier], 2026-10-05; trimmed and encoded by Hussein"
+      "source": "AI-generated, FLUX.3 Video (image-to-video, via Higgsfield, Ultra plan) from the approved picture, 2026-10-05; trimmed and encoded by Hussein"
     }
   ]
 }

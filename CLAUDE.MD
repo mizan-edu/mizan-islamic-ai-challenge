@@ -149,7 +149,7 @@ One task at a time. State the plan, make the change, run tests, report. Wait for
 Safety components first, with tests: content compiler, router, citation validator, TTS guard, privacy guards. UI comes after.
 Definition of done: merged to main → deployed → verified on the live URL → documented.
 Small commits with clear messages. Never rewrite history, amend pushed commits or change commit dates: commit timestamps are evidence for the prior-work rule.
-Tags: v0-baseline (before Sun 09:00), v0.9-pilot (Mon 17:00), v1.0 (Tue 6 Oct 12:00, child-screen and feature freeze; D71).
+Tags: v0-baseline (before Sun 09:00), v0.9-pilot (Mon 17:00), v1.0 (tagged once, when Hussein says "tag v1.0", right before the video is recorded; any later child-screen change means re-tagging and re-recording; D72).
 Log every non-trivial choice in /docs/decisions.md: date, decision, reason.
 If a request would break a rule in §3, refuse that part, say which rule, and propose a compliant alternative.
 If you are unsure whether text is Islamic content, treat it as Islamic content.
