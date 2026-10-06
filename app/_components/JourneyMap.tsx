@@ -42,6 +42,8 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
 }) {
   const [done, setDone] = useState<string[]>([]);
   const [picked, setPicked] = useState<string | null>(null);
+  // Guided cues (D75): the map has no speaker, so the start control glows until it is tapped.
+  const [cueOff, setCueOff] = useState(false);
   // Device-only progress (sessionStorage) is read after mount so server and client markup match.
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { setDone(completedStations()); }, []);
@@ -128,7 +130,7 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
             <span className="flex size-14 shrink-0 overflow-hidden rounded-full bg-sky" aria-hidden="true"><Icon id={selected.id} dim={false} /></span>
             {selected.title && <h2 className="font-display text-2xl leading-relaxed text-ink md:text-3xl">{selected.title}</h2>}
           </div>
-          <Link href={`/stations/${selected.id}`} data-action="start-station"
+          <Link href={`/stations/${selected.id}`} data-action="start-station" data-cue={!cueOff || undefined} onClick={() => setCueOff(true)}
             className="pill font-display flex min-h-16 items-center gap-3 bg-leaf-dark px-8 text-2xl text-white">
             {startLabel && <span>{startLabel}</span>}
             <ArrowIcon />
