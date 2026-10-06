@@ -139,3 +139,5 @@ D71 wording approved by Hussein (Review 1): README line 48, VISION.md line 107 a
 2026-10-06 — D72 addendum (Hussein): CLAUDE.md §5 (line 61) now matches D72: v1.0 is tagged once, when Hussein says "tag v1.0". Review-log entry with before/after.
 
 2026-10-06 — D73 addendum (Hussein): DISCLOSURE §1 gains the comparison link v0-baseline...v1.0 (https://github.com/mizan-edu/mizan-islamic-ai-challenge/compare/v0-baseline...v1.0), approved as drafted. Docs only, so no re-tag under D72: the v1.0 tag stays on b2a7ab8. Review-log entry.
+
+2026-10-06 (Tue) — D74 Informal usability check (Hussein). Two children aged 4–6 used v1.0 on the live link around 13:00, run by Hussein himself. Recorded in TESTING.md §9 as an informal check, not the planned pilot (D71 stands): no control group, no comprehension measure, no recording; no names, pictures or audio, and nothing from the session was kept. Participants are described without ages or family links so that no child can be identified (CLAUDE.md §12; Hussein chose this wording). No product change follows from it.
