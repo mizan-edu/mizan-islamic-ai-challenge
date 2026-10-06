@@ -93,6 +93,33 @@ describe('S1 happy path', () => {
   });
 });
 
+describe('verse_shown timing (D67)', () => {
+  const toConnect = (deferVerse?: boolean) =>
+    run(S1, [{ type: 'start' }, { type: 'choose', choiceId: 'S1.Q1.c1', t }, { type: 'flushed' }, { type: 'next', t, ...(deferVerse === undefined ? {} : { deferVerse }) }]);
+
+  it('tablets and laptops: logged on entering the verse step, as before', () => {
+    const s = toConnect();
+    expect(s.step).toBe('connect');
+    expect(s.events.map((e) => e.event)).toEqual(['verse_shown']);
+    expect(toConnect(false).events.map((e) => e.event)).toEqual(['verse_shown']);
+  });
+
+  it('phones: not logged on entering the step; logged once the verse card page appears', () => {
+    let s = toConnect(true);
+    expect(s.step).toBe('connect');
+    expect(s.events).toEqual([]);
+    s = run(S1, [{ type: 'verseShown', t }], s);
+    expect(s.events).toHaveLength(1);
+    expect(s.events[0]).toMatchObject({ event: 'verse_shown', stationId: 'S1', conceptId: 'S1.C2', sourceIds: ['S1.V1'], level: 'A' });
+  });
+
+  it('verseShown outside the verse step logs nothing', () => {
+    const s = run(S1, [{ type: 'start' }, { type: 'verseShown', t }]);
+    expect(s.step).toBe('observe');
+    expect(s.events).toEqual([]);
+  });
+});
+
 describe('S1 wrong choice, then hints', () => {
   it('a wrong choice shows that choice\'s redirect and greys the card; hints step H1->H4, then H5 highlights the answer', () => {
     let s = run(S1, [{ type: 'start' }, { type: 'choose', choiceId: 'S1.Q1.c2', t }]);

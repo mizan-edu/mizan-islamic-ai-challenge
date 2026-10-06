@@ -27,7 +27,10 @@ export type FlowAction =
   | { type: 'start' }
   | { type: 'choose'; choiceId: string; t: number }
   | { type: 'hint'; t: number }
-  | { type: 'next'; t: number }
+  // deferVerse (phones, D67): entering the verse step does not log verse_shown yet; the verse card
+  // shows on a later page of the step, which dispatches 'verseShown' when it appears.
+  | { type: 'next'; t: number; deferVerse?: boolean }
+  | { type: 'verseShown'; t: number }
   | { type: 'pick'; cardId: string; t: number }
   | { type: 'retry' }
   | { type: 'flushed' };
@@ -108,11 +111,15 @@ export function reducer(view: StationView, state: FlowState, action: FlowAction)
       if (state.step === 'frame' || state.step === 'done') return state;
       const step = nextStep(view, state.step);
       let events = state.events;
-      if (step === 'connect' && view.connect?.verse) {
+      if (step === 'connect' && view.connect?.verse && !action.deferVerse) {
         events = ev({ event: 'verse_shown', conceptId: view.connect.conceptId ?? undefined, level: 'A', sourceIds: [view.connect.verse.id], t: action.t });
       }
       return { ...state, step, events };
     }
+
+    case 'verseShown':
+      if (state.step !== 'connect' || !view.connect?.verse) return state;
+      return { ...state, events: ev({ event: 'verse_shown', conceptId: view.connect.conceptId ?? undefined, level: 'A', sourceIds: [view.connect.verse.id], t: action.t }) };
 
     case 'pick': {
       const n = view.narrate;

@@ -113,6 +113,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   // Portrait phones (D67): a reply opens in its own view (the questions and a verse card do not fit
   // together); Next goes back to the questions, and Next there moves on, as before.
   const [askView, setAskView] = useState<'list' | 'answer'>('list');
+  // On phones verse_shown is logged when the verse card page appears, not on entering the step.
+  const verseDeferred = useRef(false);
   // Judge mode (A1): off unless ?judge=1 or the parent-page switch turned it on for this session.
   const [judge, setJudge] = useState(initialJudge);
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -219,6 +221,12 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   const page = phone ? pages[Math.min(connectPage, pages.length - 1)] ?? null : null;
   const shows = (p: 'lines' | 'verse' | 'more') => page === null || page === p;
   const answerOnly = phone === 'portrait' && askView === 'answer' && Boolean(ask?.reply);
+  const verseOnScreen = state.step === 'connect' && Boolean(view.connect?.verse) && shows('verse');
+  useEffect(() => {
+    if (!verseOnScreen || !verseDeferred.current) return;
+    verseDeferred.current = false;
+    dispatch({ type: 'verseShown', t: now() });
+  }, [verseOnScreen]);
   const connectNext = () => {
     if (page && connectPage < pages.length - 1) { setConnectPage(connectPage + 1); return; }
     setConnectPage(0);
@@ -277,7 +285,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
                   disabled={state.observe.hintIndex >= o.hints.length}
                   className="pill flex size-20 items-center justify-center bg-sun text-ink disabled:opacity-40"><BulbIcon /></button>
               ) : (
-                <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
+                <NextButton onClick={() => { verseDeferred.current = Boolean(phone); dispatch({ type: 'next', t: now(), deferVerse: Boolean(phone) }); }} label={labels.next} />
               )}
             </div>
           </div>

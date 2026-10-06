@@ -10,7 +10,7 @@
 import { appendFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
-import { STATIONS, standInMedia, walkMap, walkStation, walkStory } from './walk';
+import { observe, STATIONS, standInMedia, walkMap, walkStation, walkStory } from './walk';
 
 const SHOTS = 'docs/screenshots/mobile';
 const AXE = join(process.cwd(), 'node_modules/axe-core/axe.min.js');
@@ -206,3 +206,47 @@ for (const [width, height] of VIEWPORTS) {
     });
   });
 }
+
+// verse_shown (D67 fix): on phones it is logged when the verse card page appears, once; on tablets
+// and laptops on entering the verse step, as before. Read from the on-device session log.
+test.describe('verse_shown timing', () => {
+  const verseEvents = (page: Page) => page.evaluate(() => (JSON.parse(sessionStorage.getItem('mizan.events') ?? '[]') as { event: string }[]).filter((e) => e.event === 'verse_shown').length);
+  const toVerseStep = async (page: Page) => {
+    await standInMedia(page);
+    await page.goto('/stations/S2');
+    await page.locator('[data-action="start"]').click();
+    await page.locator(`[data-record="${observe('S2').correctChoiceId}"]`).click();
+    const moment = page.locator('[data-moment="S2"]');
+    await expect(moment).toBeVisible();
+    await moment.click();
+    await expect(page.locator('[data-strip="praise"]')).toBeVisible();
+    await page.locator('[data-action="next"]').click();
+    await expect(page.locator('[data-screen="connect"]')).toBeVisible();
+    await page.waitForTimeout(300);
+  };
+
+  test('phone: logged when the verse card page appears, not before, and only once', async ({ browser }) => {
+    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+    const page = await context.newPage();
+    await toVerseStep(page);
+    const connect = page.locator('[data-screen="connect"]');
+    await expect(connect).toHaveAttribute('data-connect-page', 'lines');
+    expect(await verseEvents(page)).toBe(0);
+    await page.locator('[data-action="next"]').click();
+    await expect(connect).toHaveAttribute('data-connect-page', 'verse');
+    await expect.poll(() => verseEvents(page)).toBe(1);
+    await page.locator('[data-action="next"]').click();
+    await expect(connect).toHaveAttribute('data-connect-page', 'more');
+    await page.waitForTimeout(300);
+    expect(await verseEvents(page)).toBe(1);
+    await context.close();
+  });
+
+  test('tablet: logged on entering the verse step, as before', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await toVerseStep(page);
+    await expect(page.locator('[data-screen="connect"]')).not.toHaveAttribute('data-connect-page', /.+/);
+    await expect(page.locator('[data-screen="connect"] [data-verse-text]')).toBeVisible();
+    await expect.poll(() => verseEvents(page)).toBe(1);
+  });
+});
