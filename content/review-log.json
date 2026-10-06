@@ -7072,6 +7072,20 @@
       "before": "Hosting\tVercel. Production runs a tagged release only (v1.0 from Tue 16:00).",
       "after": "Hosting\tVercel. Production runs a tagged release only (v1.0, tagged once when Hussein says \"tag v1.0\"; D72).",
       "source": "chat decision D72 (2026-10-06): §5 aligned with D72 at Hussein's request"
+    },
+    {
+      "id": "DOC.DISCLOSURE.md",
+      "kind": "doc-text",
+      "file": "DISCLOSURE.md",
+      "lines": "section 1, after the «كل ما عدا ذلك بُني خلال 4–6 أكتوبر» block (line 23)",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T07:40:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D73",
+      "after": "- **المقارنة:** كل ما بُني بين العمل السابق والإصدار المسلَّم في الرابط https://github.com/mizan-edu/mizan-islamic-ai-challenge/compare/v0-baseline...v1.0",
+      "source": "chat decision D73 (2026-10-06): comparison link approved as drafted"
     }
   ]
 }
