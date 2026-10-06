@@ -58,7 +58,7 @@ Do not start work outside this list without a logged decision in /docs/decisions
 5. Architecture
 Layer	Choice
 App	One Next.js (React) app, RTL, tablet-first, installable; child app, parent summary, evaluation page and API routes in one codebase.
-Hosting	Vercel. Production runs a tagged release only (v1.0, tagged once when Hussein says "tag v1.0"; D72).
+Hosting	Vercel. Production runs a tagged release only: v1.1 (v1.0 plus guided cues; D75 addendum). v1.0 stays on b2a7ab8.
 Content	Versioned JSON in /content. A build step compiles only records with status: "approved" into the app bundle. Unreviewed content does not exist at runtime.
 LLM	Primary provider via env (LLM_PROVIDER, LLM_MODEL); low temperature; JSON output only. Second provider behind the same interface, switched by env flag. Model IDs are set by the Saturday spike (step 1.9), never hard-coded.
 Router	Deterministic rules from /content/router-rules.json (reviewed data) + LLM classifier. Output: level, reason, rule IDs fired.
@@ -149,7 +149,7 @@ One task at a time. State the plan, make the change, run tests, report. Wait for
 Safety components first, with tests: content compiler, router, citation validator, TTS guard, privacy guards. UI comes after.
 Definition of done: merged to main → deployed → verified on the live URL → documented.
 Small commits with clear messages. Never rewrite history, amend pushed commits or change commit dates: commit timestamps are evidence for the prior-work rule.
-Tags: v0-baseline (before Sun 09:00), v0.9-pilot (Mon 17:00), v1.0 (tagged once, when Hussein says "tag v1.0", right before the video is recorded; any later child-screen change means re-tagging and re-recording; D72).
+Tags: v0-baseline (before Sun 09:00), v0.9-pilot (Mon 17:00), v1.0 (tagged once on Hussein's "tag v1.0", right before the video was recorded; stays on b2a7ab8; D72), v1.1 (production: v1.0 plus guided cues; the submitted video and deck stay as recorded on v1.0; any child-screen change after v1.1 means re-tagging and re-recording; D75 addendum).
 Log every non-trivial choice in /docs/decisions.md: date, decision, reason.
 If a request would break a rule in §3, refuse that part, say which rule, and propose a compliant alternative.
 If you are unsure whether text is Islamic content, treat it as Islamic content.
