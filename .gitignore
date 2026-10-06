@@ -175,3 +175,6 @@ docs/video-input/
 docs/sfx-alt/
 # Original take-1 sound files with their intact C2PA content credentials (D65); shipped copies are gain-normalised.
 docs/sfx-originals/
+
+# Unpublished drafts for review (D69): never committed.
+docs/drafts/
