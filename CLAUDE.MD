@@ -58,7 +58,7 @@ Do not start work outside this list without a logged decision in /docs/decisions
 5. Architecture
 Layer	Choice
 App	One Next.js (React) app, RTL, tablet-first, installable; child app, parent summary, evaluation page and API routes in one codebase.
-Hosting	Vercel. Production runs a tagged release only (v1.0 from Tue 16:00).
+Hosting	Vercel. Production runs a tagged release only (v1.0, tagged once when Hussein says "tag v1.0"; D72).
 Content	Versioned JSON in /content. A build step compiles only records with status: "approved" into the app bundle. Unreviewed content does not exist at runtime.
 LLM	Primary provider via env (LLM_PROVIDER, LLM_MODEL); low temperature; JSON output only. Second provider behind the same interface, switched by env flag. Model IDs are set by the Saturday spike (step 1.9), never hard-coded.
 Router	Deterministic rules from /content/router-rules.json (reviewed data) + LLM classifier. Output: level, reason, rule IDs fired.

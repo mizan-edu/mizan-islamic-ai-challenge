@@ -7057,6 +7057,21 @@
       "before": "Tags: v0-baseline (before Sun 09:00), v0.9-pilot (Mon 17:00), v1.0 (Tue 6 Oct 12:00, child-screen and feature freeze; D71).",
       "after": "Tags: v0-baseline (before Sun 09:00), v0.9-pilot (Mon 17:00), v1.0 (tagged once, when Hussein says \"tag v1.0\", right before the video is recorded; any later child-screen change means re-tagging and re-recording; D72).",
       "source": "chat decision D72 (2026-10-06): section 11 tags line set by D72 (Hussein)"
+    },
+    {
+      "id": "DOC.CLAUDE.MD",
+      "kind": "doc-text",
+      "file": "CLAUDE.MD",
+      "lines": "line 61, section 5 Hosting",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T07:10:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D72",
+      "before": "Hosting\tVercel. Production runs a tagged release only (v1.0 from Tue 16:00).",
+      "after": "Hosting\tVercel. Production runs a tagged release only (v1.0, tagged once when Hussein says \"tag v1.0\"; D72).",
+      "source": "chat decision D72 (2026-10-06): §5 aligned with D72 at Hussein's request"
     }
   ]
 }
