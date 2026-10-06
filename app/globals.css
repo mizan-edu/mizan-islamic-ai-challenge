@@ -435,3 +435,242 @@
     filter: brightness(0.92);
   }
 }
+
+/* ---------- Phone layout (D67) ----------
+   Portrait phones (narrower than 600 px) and landscape phones (shorter than 500 px) only: nothing
+   below applies to tablets or laptops (same query as PHONE_QUERY in _components/phone.ts). The rules
+   are unlayered so they win over the utility classes, on phones only.
+   Child screens ([data-shell]) are exactly the visible screen: dynamic viewport height, safe-area
+   padding, no page scroll. Tap targets stay at least 64 px with at least 12 px between them; cards
+   keep their right-to-left order; child text stays at least 16 px; the Qur'an text at least 20 px
+   (if it does not fit, only the verse text scrolls inside its box, with a still fade cue). Motion,
+   video and sound are untouched. */
+@media (max-width: 599px), (max-height: 499px) {
+  [data-shell] {
+    box-sizing: border-box;
+    height: 100dvh;
+    min-height: 0;
+    max-width: none;
+    overflow: hidden;
+    gap: 8px;
+    padding: max(8px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+  /* Adult pages scroll as usual; they only keep clear of the notch and home bar. */
+  body:not(:has([data-shell])) { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  /* Judge mode (adults, ?judge=1): the AI lens adds a panel, so the page may scroll. */
+  [data-shell][data-judge] { height: auto; min-height: 100dvh; overflow: visible; }
+
+  /* Header: home, title, plant (decorative, smaller). */
+  [data-shell] > [data-bar] { gap: 8px; }
+  [data-shell] > [data-bar] h1 { font-size: 20px; line-height: 1.35; }
+  [data-shell="station"] > [data-bar] > img { width: 48px; height: 48px; }
+
+  /* The step fills what is left. */
+  [data-shell] > section { flex: 1 1 0; min-height: 0; gap: 12px; }
+  [data-shell="map"] > section { flex: 0 0 auto; }
+  [data-shell] > figure { flex: 0 1 auto; min-height: 0; }
+
+  /* Narration lines and buttons. */
+  [data-shell] [data-line] { gap: 10px; }
+  [data-q-card] > img { display: none; }
+  [data-shell] [data-line] > p { font-size: 19px; line-height: 1.5; }
+  [data-shell] [data-narration].size-24 { width: 64px; height: 64px; }
+  [data-shell] [data-narration].size-24 > svg { width: 36px; height: 36px; }
+  [data-shell] [data-action="next"] { min-height: 64px; min-width: 96px; padding-inline: 24px; }
+  [data-shell] [data-action="hint"] { width: 64px; height: 64px; }
+  [data-shell] [data-action] svg.size-9 { width: 30px; height: 30px; }
+  [data-shell] [data-strip] { border-inline-start-width: 6px; border-radius: 22px; padding: 8px 10px; }
+  [data-shell] [data-feedback] { min-height: 0; }
+
+  /* Frame. */
+  [data-screen="frame"] { justify-content: center; gap: 16px; padding: 16px; }
+  [data-screen="frame"] > p { font-size: 23px; line-height: 1.6; }
+  [data-screen="frame"] [data-action="start"] { min-height: 64px; font-size: 22px; padding-inline: 28px; }
+
+  /* Question and its picture choices; narration cards. The card area is a size container: each
+     picture takes the largest size that fits the row (or rows) and the label below it. */
+  [data-q-row] { gap: 8px; }
+  [data-q-card] { padding: 10px 12px; gap: 10px; }
+  [data-q-card] > p { font-size: 20px; line-height: 1.5; }
+  [data-intro] { padding: 10px 12px; }
+  [data-intro] [data-line] > p { font-size: 20px; }
+  [data-cards] {
+    flex: 1 1 0;
+    min-height: 0;
+    container: cards / size;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-auto-rows: auto;
+    align-content: center;
+    gap: 20px 0;
+    align-items: center;
+    --lab: 52px;
+  }
+  [data-cards] > [data-card-wrap] { grid-column: span 4; padding-inline: 8px; place-items: center; min-height: 0; }
+  [data-cards] [data-record] { width: 100%; min-height: 0; padding: 8px; gap: 4px; border-radius: 22px; }
+  [data-cards] [data-card-face] { gap: 4px; }
+  [data-cards] [data-card-label] { font-size: 17px; line-height: 1.4; }
+  [data-cards] [data-picture-frame] { max-width: 100%; border-radius: 14px; }
+  /* One row of three: width per column, height of the row less the label and room for the hero lift. */
+  [data-cards] [data-picture-frame="square"] { width: min(100cqw / 3 - 32px, 100cqh - 40px - var(--lab)); }
+  [data-cards] [data-picture-frame="card"] { width: min(100cqw / 3 - 32px, (100cqh - 40px - var(--lab)) * 4 / 3); }
+  [data-cards] [data-order] { width: 36px; height: 36px; font-size: 18px; }
+  [data-shell] [data-cards] .hero-ring { inset: -6px; }
+
+  /* Verse step pages and the verse card. */
+  [data-screen="connect"] { display: flex; flex-direction: column; }
+  [data-connect-lines], [data-explanations] { padding: 12px; gap: 12px; }
+  [data-shell] [data-verse] { flex: 0 1 auto; min-height: 0; gap: 8px; padding: 8px; }
+  [data-shell] [data-verse-box] { flex: 0 1 auto; min-height: 0; gap: 6px; padding: 16px 14px; }
+  [data-shell] [data-verse-label] { font-size: 17px; }
+  [data-shell] [data-verse-text] { font-size: 26px; line-height: 2.1; }
+  [data-shell] [data-reference] { font-size: 17px; }
+  [data-shell] [data-verse] figcaption { padding-bottom: 2px; }
+  [data-shell] [data-verse] figcaption > span { width: 80px; height: 80px; }
+  [data-shell] [data-verse] [data-recitation-ring] { width: 80px; height: 80px; }
+  [data-shell] [data-recitation] { width: 64px; height: 64px; }
+  [data-shell] [data-recitation] svg { width: 32px; height: 32px; }
+  [data-shell] [data-parents-toggle] { padding: 0 16px; }
+  [data-shell] [data-parents-toggle] > div { max-height: 30dvh; overflow-y: auto; }
+  [data-shell] [data-parents-toggle] p[dir="ltr"] { font-size: 16px; }
+
+  /* Ask: the questions, then the reply (its verse card shrinks and scrolls inside if needed). */
+  [data-ask-questions] { gap: 12px; }
+  [data-ask-questions] > button { min-height: 64px; padding: 8px 16px; font-size: 18px; line-height: 1.4; }
+  [data-answer] { flex: 0 1 auto; min-height: 0; padding: 12px; gap: 8px; overflow: hidden; }
+  [data-ask-view] > [data-action="next"] { margin-top: auto; }
+  [data-answer] > p { font-size: 19px; line-height: 1.5; }
+
+  /* Close. */
+  [data-screen="close"] { justify-content: center; gap: 12px; padding: 16px; }
+  [data-screen="close"] [data-plant] { width: min(200px, 26dvh); height: min(200px, 26dvh); }
+  [data-screen="close"] [data-line] > p { font-size: 22px; }
+  [data-close-actions] { gap: 16px; }
+  [data-close-actions] > a { min-height: 64px; }
+  [data-close-actions] > a[aria-label]:first-child { width: 64px; height: 64px; }
+  [data-close-actions] [data-action="next-station"] { font-size: 20px; padding-inline: 24px; }
+  [data-screen="close"] > [data-parents-link] { padding: 0 16px; min-width: 64px; display: flex; align-items: center; justify-content: center; }
+
+  /* Story mode. */
+  [data-shell="story"] > section { padding: 12px; gap: 10px; justify-content: center; }
+  [data-shell="story"] [data-story-picture] { flex: 0 1 auto; min-height: 0; padding: 8px; gap: 0; width: auto; max-width: 100%; }
+  [data-shell="story"] [data-story-picture] > img { width: auto; height: auto; max-width: 100%; max-height: 100%; min-height: 0; }
+  [data-shell="story"] [data-line] { font-size: 22px; line-height: 1.6; }
+  [data-shell="story"] [data-story-start] { width: 128px; height: 128px; }
+
+  /* Journey map: the whole picture (contained) over its blurred copy; the stones sit on the picture. */
+  [data-shell="map"] > [data-bar] h1 { font-size: 22px; line-height: 1.3; }
+  [data-progress] { padding: 4px 8px; }
+  [data-progress] img[data-plant] { width: 48px; height: 48px; }
+  [data-plant-locked] img { width: 28px; height: 28px; }
+  [data-map-box] { flex: 1 1 0; min-height: 0; aspect-ratio: auto !important; container: map / size; }
+  [data-map-box]::before { content: ""; position: absolute; inset: -24px; background: url("/images/map/background.webp") center / cover; filter: blur(18px); }
+  [data-map-box] > [data-map], [data-map-box] > [data-map-video] { object-fit: contain; }
+  [data-map-box] > [data-stones] { inset: auto; left: 50%; top: 50%; width: min(100cqw, 100cqh * 1344 / 752); aspect-ratio: 1344 / 752; translate: -50% -50%; }
+  [data-stones] > [data-station] button { width: 64px; height: 64px; border-width: 4px; }
+  [data-stones] > [data-soon] > div { width: 52px; height: 52px; border-width: 4px; }
+  [data-stones] [data-badge="soon"] { font-size: 16px; line-height: 1.5; }
+  [data-stones] [data-badge="done"] { width: 28px; height: 28px; }
+  @container map (max-width: 509px) or (max-height: 285px) {
+    [data-stones] > li { left: var(--cx) !important; top: var(--cy) !important; }
+  }
+  [data-selected] { padding: 10px 12px; gap: 10px; }
+  [data-selected] h2 { font-size: 20px; }
+  [data-selected] > span { width: 48px; height: 48px; }
+  [data-selected] [data-action="start-station"] { flex: 1 1 auto; justify-content: center; min-height: 64px; font-size: 20px; padding-inline: 20px; }
+  [data-shell="map"] > [data-parents-link] { min-height: 64px; }
+}
+
+/* Portrait phones: the cards may take two rows (two, then one centred) when that gives bigger pictures. */
+@media (max-width: 599px) and (min-height: 500px) {
+  @container cards (min-height: 330px) {
+    [data-cards] { row-gap: 28px; }
+    [data-cards] > [data-card-wrap] { padding-inline: 12px; }
+    [data-cards] > [data-card-wrap]:nth-child(1) { grid-column: 1 / span 6; }
+    [data-cards] > [data-card-wrap]:nth-child(2) { grid-column: 7 / span 6; }
+    [data-cards] > [data-card-wrap]:nth-child(3) { grid-column: 4 / span 6; }
+    [data-cards] [data-picture-frame="square"] { width: min(100cqw / 2 - 40px, (100cqh - 28px) / 2 - 40px - var(--lab)); }
+    [data-cards] [data-picture-frame="card"] { width: min(100cqw / 2 - 40px, ((100cqh - 28px) / 2 - 40px - var(--lab)) * 4 / 3); }
+  }
+  [data-screen="observe"] > [data-feedback], [data-screen="narrate"] > [data-feedback] { min-height: 80px; }
+}
+
+/* Landscape phones: a rail on the start side (home, title, plant, step dots) gives the step the full
+   height; the question, feedback and button sit above one row of cards. */
+@media (max-height: 499px) {
+  [data-shell="station"], [data-shell="story"] {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 10px;
+  }
+  [data-shell="station"] > [data-bar], [data-shell="story"] > [data-bar] { grid-column: 1; grid-row: 1; flex-direction: column; justify-content: flex-start; }
+  [data-shell] > [data-bar] h1 { font-size: 16px; line-height: 1.35; text-align: center; }
+  [data-shell="story"] > [data-bar] { flex-direction: column-reverse; justify-content: flex-end; }
+  [data-shell="station"] > [data-step-dots] { grid-column: 1; grid-row: 2; flex-direction: column; align-self: start; }
+  [data-step-dots] > li { width: 12px; }
+  [data-step-dots] > li[data-on] { height: 28px; }
+  [data-shell="station"] > section, [data-shell="story"] > section, [data-shell="story"] > figure, [data-shell="story"] > div { grid-column: 2; grid-row: 1 / span 2; }
+
+  [data-screen="observe"], [data-screen="narrate"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "q fb side" "cards cards cards";
+    gap: 8px;
+  }
+  [data-screen="observe"] > [data-q-row] { display: contents; }
+  [data-q-card], [data-intro] { grid-area: q; }
+  [data-q-card] > p, [data-intro] [data-line] > p { font-size: 18px; line-height: 1.45; }
+  [data-q-side] { grid-area: side; align-items: flex-start; }
+  [data-screen="observe"] > [data-cards], [data-screen="narrate"] > [data-cards] { grid-area: cards; }
+  [data-cards] > [data-card-wrap] { padding-inline: 12px; }
+  [data-cards] [data-picture-frame="square"] { width: min(100cqw / 3 - 40px, 100cqh - 40px - var(--lab)); }
+  [data-cards] [data-picture-frame="card"] { width: min(100cqw / 3 - 40px, (100cqh - 40px - var(--lab)) * 4 / 3); }
+  [data-screen="observe"] > [data-feedback], [data-screen="narrate"] > [data-feedback] { grid-area: fb; }
+  [data-screen="narrate"] > [data-action="next"] { grid-area: side; align-self: start; }
+  [data-shell] [data-strip] [data-line] > p { font-size: 17px; line-height: 1.45; }
+
+  [data-screen="connect"], [data-screen="ask"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+  }
+  [data-screen="connect"] > [data-action="next"], [data-screen="ask"] > [data-action="next"] { grid-column: 2; grid-row: 1; align-self: end; }
+  [data-screen="connect"] > :not([data-action]) { grid-column: 1; }
+  [data-connect-lines] { display: grid; grid-auto-flow: column; grid-template-rows: repeat(3, auto); grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 16px; }
+  [data-connect-lines] [data-line] > p { font-size: 17px; line-height: 1.45; }
+  [data-shell] [data-verse] { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; max-height: 100%; }
+  [data-shell] [data-verse-box] { max-height: 100%; }
+  [data-shell] [data-verse-text] { font-size: 24px; line-height: 2; }
+  [data-screen="ask"] { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr) auto; }
+  [data-ask-questions] { grid-column: 1; flex-direction: column; flex-wrap: nowrap; }
+  [data-screen="ask"] > [data-answer] { grid-column: 2; grid-row: 1; max-height: 100%; }
+  [data-screen="ask"] > [data-action="next"] { grid-column: 3; }
+
+  [data-screen="close"] { display: grid; grid-template-columns: auto minmax(0, 1fr); align-content: center; justify-items: center; column-gap: 20px; row-gap: 10px; }
+  [data-screen="close"] > :first-child { grid-column: 1; grid-row: 1 / span 4; }
+  [data-screen="close"] > :not(:first-child) { grid-column: 2; }
+  [data-screen="close"] [data-plant] { width: 120px; height: 120px; }
+
+  [data-shell="story"] > section { flex-direction: row; align-items: center; }
+  [data-shell="story"] [data-story-picture] { max-height: 100%; flex: 0 1 auto; max-width: 55%; }
+  [data-shell="story"] > section > [data-line] { flex: 1 1 0; }
+
+  [data-shell="map"] {
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: "bar map" "sel map" "par map";
+    column-gap: 12px;
+    row-gap: 8px;
+  }
+  [data-shell="map"] > [data-bar] { grid-area: bar; }
+  [data-shell="map"] > [data-map-box] { grid-area: map; height: 100%; }
+  [data-shell="map"] > [data-selected] { grid-area: sel; }
+  [data-shell="map"] > [data-parents-link] { grid-area: par; align-self: start; justify-self: center; }
+  [data-shell="map"] > [data-bar] h1 { font-size: 20px; }
+}

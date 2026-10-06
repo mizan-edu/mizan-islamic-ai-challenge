@@ -156,6 +156,8 @@ test('phone width: map, question and verse card', async ({ page }) => {
   await page.locator(`[data-record="${observe('S1').correctChoiceId}"]`).click();
   await page.locator('[data-moment="S1"]').click();
   await next(page);
+  // Phones (D67): the verse step shows in pages (lines first); Next moves on to the verse card.
+  while (!(await page.locator('[data-screen="connect"] [data-verse-text]').count())) await next(page);
   await shot(page, 'phone-s1-verse-card', 400);
 });
 

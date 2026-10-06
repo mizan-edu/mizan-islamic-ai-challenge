@@ -17,6 +17,7 @@ import { NarrationButton, PictureCard, PlantMarker, VerseCard, type ParticleKind
 import { sfx } from '@/app/_lib/sfx';
 import type { VideoSources } from '@/app/_lib/media';
 import { MOMENT, MomentOverlay, videoAllowed, type MomentPicture, type MomentRect } from './moments';
+import { usePhone } from './phone';
 import { addEvents, markCompleted } from './session';
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -83,7 +84,7 @@ function StepDots({ step }: { step: FlowState['step'] }) {
   return (
     <ol className="flex items-center justify-center gap-2" aria-hidden="true" data-step-dots={at}>
       {DOTS.map((d, i) => (
-        <li key={d} data-dot={d} className={`h-3 rounded-full transition-all duration-200 ${i === at ? 'w-8 bg-water' : i < at ? 'w-3 bg-leaf' : 'w-3 bg-stone'}`} />
+        <li key={d} data-dot={d} data-on={i === at || undefined} className={`h-3 rounded-full transition-all duration-200 ${i === at ? 'w-8 bg-water' : i < at ? 'w-3 bg-leaf' : 'w-3 bg-stone'}`} />
       ))}
     </ol>
   );
@@ -104,6 +105,14 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
 }) {
   const [state, dispatch] = useReducer((s: FlowState, a: Parameters<typeof reducer>[2]) => reducer(view, s, a), initial ?? initialState());
   const [ask, setAsk] = useState<AskState | null>(initialAsk);
+  // Phones (D67): the verse step is too long for one phone screen, so it shows in pages — the lines,
+  // the verse card, then the explanations — with Next moving page by page. Same content, same order;
+  // tablets and laptops keep the single page.
+  const phone = usePhone();
+  const [connectPage, setConnectPage] = useState(0);
+  // Portrait phones (D67): a reply opens in its own view (the questions and a verse card do not fit
+  // together); Next goes back to the questions, and Next there moves on, as before.
+  const [askView, setAskView] = useState<'list' | 'answer'>('list');
   // Judge mode (A1): off unless ?judge=1 or the parent-page switch turned it on for this session.
   const [judge, setJudge] = useState(initialJudge);
   // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -162,6 +171,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
       const reply = (await res.json()) as AskReply;
       addEvents([reply.event, reply.llmEvent].filter((e): e is Record<string, unknown> => Boolean(e)));
       setAsk({ id: questionId, reply, busy: false });
+      setAskView('answer');
     } catch {
       setAsk({ id: questionId, reply: null, busy: false });
     }
@@ -199,9 +209,26 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
     }, MOMENT.delayMs);
   };
 
+  // Verse-step pages on phones (D67): only the pages that have content.
+  const cv = view.connect;
+  const pages = cv ? [
+    ...(cv.science.length > 0 || cv.bridge || cv.listen ? ['lines' as const] : []),
+    ...(cv.verse ? ['verse' as const] : []),
+    ...(cv.explanations.length > 0 || cv.tafsir ? ['more' as const] : []),
+  ] : [];
+  const page = phone ? pages[Math.min(connectPage, pages.length - 1)] ?? null : null;
+  const shows = (p: 'lines' | 'verse' | 'more') => page === null || page === p;
+  const answerOnly = phone === 'portrait' && askView === 'answer' && Boolean(ask?.reply);
+  const connectNext = () => {
+    if (page && connectPage < pages.length - 1) { setConnectPage(connectPage + 1); return; }
+    setConnectPage(0);
+    dispatch({ type: 'next', t: now() });
+  };
+
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 overflow-x-clip px-4 py-5 sm:px-8" data-step={state.step} data-station={view.stationId}>
-      <header className="flex items-center justify-between gap-4">
+    <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 overflow-x-clip px-4 py-5 sm:px-8" data-step={state.step} data-station={view.stationId}
+      data-shell="station" data-judge={judge || undefined}>
+      <header className="flex items-center justify-between gap-4" data-bar>
         <Link href="/" aria-label={labels.home} className="pill flex size-16 shrink-0 items-center justify-center bg-card text-water"><HomeIcon /></Link>
         {view.title && <h1 className="font-display text-center text-2xl leading-snug text-ink md:text-4xl">{view.title.text}</h1>}
         <PlantMarker done={finished ? view.close.stage : Math.max(view.close.stage - 1, 0)} className="size-16 shrink-0 md:size-20" />
@@ -228,8 +255,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
             // Hidden: warms the cache for the moment clip; never shown or played here.
             <video src={video.mp4} preload="auto" muted playsInline className="hidden" aria-hidden="true" data-video-preload={view.stationId} />
           )}
-          <div className="flex items-stretch gap-3">
-            <div className="card flex flex-1 items-center gap-4 p-4">
+          <div className="flex items-stretch gap-3" data-q-row>
+            <div className="card flex flex-1 items-center gap-4 p-4" data-q-card>
               <NarrationButton src={o.question.audio} label={labels.play} big />
               <p className="font-display flex-1 text-2xl leading-relaxed text-ink md:text-3xl" data-line={o.question.id}>{o.question.text}</p>
               {o.question.image ? (
@@ -244,7 +271,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
                   style={firstCard.imageSize ? { aspectRatio: `${firstCard.imageSize.width} / ${firstCard.imageSize.height}` } : undefined} />
               ) : null}
             </div>
-            <div className="flex shrink-0 items-center">
+            <div className="flex shrink-0 items-center" data-q-side>
               {!state.observe.solved ? (
                 <button type="button" onClick={() => { tap(); dispatch({ type: 'hint', t: now() }); }} aria-label={labels.hint} data-action="hint"
                   disabled={state.observe.hintIndex >= o.hints.length}
@@ -254,7 +281,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
               )}
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3" data-cards={o.choices.length}>
             {o.choices.map((c, i) => (
               <PictureCard key={c.id} record={c} index={i} particles={PARTICLES[view.stationId]}
                 state={state.observe.highlightId === c.id ? 'highlight' : state.observe.greyed.includes(c.id) ? 'greyed' : 'idle'}
@@ -270,45 +297,45 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
 
       {state.step === 'connect' && view.connect && (
         // No step animation here: nothing moves on or near the verse.
-        <section className="flex flex-col gap-6" data-screen="connect">
-          {(view.connect.science.length > 0 || view.connect.bridge || view.connect.listen) && (
-            <div className="card flex flex-col gap-4 p-5">
+        <section className="flex flex-col gap-6" data-screen="connect" data-connect-page={page ?? undefined}>
+          {shows('lines') && (view.connect.science.length > 0 || view.connect.bridge || view.connect.listen) && (
+            <div className="card flex flex-col gap-4 p-5" data-connect-lines>
               {view.connect.science.map((r) => <Line key={r.id} record={r} labels={labels} />)}
               <Line record={view.connect.bridge} labels={labels} />
               <Line record={view.connect.listen} labels={labels} />
             </div>
           )}
-          {view.connect.verse && <VerseCard verse={view.connect.verse} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />}
-          {view.connect.explanations.length > 0 && (
+          {shows('verse') && view.connect.verse && <VerseCard verse={view.connect.verse} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />}
+          {shows('more') && view.connect.explanations.length > 0 && (
             <div className="card flex flex-col gap-4 p-5" data-explanations>
               {view.connect.explanations.map((r) => <Line key={r.id} record={r} labels={labels} />)}
             </div>
           )}
-          {view.connect.tafsir && (
+          {shows('more') && view.connect.tafsir && (
             <ParentsToggle label={labels.tafsirToggle ?? labels.parents}>
               <p dir="rtl" lang="ar" className="text-lg leading-loose text-ink" data-tafsir={view.connect.tafsir.id}>{view.connect.tafsir.text}</p>
               <p dir="ltr" className="pb-3 text-sm text-ink-2">{view.connect.tafsir.platformId}</p>
             </ParentsToggle>
           )}
-          <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
+          <NextButton onClick={connectNext} label={labels.next} />
         </section>
       )}
 
       {state.step === 'ask' && (
-        <section className="anim-step flex flex-col gap-6" data-screen="ask">
-          <div className="flex flex-wrap gap-4">
+        <section className="anim-step flex flex-col gap-6" data-screen="ask" data-ask-view={phone === 'portrait' ? (answerOnly ? 'answer' : 'list') : undefined}>
+          {!answerOnly && <div className="flex flex-wrap gap-4" data-ask-questions>
             {view.ask.map((q) => (
               <button key={q.id} type="button" data-question={q.id} onClick={() => { tap(); void askQuestion(q.id); }} disabled={ask?.busy}
                 className={`pill font-display min-h-16 px-6 py-3 text-2xl text-ink ${ask?.id === q.id ? 'bg-sky ring-4 ring-water' : 'bg-card'}`}>{q.text}</button>
             ))}
-          </div>
-          {ask?.reply && (
+          </div>}
+          {ask?.reply && (phone !== 'portrait' || answerOnly) && (
             <div className={`card flex flex-col gap-4 p-5 ${ask.reply.verses.length ? '' : 'anim-rise'}`} aria-live="polite" data-answer={ask.id}>
               {ask.reply.segments.filter((s) => s.kind === 'text').map((s) => <p key={s.recordId} className="font-display text-2xl leading-relaxed text-ink" data-line={s.recordId}>{s.text}</p>)}
               {ask.reply.verses.map((v) => <VerseCard key={v.id} verse={v} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />)}
             </div>
           )}
-          <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />
+          <NextButton onClick={() => (answerOnly ? setAskView('list') : dispatch({ type: 'next', t: now() }))} label={labels.next} />
           {/* Judge panel: below the controls, away from the reply and any verse card in it. */}
           {judge && <JudgePanel decisions={decisions} trace={ask?.reply?.trace ?? null} labels={labels} />}
         </section>
@@ -316,8 +343,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
 
       {state.step === 'narrate' && view.narrate && (
         <section className="anim-step flex flex-col gap-5" data-screen="narrate" data-mode={view.narrate.mode}>
-          <div className="card p-5"><Line record={view.narrate.intro} labels={labels} size="text-3xl" big /></div>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
+          <div className="card p-5" data-intro><Line record={view.narrate.intro} labels={labels} size="text-3xl" big /></div>
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-3" data-cards={view.narrate.cards.length}>
             {view.narrate.cards.map((c, i) => {
               const pos = state.narrate.picked.indexOf(c.id);
               const highlight = state.narrate.done && (view.narrate!.mode === 'order' || c.id === view.narrate!.bestCardId);
@@ -345,7 +372,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
         <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="close">
           <PlantMarker done={view.close.stage} grow className="size-56 md:size-64" />
           {view.close.lines.map((r) => <Line key={r.id} record={r} labels={labels} size="text-3xl" />)}
-          <div className="flex flex-wrap items-center justify-center gap-5">
+          <div className="flex flex-wrap items-center justify-center gap-5" data-close-actions>
             <Link href="/" aria-label={labels.home} className="pill flex size-20 items-center justify-center bg-sky text-water"><HomeIcon /></Link>
             {view.nextStationId && (
               <Link href={`/stations/${view.nextStationId}`} aria-label={labels.nextStation} data-action="next-station"

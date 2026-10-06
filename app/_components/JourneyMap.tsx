@@ -19,6 +19,11 @@ export interface MapStation { id: string; number: number; title: string | null; 
 // Stone centres on public/images/map/background.webp, in % of its width and height (S1 upstream,
 // right; S5 downstream, left — the journey reads right to left).
 const STONES = [{ x: 86, y: 36 }, { x: 66, y: 51 }, { x: 83, y: 63 }, { x: 45, y: 75 }, { x: 21, y: 78 }];
+// Phones (D67): when the whole map is shown narrower than about 500 px, stones of at least 64 px
+// cannot keep 12 px between them at the positions above (S1 and S3 sit too close), so they move to
+// these points, still along the river and in the same order (globals.css, map container query).
+const STONES_COMPACT = [{ x: 88, y: 22 }, { x: 62, y: 40 }, { x: 84, y: 74 }, { x: 44, y: 76 }, { x: 18, y: 70 }];
+const at = (i: number) => ({ left: `${STONES[i].x}%`, top: `${STONES[i].y}%`, '--cx': `${STONES_COMPACT[i].x}%`, '--cy': `${STONES_COMPACT[i].y}%` }) as React.CSSProperties;
 const ROADMAP: readonly string[] = ROADMAP_STATIONS;
 
 const TickIcon = () => <svg viewBox="0 0 24 24" className="size-5 md:size-6" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -60,8 +65,8 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
   const completed = stations.filter((s) => done.includes(s.id)).length;
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-4 px-4 py-5 sm:px-8" data-screen="journey">
-      <header className="flex items-center justify-between gap-4">
+    <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-4 px-4 py-5 sm:px-8" data-screen="journey" data-shell="map">
+      <header className="flex items-center justify-between gap-4" data-bar>
         {title && <h1 className="font-display text-3xl leading-snug text-ink md:text-5xl">{title}</h1>}
         <div className="card flex shrink-0 items-end gap-1 px-3 py-2" data-progress={completed}>
           <PlantMarker done={completed} className="size-16 rounded-2xl md:size-20" />
@@ -75,7 +80,7 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
         </div>
       </header>
 
-      <div className="card relative w-full overflow-hidden" style={{ aspectRatio: '1344 / 752' }}>
+      <div className="card relative w-full overflow-hidden" style={{ aspectRatio: '1344 / 752' }} data-map-box>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/images/map/background.webp" alt="" aria-hidden="true" width={1344} height={752} className="absolute inset-0 size-full object-cover" data-map />
         {mapVideo && video && (
@@ -84,16 +89,15 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
             <source src={video.mp4} type="video/mp4" onError={() => setMapVideo(false)} />
           </video>
         )}
-        <ol className="absolute inset-0">
+        <ol className="absolute inset-0" data-stones>
           {stations.map((s, i) => {
             const isOpen = open(i);
             const isDone = done.includes(s.id);
             const isCurrent = s.id === current;
-            const pos = STONES[i];
             const ring = isDone ? 'border-leaf' : isCurrent ? 'border-water' : isOpen ? 'border-water-light' : 'border-stone';
             return (
               <li key={s.id} data-station={s.id} data-open={isOpen} data-state={isDone ? 'done' : isCurrent ? 'current' : isOpen ? 'open' : 'locked'}
-                className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${pos.x}%`, top: `${pos.y}%` }}>
+                className="absolute -translate-x-1/2 -translate-y-1/2" style={at(i)}>
                 <div className={`relative isolate rounded-full ${isCurrent ? 'anim-pulse' : ''}`}>
                   <button type="button" disabled={!isOpen} onClick={() => setPicked(s.id)} aria-label={s.title ?? undefined} aria-pressed={s.id === selectedId}
                     className={`press relative flex size-18 items-center justify-center overflow-hidden rounded-full border-[5px] bg-card md:size-24 md:border-[6px] ${ring} ${s.id === selectedId ? 'outline-4 outline-offset-4 outline-sun' : ''}`}>
@@ -105,10 +109,9 @@ export default function JourneyMap({ title, stations, parentsLabel, startLabel, 
             );
           })}
           {ROADMAP.map((id, k) => {
-            const pos = STONES[stations.length + k];
-            if (!pos) return null;
+            if (!STONES[stations.length + k]) return null;
             return (
-              <li key={id} data-soon={id} aria-label={comingSoonLabel} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${pos.x}%`, top: `${pos.y}%` }}>
+              <li key={id} data-soon={id} aria-label={comingSoonLabel} className="absolute -translate-x-1/2 -translate-y-1/2" style={at(stations.length + k)}>
                 <div className="relative flex size-16 items-center justify-center overflow-hidden rounded-full border-[5px] border-stone bg-card md:size-20">
                   <Icon id={id} dim />
                 </div>

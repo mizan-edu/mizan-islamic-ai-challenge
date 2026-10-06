@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { sfx } from '@/app/_lib/sfx';
 import type { RecordView, VerseView } from '@/app/_lib/station-view';
+import { usePhone } from './phone';
 
 const SpeakerIcon = ({ className = 'size-8' }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
@@ -158,7 +159,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false, in
           ) : (
             <span data-placeholder="picture" className="font-display flex h-40 w-full items-center justify-center rounded-[20px] bg-sky-soft px-3 text-2xl leading-relaxed text-ink">{record.text}</span>
           )}
-          {record.image && <span aria-hidden="true" className="font-display text-xl leading-relaxed text-ink">{record.text}</span>}
+          {record.image && <span aria-hidden="true" className="font-display text-xl leading-relaxed text-ink" data-card-label>{record.text}</span>}
         </span>
         {order !== undefined && <span key={order} className="anim-badge font-display absolute start-3 top-3 flex size-11 items-center justify-center rounded-full bg-sun text-xl text-ink" data-order={order}>{order}</span>}
         {state === 'highlight' && !celebrate && <span className="hint-glow" aria-hidden="true" />}
@@ -183,6 +184,30 @@ const Star = ({ className }: { className: string }) => (
   </svg>
 );
 
+// Phones (D67): when the verse does not fit at its phone size (never under 20 px), only the verse
+// text scrolls, inside its box, and a still fade at the bottom shows there is more until the end is
+// reached. The text itself is the stored text, unchanged: same wrapping rules, no scaling.
+function VerseWindow({ children }: { children: React.ReactNode }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [more, setMore] = useState(false);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const check = () => setMore(el.scrollHeight - el.clientHeight - el.scrollTop > 2);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    el.addEventListener('scroll', check, { passive: true });
+    return () => { ro.disconnect(); el.removeEventListener('scroll', check); };
+  }, []);
+  return (
+    <div className="relative flex min-h-0 flex-col" data-verse-window>
+      <div ref={box} className="min-h-0 overflow-y-auto overscroll-contain" data-verse-scroll>{children}</div>
+      {more && <span className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-linear-to-b from-card/0 to-card" aria-hidden="true" data-verse-fade />}
+    </div>
+  );
+}
+
 // Verse card: calm and still. Stored text in the KFC font (never animated), the reference, and the
 // real recitation limited to the ayah. Only the recitation button moves, and only while playing.
 // Story mode (D47): autoPlay starts the recitation on mount (the story's play tap is the user gesture)
@@ -194,6 +219,7 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, auto
   const [playing, setPlaying] = useState(false);
   const reciting = useRef(false);
   const rc = verse.recitation;
+  const phone = usePhone();
   // Qur'an recitation: sound effects stop and stay silent until it ends (D38).
   const started = () => { reciting.current = true; sfx.recitationStarted(); };
   const done = useRef(false);
@@ -232,12 +258,13 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, auto
     };
   }, []);
 
+  const text = <blockquote dir="rtl" lang="ar" className="font-quran text-center text-4xl leading-[2.2] text-ink md:text-5xl" data-verse-text>{verse.text}</blockquote>;
   return (
     <figure data-verse={verse.id} className="card flex flex-col gap-5 border border-gold p-3">
-      <div className="relative flex flex-col gap-4 rounded-[24px] border border-gold/60 px-6 py-8 md:px-12">
+      <div className="relative flex flex-col gap-4 rounded-[24px] border border-gold/60 px-6 py-8 md:px-12" data-verse-box>
         <Star className="start-2 top-2" /><Star className="end-2 top-2" /><Star className="bottom-2 start-2" /><Star className="bottom-2 end-2" />
         {label && <p className="font-display text-center text-xl text-ink-2" data-verse-label>{label}</p>}
-        <blockquote dir="rtl" lang="ar" className="font-quran text-center text-4xl leading-[2.2] text-ink md:text-5xl" data-verse-text>{verse.text}</blockquote>
+        {phone ? <VerseWindow>{text}</VerseWindow> : text}
         {/* «سورة <KFC name> · الآية <n>» (Western numerals); the plain reference when a label is missing. */}
         {surahLabel && ayahLabel && verse.surahName && verse.ayah !== null
           ? <p className="font-display text-center text-lg text-ink-2" data-reference={verse.reference}>{surahLabel} {verse.surahName} · {ayahLabel} {verse.ayah}</p>

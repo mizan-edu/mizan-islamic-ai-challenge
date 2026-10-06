@@ -84,8 +84,8 @@ export default function StoryPlayer({ view, steps, labels, sfxCues = [], initial
   const key = index < 0 ? 'start' : step ? stepKey(step) : 'done';
   const firstCard = view.narrate?.cards[0] ?? null;
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 overflow-x-clip px-4 py-6 sm:px-8" data-screen="story" data-story-step={key} data-story-index={index}>
-      <header className="flex items-center justify-between gap-4">
+    <main className="mx-auto flex min-h-dvh w-full max-w-3xl flex-col gap-6 overflow-x-clip px-4 py-6 sm:px-8" data-screen="story" data-story-step={key} data-story-index={index} data-shell="story">
+      <header className="flex items-center justify-between gap-4" data-bar>
         {view.title && <h1 className="font-display text-3xl text-ink">{view.title.text}</h1>}
         <Link href="/" aria-label={labels.home} className="pill flex size-16 shrink-0 items-center justify-center bg-card text-water">
           <svg viewBox="0 0 24 24" className="size-8" aria-hidden="true"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z" fill="currentColor" /></svg>

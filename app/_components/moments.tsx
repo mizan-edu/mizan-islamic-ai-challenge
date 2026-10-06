@@ -62,6 +62,10 @@ const BEAMS = [{ a: 32, d: 0 }, { a: 46, d: 700 }, { a: 60, d: 1400 }];
 const MOTES = row(14, (i) => ({ x: 28 + ((i * 37) % 44), y: 74, d: (i * 263) % 2600 }));
 
 const style = (o: Record<string, string | number>) => o as React.CSSProperties;
+// Safe areas (D67): on a phone with a notch or home bar the picture frame stays clear of them; the
+// blurred fill still covers the whole screen. Zero everywhere else.
+const SAFE_X = 'env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)';
+const SAFE_Y = 'env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)';
 
 function LiveLayer({ stationId }: { stationId: string }) {
   return (
@@ -215,7 +219,7 @@ export function MomentOverlay({ stationId, pictures, onDone, fromRect = null, vi
             <img src={main.src} alt="" className="absolute inset-0 size-full scale-110 object-cover blur-[24px]" data-moment-backdrop />
           )}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" data-moment-box
-            style={{ width: `min(100vw, calc(100dvh * ${w} / ${h}))`, aspectRatio: `${w} / ${h}` }}>
+            style={{ width: `min(100vw - ${SAFE_X}, calc((100dvh - ${SAFE_Y}) * ${w} / ${h}))`, aspectRatio: `${w} / ${h}` }}>
             <div ref={tilt} className="moment-tilt absolute inset-0">
               <div className="moment-camera absolute inset-0">
                 <div className="absolute inset-[5%]" data-moment-picture>

@@ -39,6 +39,9 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: '#CFEAF7',
+  // D67: phones lay child screens out to the edges and keep content clear of the notch and home bar
+  // with env(safe-area-inset-*) (globals.css, phone rules only).
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
