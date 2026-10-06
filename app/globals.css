@@ -242,6 +242,8 @@
 @keyframes flip-in { from { transform: translate(var(--fx), var(--fy)) scale(var(--fsx), var(--fsy)); } to { transform: none; } }
 @keyframes scene-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes camera { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.06) translate(-1%, -0.6%); } }
+@keyframes cue-pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.04); opacity: 1; } }
+@keyframes cue-breathe { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
 @keyframes scene-out { from { opacity: 1; transform: none; } to { opacity: 0; transform: scale(0.98); } }
 @keyframes streak { 0% { opacity: 0; transform: translateY(-4%); } 12% { opacity: 1; } 88% { opacity: 1; } 100% { opacity: 0; transform: translateY(100%); } }
 @keyframes ripple { 0% { opacity: 0; transform: scale(0.2); } 15% { opacity: 0.9; } 100% { opacity: 0; transform: scale(1.6); } }
@@ -292,6 +294,24 @@
    anim-place (a retry) does not restart the entrance. */
 .anim-card-in.anim-place { animation: card-in 420ms var(--ease-spring-soft) backwards, place 520ms var(--ease-spring); animation-delay: calc(120ms + var(--i, 0) * 90ms), 0ms; }
 .hint-glow { animation: glow-breathe 1.6s ease-in-out infinite; }
+/* Guided cue (D75): the control to tap next glows mint. A ring layer outside the control: a dark
+   inner edge (visible on white and sky backgrounds) and a mint halo (visible on dark ones). It
+   breathes once every 1.6 s (0.625 Hz: no flashing, WCAG 2.3.1) and grows by at most 4 %; it is
+   a pseudo-element, so the control's size, margins and layout never change. Never red. */
+[data-cue] { position: relative; }
+[data-cue]::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  pointer-events: none;
+  box-shadow: 0 0 0 3px #0B5D4B, 0 0 0 7px #2EF2C2, 0 0 22px 8px rgba(46, 242, 194, 0.55);
+  animation: cue-pulse 1.6s ease-in-out infinite;
+  z-index: 1;
+}
+.tactile[data-cue]::after { border-radius: 34px; }
+/* Nothing new moves on or near the verse (D26): on the verse card the ring breathes by opacity only. */
+[data-verse] [data-cue]::after { animation-name: cue-breathe; }
 .glass-pulse { transform-box: fill-box; transform-origin: center; animation: glass-pulse 1200ms ease-out infinite; }
 .glass-flow { animation: glass-flow 450ms ease-in both; }
 
@@ -426,6 +446,10 @@
   }
   .hint-glow {
     opacity: 0.95;
+  }
+  /* Guided cue (D75): a static thick mint ring instead of the pulse. */
+  [data-cue]::after {
+    box-shadow: 0 0 0 3px #0B5D4B, 0 0 0 10px #2EF2C2;
   }
   .pill:active:not(:disabled),
   .press:active:not(:disabled),

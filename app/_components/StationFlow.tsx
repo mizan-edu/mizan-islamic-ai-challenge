@@ -6,12 +6,14 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { cueReducer, currentCue, initialCueState, NEXT, stationCuePlan, stationScreenKey } from '@/app/_lib/cues';
 import { initialState, reducer, type FlowState } from '@/app/_lib/flow';
 import { judgeEnabled } from '@/app/_lib/judge';
 import { stepDecisions } from '@/app/_lib/lens';
 import type { Labels } from '@/app/_lib/labels';
 import type { Trace } from '@/app/_lib/trace';
 import type { RecordView, StationView, VerseView } from '@/app/_lib/station-view';
+import { CueContext, type CueApi } from './cues';
 import JudgePanel from './JudgePanel';
 import { NarrationButton, PictureCard, PlantMarker, VerseCard, type ParticleKind } from './media';
 import { sfx } from '@/app/_lib/sfx';
@@ -57,9 +59,9 @@ function Strip({ kind, record, labels, autoPlay = false }: { kind: keyof typeof 
   );
 }
 
-function NextButton({ onClick, label, disabled = false }: { onClick: () => void; label?: string; disabled?: boolean }) {
+function NextButton({ onClick, label, disabled = false, cue = false }: { onClick: () => void; label?: string; disabled?: boolean; cue?: boolean }) {
   return (
-    <button type="button" onClick={() => { sfx.play('tap'); onClick(); }} disabled={disabled} aria-label={label} data-action="next"
+    <button type="button" onClick={() => { sfx.play('tap'); onClick(); }} disabled={disabled} aria-label={label} data-action="next" data-cue={cue || undefined}
       className="pill flex min-h-20 min-w-36 items-center justify-center self-center bg-leaf-dark px-10 text-white disabled:opacity-30">
       <ArrowIcon />
     </button>
@@ -227,6 +229,27 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
     verseDeferred.current = false;
     dispatch({ type: 'verseShown', t: now() });
   }, [verseOnScreen]);
+  // Guided cues (D75): the one group of controls to glow now, derived from what this screen shows.
+  const cueUi = {
+    page, answerOnly, momentPending, praiseAuto,
+    ask: ask?.reply ? { id: ask.id, verses: ask.reply.verses.map((v) => ({ id: v.id, recitation: Boolean(v.recitation) })) } : null,
+  };
+  const cuePlan = stationCuePlan(view, state, cueUi);
+  const cueScreen = stationScreenKey(state, cueUi);
+  const [cues, cueDispatch] = useReducer(cueReducer, undefined, () => initialCueState());
+  useEffect(() => { cueDispatch({ type: 'screen', screen: cueScreen }); }, [cueScreen]);
+  const cueTargets = cuePlan.map((p) => p.key).join('|');
+  useEffect(() => { cueDispatch({ type: 'plan' }); }, [cueTargets]);
+  const cue = cues.screen === cueScreen ? currentCue(cuePlan, cues) : null;
+  const cueTap = (key: string | undefined) => { if (key) cueDispatch({ type: 'tap', key, plan: cuePlan }); };
+  const cueApi: CueApi = {
+    cued: cue?.kind === 'speaker' ? cue.key : null,
+    tap: (key) => cueTap(key),
+    play: (key) => cueDispatch({ type: 'play', key }),
+    end: (key) => cueDispatch({ type: 'end', key }),
+  };
+  const cardsKey = cuePlan.find((p) => p.kind === 'cards')?.key;
+  const nextCued = cue?.key === NEXT;
   const connectNext = () => {
     if (page && connectPage < pages.length - 1) { setConnectPage(connectPage + 1); return; }
     setConnectPage(0);
@@ -234,8 +257,9 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
   };
 
   return (
+    <CueContext.Provider value={cueApi}>
     <main className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col gap-6 overflow-x-clip px-4 py-5 sm:px-8" data-step={state.step} data-station={view.stationId}
-      data-shell="station" data-judge={judge || undefined}>
+      data-shell="station" data-judge={judge || undefined} data-cue-now={cue?.kind ?? 'none'}>
       <header className="flex items-center justify-between gap-4" data-bar>
         <Link href="/" aria-label={labels.home} className="pill flex size-16 shrink-0 items-center justify-center bg-card text-water"><HomeIcon /></Link>
         {view.title && <h1 className="font-display text-center text-2xl leading-snug text-ink md:text-4xl">{view.title.text}</h1>}
@@ -250,7 +274,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
         <section className="card anim-step flex flex-col items-center gap-6 px-6 py-8 text-center" data-screen="frame">
           {view.frame[0] && <NarrationButton src={view.frame[0].audio} label={labels.play} big />}
           {view.frame.map((r) => <p key={r.id} data-line={r.id} className="font-display text-3xl leading-relaxed text-ink">{r.text}</p>)}
-          <button type="button" onClick={() => { tap(); dispatch({ type: 'start' }); }} aria-label={labels.start} data-action="start"
+          <button type="button" onClick={() => { tap(); cueTap(NEXT); dispatch({ type: 'start' }); }} aria-label={labels.start} data-action="start" data-cue={nextCued || undefined}
             className="pill font-display flex min-h-20 min-w-48 items-center justify-center gap-3 bg-leaf-dark px-10 text-2xl text-white">
             {labels.start && <span aria-hidden="true">{labels.start}</span>}<ArrowIcon />
           </button>
@@ -281,11 +305,11 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
             </div>
             <div className="flex shrink-0 items-center" data-q-side>
               {!state.observe.solved ? (
-                <button type="button" onClick={() => { tap(); dispatch({ type: 'hint', t: now() }); }} aria-label={labels.hint} data-action="hint"
+                <button type="button" onClick={() => { tap(); cueTap(cardsKey); dispatch({ type: 'hint', t: now() }); }} aria-label={labels.hint} data-action="hint"
                   disabled={state.observe.hintIndex >= o.hints.length}
                   className="pill flex size-20 items-center justify-center bg-sun text-ink disabled:opacity-40"><BulbIcon /></button>
               ) : (
-                <NextButton onClick={() => { verseDeferred.current = Boolean(phone); dispatch({ type: 'next', t: now(), deferVerse: Boolean(phone) }); }} label={labels.next} />
+                <NextButton onClick={() => { verseDeferred.current = Boolean(phone); dispatch({ type: 'next', t: now(), deferVerse: Boolean(phone) }); }} label={labels.next} cue={nextCued} />
               )}
             </div>
           </div>
@@ -294,7 +318,8 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
               <PictureCard key={c.id} record={c} index={i} particles={PARTICLES[view.stationId]}
                 state={state.observe.highlightId === c.id ? 'highlight' : state.observe.greyed.includes(c.id) ? 'greyed' : 'idle'}
                 celebrate={state.observe.solved}
-                onTap={state.observe.solved ? undefined : () => choose(c.id)} />
+                cue={cue?.kind === 'cards'}
+                onTap={state.observe.solved ? undefined : () => { cueTap(cardsKey); choose(c.id); }} />
             ))}
           </div>
           <div className="min-h-16" aria-live="polite" data-feedback={state.observe.feedbackId ?? ''}>
@@ -325,7 +350,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
               <p dir="ltr" className="pb-3 text-sm text-ink-2">{view.connect.tafsir.platformId}</p>
             </ParentsToggle>
           )}
-          <NextButton onClick={connectNext} label={labels.next} />
+          <NextButton onClick={connectNext} label={labels.next} cue={nextCued} />
         </section>
       )}
 
@@ -343,7 +368,7 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
               {ask.reply.verses.map((v) => <VerseCard key={v.id} verse={v} playLabel={labels.playRecitation} label={labels.verseLabel} surahLabel={labels.surah} ayahLabel={labels.ayah} />)}
             </div>
           )}
-          <NextButton onClick={() => (answerOnly ? setAskView('list') : dispatch({ type: 'next', t: now() }))} label={labels.next} />
+          <NextButton onClick={() => { cueTap(NEXT); if (answerOnly) setAskView('list'); else dispatch({ type: 'next', t: now() }); }} label={labels.next} cue={nextCued} />
           {/* Judge panel: below the controls, away from the reply and any verse card in it. */}
           {judge && <JudgePanel decisions={decisions} trace={ask?.reply?.trace ?? null} labels={labels} />}
         </section>
@@ -365,14 +390,14 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
                   state={highlight ? 'highlight' : pos >= 0 ? 'picked' : 'idle'}
                   celebrate={state.narrate.done}
                   order={view.narrate!.mode === 'order' && pos >= 0 ? pos + 1 : undefined}
-                  onTap={state.narrate.done ? undefined : () => dispatch({ type: 'pick', cardId: c.id, t: now() })} />
+                  onTap={state.narrate.done ? undefined : () => { cueTap('arrange'); dispatch({ type: 'pick', cardId: c.id, t: now() }); }} />
               );
             })}
           </div>
           <div className="min-h-16" aria-live="polite" data-feedback={state.narrate.feedbackId ?? ''}>
             <Strip kind={narrateKind(state.narrate.feedbackId)} record={feedback(state.narrate.feedbackId)} labels={labels} />
           </div>
-          {state.narrate.done && <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} />}
+          {state.narrate.done && <NextButton onClick={() => dispatch({ type: 'next', t: now() })} label={labels.next} cue={nextCued} />}
         </section>
       )}
 
@@ -381,9 +406,10 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
           <PlantMarker done={view.close.stage} grow className="size-56 md:size-64" />
           {view.close.lines.map((r) => <Line key={r.id} record={r} labels={labels} size="text-3xl" />)}
           <div className="flex flex-wrap items-center justify-center gap-5" data-close-actions>
-            <Link href="/" aria-label={labels.home} className="pill flex size-20 items-center justify-center bg-sky text-water"><HomeIcon /></Link>
+            {/* The last station has no next one: home (the map) is the way on, so it carries the cue. */}
+            <Link href="/" aria-label={labels.home} className="pill flex size-20 items-center justify-center bg-sky text-water" data-cue={(nextCued && !view.nextStationId) || undefined}><HomeIcon /></Link>
             {view.nextStationId && (
-              <Link href={`/stations/${view.nextStationId}`} aria-label={labels.nextStation} data-action="next-station"
+              <Link href={`/stations/${view.nextStationId}`} aria-label={labels.nextStation} data-action="next-station" data-cue={nextCued || undefined}
                 className="pill font-display flex min-h-20 items-center gap-3 bg-leaf-dark px-10 text-2xl text-white">
                 {labels.nextStation && <span aria-hidden="true">{labels.nextStation}</span>}<ArrowIcon />
               </Link>
@@ -399,5 +425,6 @@ export default function StationFlow({ view, labels, initial, initialAsk = null, 
           step that puts it below the Next button, away from the verse card. */}
       {judge && state.step !== 'ask' && <JudgePanel decisions={decisions} labels={labels} />}
     </main>
+    </CueContext.Provider>
   );
 }

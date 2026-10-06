@@ -8,6 +8,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { sfx } from '@/app/_lib/sfx';
 import type { RecordView, VerseView } from '@/app/_lib/station-view';
+import { reciteKey } from '@/app/_lib/cues';
+import { useSpeakerCue } from './cues';
 import { usePhone } from './phone';
 
 const SpeakerIcon = ({ className = 'size-8' }: { className?: string }) => (
@@ -25,12 +27,16 @@ const narrating = (on: boolean) => { try { document.documentElement.toggleAttrib
 
 // Plays /audio/<station>/<id>.mp3 when it exists; otherwise the button is shown disabled. While it
 // plays, sound effects are lowered (D38). autoPlay: play once on mount (the praise after a moment).
+// Guided cues (D75): glows when it is the next thing to tap; reports when its audio ends or fails.
 export function NarrationButton({ src, label, big = false, autoPlay = false }: { src: string | null; label?: string; big?: boolean; autoPlay?: boolean }) {
   const ref = useRef<HTMLAudioElement>(null);
   const size = big ? 'size-24' : 'size-16';
+  const cue = useSpeakerCue(src, ref);
   useEffect(() => {
     const a = ref.current;
-    if (autoPlay && a) { a.currentTime = 0; void a.play().catch(() => { /* autoplay refused: the button still works */ }); }
+    if (autoPlay && a) { a.currentTime = 0; cue.tap(); void a.play().catch(cue.ended); /* autoplay refused: the button still works */ }
+    // Mount and autoPlay changes only.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlay]);
   return (
     <>
@@ -39,12 +45,14 @@ export function NarrationButton({ src, label, big = false, autoPlay = false }: {
         disabled={!src}
         aria-label={label}
         data-narration={src ? 'available' : 'missing'}
-        onClick={() => { const a = ref.current; if (a) { a.currentTime = 0; void a.play(); } }}
+        data-cue={cue.cued || undefined}
+        onClick={() => { const a = ref.current; if (a) { cue.tap(); a.currentTime = 0; void a.play().catch(cue.ended); } }}
         className={`pill flex ${size} shrink-0 items-center justify-center ${src ? 'bg-water text-white' : 'bg-sky text-ink-2/60 shadow-none'}`}
       >
         <SpeakerIcon className={big ? 'size-12' : 'size-8'} />
       </button>
-      {src && <audio ref={ref} src={src} preload={autoPlay ? 'auto' : 'none'} onPlay={() => { sfx.narrationStarted(); narrating(true); }} onPause={() => { sfx.narrationStopped(); narrating(false); }} />}
+      {src && <audio ref={ref} src={src} preload={autoPlay ? 'auto' : 'none'} onPlay={() => { sfx.narrationStarted(); narrating(true); cue.playing(); }} onPause={() => { sfx.narrationStopped(); narrating(false); }}
+        onEnded={cue.ended} onError={cue.ended} />}
     </>
   );
 }
@@ -110,8 +118,9 @@ function untilt(e: React.PointerEvent<HTMLElement>) {
 // - hero (correct): the others recede, this card lifts with a 3D settle, a ring pulses once, a sheen
 //   sweeps once and `particles` burst; `heroDelayMs` staggers several heroes (narration order);
 // - placed narration card: springs into place, and its order number lands with a small pop.
-export function PictureCard({ record, state, onTap, order, celebrate = false, index, particles, heroDelayMs = 0 }: {
+export function PictureCard({ record, state, onTap, order, celebrate = false, index, particles, heroDelayMs = 0, cue = false }: {
   record: RecordView;
+  cue?: boolean; // guided cues (D75): all answer cards glow together, never one alone
   state: 'idle' | 'greyed' | 'highlight' | 'picked';
   onTap?: () => void;
   order?: number;
@@ -138,6 +147,7 @@ export function PictureCard({ record, state, onTap, order, celebrate = false, in
         type="button"
         data-record={record.id}
         data-state={state}
+        data-cue={cue || undefined}
         disabled={state === 'greyed' || !onTap}
         onClick={onTap}
         onPointerDown={onTap ? (e) => { tiltTo(e, narration ? 3 : 6); sfx.play('tap'); } : undefined}
@@ -220,11 +230,14 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, auto
   const reciting = useRef(false);
   const rc = verse.recitation;
   const phone = usePhone();
+  // Guided cues (D75): the play button glows first; the cue moves on when the recitation ends, or
+  // the child pauses or stops it, or it fails, or it has not ended 2 s after its length.
+  const cue = useSpeakerCue(rc ? reciteKey(verse.id) : null, ref, rc ? Math.max(rc.endMs - rc.startMs, 0) / 1000 : null);
   // Qur'an recitation: sound effects stop and stay silent until it ends (D38).
   const started = () => { reciting.current = true; sfx.recitationStarted(); };
   const done = useRef(false);
   const finish = () => { if (!done.current && onDone) { done.current = true; onDone(); } };
-  const stopped = () => { setPlaying(false); reciting.current = false; sfx.recitationStopped(); finish(); };
+  const stopped = () => { setPlaying(false); reciting.current = false; sfx.recitationStopped(); finish(); cue.ended(); };
 
   const play = () => {
     const a = ref.current;
@@ -234,6 +247,7 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, auto
     if (a.readyState >= 1) a.currentTime = start;
     else a.addEventListener('loadedmetadata', () => { a.currentTime = start; }, { once: true });
     started();
+    cue.tap();
     void a.play().then(() => setPlaying(true)).catch(stopped);
   };
   const onTime = () => {
@@ -278,7 +292,7 @@ export function VerseCard({ verse, playLabel, label, surahLabel, ayahLabel, auto
                 <circle cx="56" cy="56" r="52" fill="none" stroke="#C9A44C" strokeWidth="3" strokeDasharray="10 8" strokeLinecap="round" />
               </svg>
             )}
-            <button type="button" aria-label={playLabel} onClick={play} data-recitation={rc.audioUrl} data-playing={playing}
+            <button type="button" aria-label={playLabel} onClick={play} data-recitation={rc.audioUrl} data-playing={playing} data-cue={cue.cued || undefined}
               className="pill flex size-24 items-center justify-center bg-leaf-dark text-white">
               <PlayIcon className="size-12" />
             </button>
