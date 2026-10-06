@@ -6514,6 +6514,35 @@
       "decisionRef": "D70",
       "after": "- **عمل سابق خارج المستودع:** وثائق التصميم والتخطيط المؤرَّخة من أغسطس إلى 2 أكتوبر 2026، وكود Wave 1 المرجعي (PostgreSQL وPython، 102 اختبار)، وهي عملٌ سابق قبل 4 أكتوبر، وليس شيءٌ منها في هذا المستودع ولا في التطبيق المبني.",
       "source": "chat decision D70 (2026-10-06): wording given by Hussein"
+    },
+    {
+      "id": "DOC.VISION.md",
+      "kind": "doc-text",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T04:45:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D70",
+      "file": "VISION.md",
+      "lines": "line 98 of 767da73 (line 131 as published), section 7 note",
+      "before": "> ملاحظة تحقّق: حالة نموذج التحدّي (المرحلة 0) مأخوذة من قائمة «مُنجَز خلال 4–6 أكتوبر» في README. وما أُنجز قبل 4 أكتوبر موسوم «عمل سابق قبل 4 أكتوبر».",
+      "after": "> ملاحظة تحقّق: حالة نموذج التحدّي (المرحلة 0) مأخوذة من قائمة «مُنجَز خلال 4–6 أكتوبر» في README. وما أُنجز قبل 4 أكتوبر موسوم «عمل سابق قبل 4 أكتوبر»، وما صُمِّم قبله موسوم «مُصمَّم قبل 4 أكتوبر».",
+      "source": "chat decision D70 (2026-10-06): ending worded by Hussein"
+    },
+    {
+      "id": "DOC.DISCLOSURE.md",
+      "kind": "doc-text",
+      "review": 1,
+      "reviewer": "Hussein",
+      "timestamp": "2026-10-06T04:45:00+03:00",
+      "decision": "A",
+      "resultingStatus": "approved",
+      "decisionRef": "D70",
+      "file": "DISCLOSURE.md",
+      "lines": "section 1, «ملفات أخرى» bullet, joining phrase «وملفات الإعداد …»",
+      "after": "- **ملفات أخرى:** ملف CLAUDE.md، وREADME أوّلي، وسجلّ القرارات حتى ذلك اليوم، وورقتا مراجعة للمحطتين 2 و3، وثلاث مهارات (skills) لصياغة المحتوى والتقييم والتقديم، وملفات الإعداد `package.json` و`.gitignore` و`sources/kfc/.gitkeep`.",
+      "source": "chat decision D70 (2026-10-06): joining phrase drafted by Claude Code, approved by Hussein as published in 4083889"
     }
   ]
 }
